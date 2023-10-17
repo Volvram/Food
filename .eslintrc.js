@@ -7,7 +7,8 @@ module.exports = {
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended"
   ],
   overrides: [
     {
@@ -26,11 +27,36 @@ module.exports = {
     sourceType: "module",
     project: "tsconfig.json",
   },
-  plugins: ["@typescript-eslint", "react", "prettier"],
+  plugins: ["@typescript-eslint", "react", "prettier", "import"],
   rules: {
     "react/react-in-jsx-scope": "off",
-    "no-console": 1, // Means warning
+    "no-console": 1, // 1 - means warning; 2 - means error
     "prettier/prettier": ["error", { endOfLine: "auto" }],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": [
+          "react"
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+      }
+    ]
   },
-  ignorePatterns: ["node_modules/", "build/", "dist/", "prettierrc.cjs"],
+  ignorePatterns: ["node_modules/", "build/", "dist/", "prettierrc.cjs",],
 };

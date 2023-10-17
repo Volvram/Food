@@ -1,0 +1,10 @@
+@import "@/styles/variables.scss";
+
+.header {
+    background-color: $white;
+
+    &_sections {
+        display: flex;
+        justify-content: space-between;
+    }
+}
