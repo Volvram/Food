@@ -1,19 +1,9 @@
 import React from "react";
 
-import Header from "@/components/Header/Header";
-import Meta from "@/components/Meta/Meta";
+import SearchPage from "@/components/pages/SearchPage/SearchPage";
 
-const SearchPage: React.FC = () => {
-  return (
-    <div>
-      <Meta
-        title="Найти еду"
-        description="Найдите еду по своему усмотрению"
-        keywords="поиск, еда, блюдо, питание, диета, продукт, ингредиент"
-      />
-      <Header />
-    </div>
-  );
+const Search: React.FC = () => {
+  return <SearchPage />;
 };
 
-export default SearchPage;
+export default Search;

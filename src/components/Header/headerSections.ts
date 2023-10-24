@@ -15,4 +15,19 @@ export const headerSections: HeaderSectionsType[] = [
     name: "Поиск блюд",
     href: "/search",
   },
+  {
+    id: "calendar",
+    name: "Календарь",
+    href: "/calendar",
+  },
+  {
+    id: "journal",
+    name: "Журнал",
+    href: "/journal",
+  },
+  {
+    id: "statistics",
+    name: "Статистика",
+    href: "/statistics",
+  },
 ];

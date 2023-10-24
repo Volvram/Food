@@ -11,6 +11,10 @@
     "prettier": "npx prettier --write 'src/**/*.ts' 'src/**/*.tsx'"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.14.14",
+    "classnames": "^2.3.2",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "mobx": "^6.10.2",
     "mobx-react-lite": "^4.0.5",

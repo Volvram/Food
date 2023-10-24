@@ -1,0 +1,35 @@
+@import "@/styles/variables.scss";
+
+.container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+}
+.input{
+    padding: 10px 40px 10px 19px;
+    border-radius: 20px;
+    min-width: 260px;
+    border: 1px solid $light-gray;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+
+    &:focus {
+        outline-width: 0;
+    }
+
+    &_icon {
+        position: absolute;
+        margin-top: auto;
+        margin-bottom: auto;
+        width: 24px;
+        height: 24px;
+
+        right: 12px;
+        // align-center
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
