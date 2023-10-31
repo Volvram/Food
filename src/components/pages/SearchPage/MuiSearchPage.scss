@@ -1,0 +1,23 @@
+@import "@/styles/variables.scss";
+
+.MuiPaginationItem-root {
+  background-color: $black-primary;
+  color: $white;
+}
+
+.MuiPaginationItem-root:hover {
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  background-color: rgba(0, 0, 0, 0.08);
+  color: $black;
+}
+  
+.MuiPaginationItem-root.Mui-selected {
+  border: 1px solid $black-primary;
+  background-color: $white;
+  color: $black-primary;
+}
+
+.MuiPaginationItem-ellipsis:hover {
+  background-color: $black-primary;
+  color: $white;
+}

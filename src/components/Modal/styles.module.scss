@@ -1,0 +1,48 @@
+.modal{
+    background-color: white;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    width: fit-content;
+    min-width: 450px;
+    height: fit-content;
+    overflow: hidden;
+    z-index: 9999;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+    box-shadow: 1px 2px 1px rgb(245, 240, 240),-1px -2px 1px rgb(245, 240, 240);
+    transition:top cubic-bezier(0.18, 0.89, 0.32, 1.28) 1s ;
+    -webkit-transition:top cubic-bezier(0.18, 0.89, 0.32, 1.28) 1s ;
+    -moz-transition:top cubic-bezier(0.18, 0.89, 0.32, 1.28) 1s ;
+    -ms-transition:top cubic-bezier(0.18, 0.89, 0.32, 1.28) 1s ;
+    -o-transition:top cubic-bezier(0.18, 0.89, 0.32, 1.28) 1s ;
+    box-shadow: 1px 1px  5px rgba(77, 75, 75,0.5),-1px -1px  5px rgba(77, 75, 75,0.5);
+}
+
+.close{
+    position: absolute;
+    top: -200%;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    width: fit-content;
+    min-width: 450px;
+    height: fit-content;
+    background-color: white;
+    overflow: hidden;
+    z-index: 9999;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+    transition: top 1s ease-in-out;
+    box-shadow: 1px 1px  5px rgba(77, 75, 75,0.5),-1px -1px  5px rgba(77, 75, 75,0.5);
+}
