@@ -11,9 +11,9 @@ export type InputProps = Omit<
   "onChange"
 > & {
   /** Значение поля */
-  value?: string;
+  value?: string | string[];
   /** Callback, вызываемый при вводе данных в поле */
-  onChange: (value: string) => void;
+  onChange: (value: string | string[]) => void;
   className?: string;
   containerClassName?: string;
   disabled?: boolean;
@@ -31,7 +31,11 @@ export const Input: React.FC<InputProps> = ({
   iconAlt = "",
   ...attributes
 }) => {
-  const [currentValue, setValue] = React.useState<string>(value);
+  const [currentValue, setValue] = React.useState<string | string[]>(value);
+
+  React.useEffect(() => {
+    setValue(value);
+  }, [value]);
 
   const classnames = cn(
     styles.input,

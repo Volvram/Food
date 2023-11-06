@@ -21,14 +21,15 @@ const SearchPage: React.FC = () => {
 
   const searchPageStore = useLocalStore(() => new SearchPageStore());
 
-  const handleChange = React.useCallback((value: string) => {
-    if (value === "") {
-      searchPageStore.setSearchMode("categories");
-    } else {
-      searchPageStore.setSearchMode("commonSearch");
-    }
+  const handleChange = React.useCallback((value: string | string[]) => {
     router.push({ query: { search: value } });
   }, []);
+
+  React.useEffect(() => {
+    router.query.search
+      ? searchPageStore.setSearchMode("commonSearch")
+      : searchPageStore.setSearchMode("categories");
+  }, [router.query.search]);
 
   return (
     <div className={styles.searchPage_body}>
@@ -44,6 +45,7 @@ const SearchPage: React.FC = () => {
         </Modal>
         <div className={styles.searchPage_body_search}>
           <Input
+            value={router.query.search}
             className={styles.searchPage_body_search_searchInput}
             containerClassName={styles.searchPage_searchInput_container}
             onChange={handleChange}
