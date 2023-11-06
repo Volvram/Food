@@ -25,6 +25,12 @@ const Meta: React.FC<MetaProps> = ({
       <meta name="description" content={description} />
       <meta name="viewport" content={viewport} />
       <meta charSet={charset} />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+        rel="stylesheet"
+      />
     </Head>
   );
 };

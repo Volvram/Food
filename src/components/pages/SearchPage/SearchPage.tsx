@@ -33,7 +33,7 @@ const SearchPage: React.FC = () => {
   return (
     <div className={styles.searchPage_body}>
       <Meta
-        title="Найти еду"
+        title="Поиск блюд"
         description="Найдите еду по своему усмотрению"
         keywords="поиск, еда, блюдо, питание, диета, продукт, ингредиент"
       />

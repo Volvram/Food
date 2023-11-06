@@ -1,11 +1,16 @@
 @import "@/styles/variables.scss";
 
 .header {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 3%;
+    padding-right: 5%;
     background-color: $white;
     display: flex;
-    height: 50px;
+    justify-content: space-between;
     background-color: transparent;
     align-items: center;
+
     &_logo{
         color: rgb(46, 47, 46);
         font-weight: bolder;
@@ -20,15 +25,18 @@
         align-items: center;
         justify-content: space-between;
         gap: 20px;
-    }
-    &_sections a{
-        text-decoration: none;
-        color:$black-primary;
-        font-size: 16px;
-        line-height: 24px;
-    }
-    &_sections a:hover{
-        color: #113fe8;
+
+        &_section {
+            white-space: nowrap;
+            text-decoration: none;
+            color:$black-primary;
+            font-size: 16px;
+            line-height: 24px;
+        }
+
+        &_section:hover{
+            color: #113fe8;
+        }
     }
 
     &_button button {
