@@ -12,7 +12,7 @@ import style from "./styles.module.scss";
 const accordions = [
   {
     id: "1",
-    name: "Колорейность",
+    name: "Колорийность",
     details: "123",
   },
   {

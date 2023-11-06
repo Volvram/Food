@@ -17,8 +17,7 @@ const FoodCard = () => {
           Овощной освежающий салат
         </div>
         <div className={style.food_card_info_about}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </div>
         <div className={style.food_card_info_icons}>
           <div className={style.food_card_info_icons_time}>

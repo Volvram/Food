@@ -37,25 +37,27 @@ const SearchPage: React.FC = () => {
         description="Найдите еду по своему усмотрению"
         keywords="поиск, еда, блюдо, питание, диета, продукт, ингредиент"
       />
-      <Header />
-      <Modal visible={searchPageStore.isOpenFilters}>
-        <SearchFilters />
-      </Modal>
-      <div className={styles.searchPage_body_search}>
-        <Input
-          className={styles.searchPage_body_search_searchInput}
-          containerClassName={styles.searchPage_searchInput_container}
-          onChange={handleChange}
-          placeholder="Что хотите приготовить сегодня?"
-          icon={magnifier}
-        />
-        <TuneIcon
-          onClick={() => {
-            searchPageStore.toggleIsOpenFilters();
-          }}
-        />
-      </div>
-      <SearchContent searchMode={searchPageStore.searchMode} />
+      <main>
+        <Header />
+        <Modal visible={searchPageStore.isOpenFilters}>
+          <SearchFilters />
+        </Modal>
+        <div className={styles.searchPage_body_search}>
+          <Input
+            className={styles.searchPage_body_search_searchInput}
+            containerClassName={styles.searchPage_searchInput_container}
+            onChange={handleChange}
+            placeholder="Что хотите приготовить сегодня?"
+            icon={magnifier}
+          />
+          <TuneIcon
+            onClick={() => {
+              searchPageStore.toggleIsOpenFilters();
+            }}
+          />
+        </div>
+        <SearchContent searchMode={searchPageStore.searchMode} />
+      </main>
     </div>
   );
 };
