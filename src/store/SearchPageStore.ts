@@ -13,6 +13,7 @@ class SearchPageStore implements ILocalStore {
       _isOpenFilters: observable,
       setIsOpenFilters: action,
       isOpenFilters: computed,
+      toggleIsOpenFilters: action.bound,
       _searchMode: observable,
       setSearchMode: action,
       searchMode: computed,

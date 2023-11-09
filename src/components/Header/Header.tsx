@@ -65,6 +65,7 @@ const Header: React.FC = () => {
               <MenuIcon />
             </IconButton>
             <Menu
+              disableScrollLock
               id="fade-menu"
               MenuListProps={{
                 "aria-labelledby": "fade-button",

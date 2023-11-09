@@ -8,6 +8,8 @@ import "react-multi-carousel/lib/styles.css";
 import FoodCard from "./components/FoodCard/FoodCard";
 import styles from "./styles.module.scss";
 
+import { useRouter } from "next/router";
+
 type SearchContentProps = {
   searchMode: "categories" | "commonSearch";
 };
@@ -32,6 +34,15 @@ const responsive = {
 };
 
 const SearchContent: React.FC<SearchContentProps> = ({ searchMode }) => {
+  const router = useRouter();
+
+  const handlePageChange = React.useCallback(
+    (value: number) => {
+      router.push({ query: { ...router.query, page: value } });
+    },
+    [router],
+  );
+
   return (
     <div className={styles.searchContent}>
       {searchMode === "categories" ? (
@@ -61,9 +72,11 @@ const SearchContent: React.FC<SearchContentProps> = ({ searchMode }) => {
           </div>
           <Pagination
             className={styles.searchContent_commonSearch_pagination}
+            defaultPage={router.query.page ? Number(router.query.page) : 1}
             count={10}
             variant="outlined"
             shape="rounded"
+            onChange={(event, page) => handlePageChange(page)}
             renderItem={(item) => <PaginationItem {...item} />}
           />
         </div>

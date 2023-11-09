@@ -16,6 +16,11 @@ export const headerSections: HeaderSectionsType[] = [
     href: "/search",
   },
   {
+    id: "mydishes",
+    name: "Мои блюда",
+    href: "/mydishes",
+  },
+  {
     id: "calendar",
     name: "Календарь",
     href: "/calendar",
@@ -24,10 +29,5 @@ export const headerSections: HeaderSectionsType[] = [
     id: "journal",
     name: "Журнал",
     href: "/journal",
-  },
-  {
-    id: "statistics",
-    name: "Статистика",
-    href: "/statistics",
   },
 ];
