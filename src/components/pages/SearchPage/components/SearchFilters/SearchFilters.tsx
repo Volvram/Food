@@ -1,13 +1,21 @@
+import React from "react";
+
 import CloseIcon from "@mui/icons-material/Close";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
+import { observer } from "mobx-react-lite";
 
 import style from "./styles.module.scss";
+import { Input } from "@/components/Input";
+import SearchFiltersStore from "@/store/SearchFiltersStore";
+import { useLocalStore } from "@/utils/useLocalStore";
 
 const accordions = [
   {
@@ -36,22 +44,34 @@ const accordions = [
     details: "123",
   },
 ];
-const SearchFilters = () => {
+
+type SearchFiltersType = {
+  onClose: () => void;
+};
+
+const SearchFilters: React.FC<SearchFiltersType> = ({ onClose }) => {
+  const searchFiltersStore = useLocalStore(() => new SearchFiltersStore());
+
   return (
     <div className={style.filtersearch}>
       <div className={style.filtersearch_inner}>
-        <div className={style.filtersearch_inner_check}>
-          <label>
-            <Radio />
-            Блюдо
-          </label>
-
-          <label>
-            <Radio />
-            Продукты
-          </label>
-        </div>
-        <div className={style.filtersearch_inner_accardion}>
+        <RadioGroup
+          className={style.filtersearch_inner_check}
+          aria-labelledby="demo-radio-buttons-group-label"
+          defaultValue={searchFiltersStore.searchType}
+          name="search-type"
+          onChange={(event: React.ChangeEvent, value: string) => {
+            searchFiltersStore.setSearchType(value);
+          }}
+        >
+          <FormControlLabel value="Блюдо" control={<Radio />} label="Блюдо" />
+          <FormControlLabel
+            value="Продукты"
+            control={<Radio />}
+            label="Продукты"
+          />
+        </RadioGroup>
+        <div className={style.filtersearch_inner_accordion}>
           {accordions.map((el) => {
             return (
               <Accordion key={el.id}>
@@ -71,18 +91,65 @@ const SearchFilters = () => {
         </div>
         <div className={style.filtersearch_inner_switch}>
           <Typography>Убрать напитки</Typography>
-          <Switch />
+          <Switch
+            checked={searchFiltersStore.removeDrinks}
+            onChange={() => {
+              searchFiltersStore.toggleRemoveDrinks();
+            }}
+          />
+        </div>
+
+        <div className={style.filtersearch_inner_control}>
+          <Input
+            onChange={(value: string | string[]) => {
+              searchFiltersStore.setProductInput(value);
+            }}
+            value={searchFiltersStore.productInput}
+            placeholder="Введите продукт"
+            className={style.filtersearch_inner_control_input}
+            containerClassName={style.filtersearch_inner_control_inputContainer}
+          />
+          <button
+            onClick={() => {
+              searchFiltersStore.addProduct(searchFiltersStore.productInput);
+              searchFiltersStore.setProductInput("");
+            }}
+            className={style.filtersearch_inner_control_button}
+          >
+            Добавить
+          </button>
         </div>
 
         <div className={style.filtersearch_inner_container}>
-          <div className={style.filtersearch_inner_container_button}>
-            Фасоль
-            <CloseIcon />
-          </div>
+          {searchFiltersStore.products.map((product) => {
+            return (
+              <div
+                key={product}
+                className={style.filtersearch_inner_container_button}
+              >
+                {product}
+                <CloseIcon
+                  onClick={() => {
+                    searchFiltersStore.removeProduct(product);
+                  }}
+                  className={style.filtersearch_inner_container_icon}
+                />
+              </div>
+            );
+          })}
         </div>
+
+        <button
+          onClick={() => {
+            onClose();
+          }}
+          className={style.filtersearch_inner_button}
+        >
+          Применить
+        </button>
       </div>
     </div>
   );
 };
 
-export default SearchFilters;
+export default observer(SearchFilters);

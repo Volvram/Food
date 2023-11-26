@@ -36,7 +36,7 @@ const LoginContent: React.FC = () => {
           onChange={() => {}}
           placeholder="Электронная почта"
           className={styles.loginContent_block_input}
-          containerClassName={styles.loginContent_block_input__container}
+          containerClassName={styles.loginContent_block_inputContainer}
         />
         <span className={styles.loginContent_block_text}>Пароль</span>
         <Input

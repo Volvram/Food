@@ -97,12 +97,12 @@
                 font-style: normal;
                 font-weight: 400;
             }
+        }
 
-            &__container {
-                margin-top: 12px;
-                margin-bottom: 25px;
-                width: 100%;
-            }
+        &_inputContainer {
+            margin-top: 12px;
+            margin-bottom: 25px;
+            width: 100%;
         }
 
         &_button {

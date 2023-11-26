@@ -51,7 +51,11 @@ const SearchPage: React.FC = () => {
           open={searchPageStore.isOpenFilters}
           onClose={searchPageStore.toggleIsOpenFilters}
         >
-          <SearchFilters />
+          <SearchFilters
+            onClose={() => {
+              searchPageStore.toggleIsOpenFilters();
+            }}
+          />
         </WithModal>
         <div className={styles.searchPage_body_search}>
           <Input
