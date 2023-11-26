@@ -12,10 +12,10 @@ import Header from "@/components/Header/Header";
 import { Input } from "@/components/Input";
 import Meta from "@/components/Meta/Meta";
 import WithModal from "@/components/WithModal/WithModal";
+import { debounce } from "@/config/debounce";
 import SearchPageStore from "@/store/SearchPageStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 import "./MuiSearchPage.scss";
-import { debounce } from "@/config/debounce";
 
 const SearchPage: React.FC = () => {
   const router = useRouter();
@@ -26,7 +26,7 @@ const SearchPage: React.FC = () => {
     if (router.query.search) {
       searchPageStore.setSearchMode("commonSearch");
     } else {
-      router.push({ query: { ...router.query, page: 1 } });
+      // router.push({ query: { ...router.query, page: 1 } });
       searchPageStore.setSearchMode("categories");
     }
   }, [router.query.search]);

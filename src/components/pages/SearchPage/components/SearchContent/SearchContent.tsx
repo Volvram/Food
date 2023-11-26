@@ -2,13 +2,12 @@ import React from "react";
 
 import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
+import { useRouter } from "next/router";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
 import FoodCard from "./components/FoodCard/FoodCard";
 import styles from "./styles.module.scss";
-
-import { useRouter } from "next/router";
 
 type SearchContentProps = {
   searchMode: "categories" | "commonSearch";

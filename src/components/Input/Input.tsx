@@ -6,7 +6,7 @@ import { StaticImageData } from "next/image";
 
 import styles from "./styles.module.scss";
 
-export type InputProps = Omit<
+type InputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "onChange"
 > & {
@@ -37,12 +37,6 @@ export const Input: React.FC<InputProps> = ({
     setValue(value);
   }, [value]);
 
-  const classnames = cn(
-    styles.input,
-    disabled && styles.input_disabled,
-    className,
-  );
-
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
     setValue(target.value);
@@ -50,10 +44,14 @@ export const Input: React.FC<InputProps> = ({
   };
 
   return (
-    <div className={cn(styles.container, containerClassName)}>
+    <div className={cn(containerClassName, styles.container)}>
       <input
         type="text"
-        className={classnames}
+        className={cn(
+          className,
+          styles.input,
+          disabled && styles.input_disabled,
+        )}
         value={currentValue}
         onInput={handleInput}
         disabled={disabled}

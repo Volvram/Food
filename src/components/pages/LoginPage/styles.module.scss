@@ -1,0 +1,9 @@
+@import "@/styles/variables.scss";
+
+.loginPage {
+
+    &_body {
+        margin: 0 auto;
+        max-width: $fullhd;
+    }
+}

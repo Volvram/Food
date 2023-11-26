@@ -102,8 +102,10 @@ const Header: React.FC = () => {
             );
           })
         )}
-        <div className={styles.header_button}>
-          <button>Войти</button>
+        <div className={styles.header_login}>
+          <Link href="/login">
+            <button className={styles.header_login_button}>Войти</button>
+          </Link>
         </div>
       </div>
     </header>

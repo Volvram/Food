@@ -13,12 +13,21 @@
             gap: 20px;
 
             &_searchInput {
+                padding: 10px 40px 10px 19px;
+                min-width: 200px;
                 width: 40vw;
+                border-radius: 20px;
+                -webkit-border-radius: 20px;
+                -moz-border-radius: 20px;
+                -ms-border-radius: 20px;
+                -o-border-radius: 20px;
+                border: 1px solid $very-light-gray;
         
                 &_container {
                     margin-top: 20px;
                     margin-left: auto;
                     margin-right: auto;
+                    width: fit-content;
                 }
             }
         
