@@ -1,24 +1,24 @@
 import React from "react";
 
-import LoginContent from "./components/LoginContent/LoginContent";
+import RegisterContent from "./components/RegisterContent/RegisterContent";
 import styles from "./styles.module.scss";
 import Header from "@/components/Header/Header";
 import Meta from "@/components/Meta/Meta";
 
-const LoginPage: React.FC = () => {
+const RegisterPage: React.FC = () => {
   return (
-    <div className={styles.loginPage_body}>
+    <div className={styles.registerPage_body}>
       <Meta
-        title="Авторизация"
-        description="Войдите в аккаунт"
+        title="Регистрация"
+        description="Создайте аккаунт"
         keywords="поиск, еда, блюдо, питание, диета, продукт, ингредиент"
       />
       <main>
         <Header />
-        <LoginContent />
+        <RegisterContent />
       </main>
     </div>
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

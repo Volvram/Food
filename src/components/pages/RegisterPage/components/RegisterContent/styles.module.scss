@@ -1,6 +1,6 @@
 @import "@/styles/variables.scss";
 
-.loginContent {
+.registerContent {
     min-height: 100%;
 
     &_block {
@@ -121,7 +121,7 @@
         &_links {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-end;
 
             &_link {
                 cursor: pointer;

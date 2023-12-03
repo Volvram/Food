@@ -1,10 +1,12 @@
 import React from "react";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 import styles from "./styles.module.scss";
 import vkIcon from "@/assets/img/vk_icon.png";
+import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 
 const LoginContent: React.FC = () => {
@@ -44,23 +46,26 @@ const LoginContent: React.FC = () => {
           placeholder="Пароль"
           type="password"
           className={styles.loginContent_block_input}
-          containerClassName={styles.loginContent_block_input__container}
+          containerClassName={styles.loginContent_block_inputContainer}
         />
-        <button
+        <Button
           onClick={() => {
-            router.back();
+            router.push("/");
           }}
           className={styles.loginContent_block_button}
         >
           Войти
-        </button>
+        </Button>
         <div className={styles.loginContent_block_links}>
           <div className={styles.loginContent_block_links_link}>
             Забыли пароль?
           </div>
-          <div className={styles.loginContent_block_links_link}>
+          <Link
+            href="/register"
+            className={styles.loginContent_block_links_link}
+          >
             Зарегистрироваться
-          </div>
+          </Link>
         </div>
       </div>
     </div>
