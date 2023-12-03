@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import { observer } from "mobx-react-lite";
 
 import style from "./styles.module.scss";
+import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import SearchFiltersStore from "@/store/SearchFiltersStore";
 import { useLocalStore } from "@/utils/useLocalStore";
@@ -109,15 +110,14 @@ const SearchFilters: React.FC<SearchFiltersType> = ({ onClose }) => {
             className={style.filtersearch_inner_control_input}
             containerClassName={style.filtersearch_inner_control_inputContainer}
           />
-          <button
+          <Button
             onClick={() => {
               searchFiltersStore.addProduct(searchFiltersStore.productInput);
               searchFiltersStore.setProductInput("");
             }}
-            className={style.filtersearch_inner_control_button}
           >
             Добавить
-          </button>
+          </Button>
         </div>
 
         <div className={style.filtersearch_inner_container}>
@@ -139,14 +139,13 @@ const SearchFilters: React.FC<SearchFiltersType> = ({ onClose }) => {
           })}
         </div>
 
-        <button
+        <Button
           onClick={() => {
             onClose();
           }}
-          className={style.filtersearch_inner_button}
         >
           Применить
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -6,6 +6,24 @@
         margin: 0 auto;
         max-width: $fullhd;
 
+        &_beforeContent {
+            margin-top: 20px;
+            display: flex;
+
+            &_seeMore {
+                margin-left: 50px;
+                padding: 7px 23px 8px 24px;
+                background-color: $white;
+                border-radius: 20px;
+                border: 1px solid $gray;
+                color: $dark-gray;
+
+                &:hover {
+                    background-color: $light-gray;
+                }
+            }
+        }
+
         &_search{
             display: flex;
             justify-content: center;
@@ -26,7 +44,19 @@
                     width: fit-content;
                 }
             }
-        
+
+            &_filters {
+                cursor: pointer;
+            }
+        }
+
+        &_afterContent {
+            margin-bottom: 20px;
+            display: flex;
+
+            &_seeMore {
+                margin: 0 auto;
+            }
         }
     }    
 }

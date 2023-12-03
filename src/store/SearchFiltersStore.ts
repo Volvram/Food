@@ -71,9 +71,11 @@ class SearchFiltersStore implements ILocalStore {
   }
 
   addProduct(product: string | string[]) {
-    Array.isArray(product)
-      ? this._products.push(...product)
-      : this._products.push(product);
+    if (product) {
+      Array.isArray(product)
+        ? this._products.push(...product)
+        : this._products.push(product);
+    }
   }
 
   removeProduct(product: string) {

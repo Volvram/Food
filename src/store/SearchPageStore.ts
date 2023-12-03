@@ -2,11 +2,12 @@ import { makeObservable, observable, action, computed } from "mobx";
 
 import { ILocalStore } from "@/utils/useLocalStore";
 
-type PrivateFields = "_isOpenFilters" | "_searchMode";
+type PrivateFields = "_isOpenFilters" | "_searchMode" | "_seeMore";
 
 class SearchPageStore implements ILocalStore {
   private _isOpenFilters = false;
   private _searchMode: "categories" | "commonSearch" = "categories";
+  private _seeMore = false;
 
   constructor() {
     makeObservable<SearchPageStore, PrivateFields>(this, {
@@ -17,6 +18,10 @@ class SearchPageStore implements ILocalStore {
       _searchMode: observable,
       setSearchMode: action,
       searchMode: computed,
+      _seeMore: observable,
+      setSeeMore: action,
+      seeMore: computed,
+      toggleSeeMore: action,
     });
   }
 
@@ -38,6 +43,18 @@ class SearchPageStore implements ILocalStore {
 
   get searchMode() {
     return this._searchMode;
+  }
+
+  setSeeMore(seeMore: boolean) {
+    this._seeMore = seeMore;
+  }
+
+  get seeMore() {
+    return this._seeMore;
+  }
+
+  toggleSeeMore() {
+    this._seeMore = !this._seeMore;
   }
 
   destroy() {}

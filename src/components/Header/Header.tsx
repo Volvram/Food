@@ -9,6 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Link from "next/link";
 
 import styles from "./styles.module.scss";
+import { Button } from "@/components/Button";
 import { headerSections } from "@/components/Header/headerSections";
 import useWindowDimensions from "@/utils/useWindowDimensions";
 
@@ -104,7 +105,7 @@ const Header: React.FC = () => {
         )}
         <div className={styles.header_login}>
           <Link href="/login">
-            <button className={styles.header_login_button}>Войти</button>
+            <Button>Войти</Button>
           </Link>
         </div>
       </div>

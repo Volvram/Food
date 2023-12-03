@@ -8,6 +8,7 @@ import SearchContent from "./components/SearchContent/SearchContent";
 import SearchFilters from "./components/SearchFilters/SearchFilters";
 import styles from "./styles.module.scss";
 import magnifier from "@/assets/img/magnifier.png";
+import { Button } from "@/components/Button";
 import Header from "@/components/Header/Header";
 import { Input } from "@/components/Input";
 import Meta from "@/components/Meta/Meta";
@@ -23,13 +24,17 @@ const SearchPage: React.FC = () => {
   const searchPageStore = useLocalStore(() => new SearchPageStore());
 
   React.useEffect(() => {
-    if (router.query.search) {
+    if (router.query.search || router.query.seeMore) {
       searchPageStore.setSearchMode("commonSearch");
     } else {
       // router.push({ query: { ...router.query, page: 1 } });
       searchPageStore.setSearchMode("categories");
     }
-  }, [router.query.search]);
+  }, [router.query.search, router.query.seeMore]);
+
+  React.useEffect(() => {
+    searchPageStore.setSeeMore(Boolean(router.query.seeMore));
+  }, [router.query.seeMore]);
 
   const handleSearchChange = React.useCallback(
     debounce((value: string | string[]) => {
@@ -37,6 +42,17 @@ const SearchPage: React.FC = () => {
     }),
     [router],
   );
+
+  const handleSeeMoreChange = React.useCallback(() => {
+    searchPageStore.toggleSeeMore();
+    searchPageStore.seeMore
+      ? router.push({
+          query: { ...router.query, seeMore: searchPageStore.seeMore },
+        })
+      : router.push({
+          query: { ...router.query, seeMore: null },
+        });
+  }, [router]);
 
   return (
     <div className={styles.searchPage_body}>
@@ -66,9 +82,38 @@ const SearchPage: React.FC = () => {
             placeholder="Что хотите приготовить сегодня?"
             icon={magnifier}
           />
-          <TuneIcon onClick={searchPageStore.toggleIsOpenFilters} />
+          <TuneIcon
+            className={styles.searchPage_body_search_filters}
+            onClick={searchPageStore.toggleIsOpenFilters}
+          />
         </div>
+        {searchPageStore.seeMore && (
+          <div className={styles.searchPage_body_beforeContent}>
+            <Button
+              onClick={() => {
+                handleSeeMoreChange();
+              }}
+              className={styles.searchPage_body_beforeContent_seeMore}
+            >
+              Категории
+            </Button>
+          </div>
+        )}
+
         <SearchContent searchMode={searchPageStore.searchMode} />
+
+        {!searchPageStore.seeMore && (
+          <div className={styles.searchPage_body_afterContent}>
+            <Button
+              onClick={() => {
+                handleSeeMoreChange();
+              }}
+              className={styles.searchPage_body_afterContent_seeMore}
+            >
+              Увидеть больше
+            </Button>
+          </div>
+        )}
       </main>
     </div>
   );
