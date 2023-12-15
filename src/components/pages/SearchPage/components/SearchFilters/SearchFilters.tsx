@@ -21,7 +21,7 @@ import { useLocalStore } from "@/utils/useLocalStore";
 const accordions = [
   {
     id: "1",
-    name: "Колорийность",
+    name: "Калорийность",
     details: "123",
   },
   {

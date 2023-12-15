@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useRef } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -8,9 +9,57 @@ import styles from "./styles.module.scss";
 import vkIcon from "@/assets/img/vk_icon.png";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
+import rootStore from "@/store/RootStore/instance";
+
+// TODO Заменить временную заглушку
+export const users = [
+  {
+    id: "1",
+    email: "julia@mail.ru",
+    password: "1234",
+    userName: "Julia",
+    auth: true,
+  },
+  {
+    id: "2",
+    email: "test@mail.ru",
+    password: "1234",
+    userName: "Test",
+    auth: true,
+  },
+];
+// TODO ----------------------
 
 const LoginContent: React.FC = () => {
   const router = useRouter();
+
+  // TODO Заменить временную заглушку
+  const email = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
+
+  const onLogin = () => {
+    if (email.current?.value && password.current?.value) {
+      const existedUser = users.find(
+        (user) => user.email === email.current?.value,
+      );
+      if (existedUser) {
+        if (existedUser.password === password.current.value) {
+          localStorage.setItem("user", JSON.stringify(existedUser));
+          rootStore.user.checkUserMock();
+          router.push("/");
+        } else {
+          alert("Неверный пароль");
+        }
+      } else {
+        alert("Неверная электронная почта");
+      }
+    } else if (!password.current?.value) {
+      alert("Пароль не может быть пустым");
+    } else {
+      alert("Электронная почта не может быть пустой");
+    }
+  };
+  // TODO ----------------------
 
   return (
     <div className={styles.loginContent}>
@@ -39,6 +88,7 @@ const LoginContent: React.FC = () => {
           placeholder="Электронная почта"
           className={styles.loginContent_block_input}
           containerClassName={styles.loginContent_block_inputContainer}
+          forwardedRef={email}
         />
         <span className={styles.loginContent_block_text}>Пароль</span>
         <Input
@@ -47,13 +97,9 @@ const LoginContent: React.FC = () => {
           type="password"
           className={styles.loginContent_block_input}
           containerClassName={styles.loginContent_block_inputContainer}
+          forwardedRef={password}
         />
-        <Button
-          onClick={() => {
-            router.push("/");
-          }}
-          className={styles.loginContent_block_button}
-        >
+        <Button onClick={onLogin} className={styles.loginContent_block_button}>
           Войти
         </Button>
         <div className={styles.loginContent_block_links}>

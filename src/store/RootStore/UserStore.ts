@@ -11,6 +11,7 @@ import { decodeToken } from "@/config/decodeToken";
 import { HOST } from "@/config/host";
 
 type PrivateFields =
+  | "_tempUser"
   | "_authorized"
   | "_avatar"
   | "_userId"
@@ -21,6 +22,10 @@ type PrivateFields =
   | "_age";
 
 export default class UserStore {
+  // TODO Заменить временную заглушку
+  private _tempUser: any = null;
+  // TODO ----------------------
+
   private _authorized: boolean | null = null;
   private _avatar: string | null = null;
   private _userId: number | null = null;
@@ -32,6 +37,12 @@ export default class UserStore {
 
   constructor() {
     makeObservable<UserStore, PrivateFields>(this, {
+      // TODO Заменить временную заглушку
+      _tempUser: observable,
+      setTempUser: action,
+      tempUser: computed,
+      // TODO ----------------------
+
       _authorized: observable,
       setAuthorized: action,
       authorized: computed,
@@ -57,6 +68,25 @@ export default class UserStore {
       _age: observable,
     });
   }
+
+  // TODO Заменить временную заглушку
+  setTempUser(tempUser: any) {
+    this._tempUser = tempUser;
+  }
+
+  get tempUser() {
+    return this._tempUser;
+  }
+
+  checkUserMock() {
+    const currentUser = localStorage.getItem("user") ?? "";
+    if (currentUser) {
+      this.setTempUser(JSON.parse(currentUser));
+    } else {
+      this.setTempUser(null);
+    }
+  }
+  // TODO ----------------------
 
   setAuthorized(authorized: boolean) {
     this._authorized = authorized;

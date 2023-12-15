@@ -11,7 +11,9 @@ import Link from "next/link";
 import styles from "./styles.module.scss";
 import { Button } from "@/components/Button";
 import { headerSections } from "@/components/Header/headerSections";
+import rootStore from "@/store/RootStore/instance";
 import useWindowDimensions from "@/utils/useWindowDimensions";
+import { observer } from "mobx-react-lite";
 
 const Header: React.FC = () => {
   const { width } = useWindowDimensions();
@@ -24,6 +26,16 @@ const Header: React.FC = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  // TODO Заменить временную заглушку
+  const logoutUser = () => {
+    const answer = confirm("Подтвердить выход из аккаунта?");
+    if (answer) {
+      localStorage.removeItem("user");
+      rootStore.user.checkUserMock();
+    }
+  };
+  // TODO ----------------------
 
   return (
     <header className={styles.header}>
@@ -104,13 +116,28 @@ const Header: React.FC = () => {
           })
         )}
         <div className={styles.header_login}>
-          <Link href="/login">
-            <Button>Войти</Button>
-          </Link>
+          {
+            // TODO Заменить временную заглушку
+            rootStore.user.tempUser ? (
+              <div
+                className={styles.header_login_logout}
+                onClick={() => {
+                  logoutUser();
+                }}
+              >
+                Выйти
+              </div>
+            ) : (
+              // TODO ----------------------
+              <Link href="/login">
+                <Button>Войти</Button>
+              </Link>
+            )
+          }
         </div>
       </div>
     </header>
   );
 };
 
-export default Header;
+export default observer(Header);

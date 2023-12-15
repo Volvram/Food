@@ -1,0 +1,54 @@
+@import "@/styles/variables.scss";
+
+.main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page {
+  height: 100%;
+
+  &_features {
+    margin-top: 50px;
+    margin-left: 80px;
+    margin-right: 80px;
+    padding: 64px;
+    border-radius: 24px;
+    background-color: $light-violet;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+
+    &_section {
+
+      display: flex;
+      flex-direction: column;
+
+      &_icon {
+        margin-bottom: 24px;
+        width: 48px;
+        height: 48px;
+      }
+      
+      &_h {
+        margin-bottom: 20px;
+        color: $black;
+      }
+    }
+  }
+}
+
+.footer {
+  margin-top: auto;
+  min-height: 100px;
+  background-color: $black-primary;
+  color: $white;
+  display: flex;
+  align-items: center;
+
+  &_section {
+
+  }
+}
