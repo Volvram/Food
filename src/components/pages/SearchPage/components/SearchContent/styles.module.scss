@@ -27,4 +27,9 @@
             margin-right: auto;
         }
     }
+
+    &_item {
+        text-decoration: none;
+        color: $black;
+    }
 }

@@ -1,24 +1,28 @@
 import React from "react";
 
-import LoginContent from "./components/LoginContent/LoginContent";
+import DishContent from "./components/DishContent/DishContent";
 import styles from "./styles.module.scss";
 import Header from "@/components/Header/Header";
 import Meta from "@/components/Meta/Meta";
 
-const LoginPage: React.FC = () => {
+type DishPageType = {
+  id: string | string[] | undefined;
+};
+
+const DishPage: React.FC<DishPageType> = ({ id }) => {
   return (
-    <div className={styles.loginPage}>
+    <div className={styles.dishPage}>
       <Meta
-        title="Авторизация"
-        description="Войдите в аккаунт"
+        title="Блюдо"
+        description="Пицевая ценность"
         keywords="поиск, еда, блюдо, питание, диета, продукт, ингредиент"
       />
       <main>
         <Header />
-        <LoginContent />
+        <DishContent dish={id} />
       </main>
     </div>
   );
 };
 
-export default LoginPage;
+export default DishPage;
