@@ -1,0 +1,26 @@
+@import "@/styles/variables.scss";
+
+.dishContent {
+    &_common {
+        margin: 20px 80px;
+
+        &_h {
+            margin-bottom: 30px;
+            font-size: $h1;
+        }
+
+        &_img {
+            width: 50%;
+            height: auto;
+            object-fit: contain;
+            border-radius: 16px;
+        }
+    }
+
+    &_description {
+        margin-left: 80px;
+        margin-right: 80px;
+        margin-bottom: 20px;
+        font-size: $p1;
+    }
+}

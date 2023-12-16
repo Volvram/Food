@@ -6,6 +6,7 @@ import Fade from "@mui/material/Fade";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { observer } from "mobx-react-lite";
 import Link from "next/link";
 
 import styles from "./styles.module.scss";
@@ -13,7 +14,6 @@ import { Button } from "@/components/Button";
 import { headerSections } from "@/components/Header/headerSections";
 import rootStore from "@/store/RootStore/instance";
 import useWindowDimensions from "@/utils/useWindowDimensions";
-import { observer } from "mobx-react-lite";
 
 const Header: React.FC = () => {
   const { width } = useWindowDimensions();
