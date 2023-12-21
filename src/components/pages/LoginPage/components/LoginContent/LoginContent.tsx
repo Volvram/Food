@@ -14,18 +14,26 @@ import rootStore from "@/store/RootStore/instance";
 // TODO Заменить временную заглушку
 export const users = [
   {
-    id: "1",
-    email: "julia@mail.ru",
-    password: "1234",
-    userName: "Julia",
-    auth: true,
+    email: "matveybatishev@mail.ru",
+    password: "123",
+    avatar:
+      "https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg",
+    height: 187,
+    weight: 80,
+    birthdate: "2002-12-05",
+    diet_point: "Сбросить вес",
+    activity_level: "Малоподвижный",
   },
   {
-    id: "2",
-    email: "test@mail.ru",
-    password: "1234",
-    userName: "Test",
-    auth: true,
+    email: "olyagrechnikova@gmail.com",
+    password: "123",
+    avatar:
+      "https://img.freepik.com/free-photo/young-beautiful-woman-pink-warm-sweater-natural-look-smiling-portrait-isolated-long-hair_285396-896.jpg",
+    height: 175,
+    weight: 65,
+    birthdate: "2000-09-07",
+    diet_point: "Сбросить вес",
+    activity_level: "Среднеподвижный",
   },
 ];
 // TODO ----------------------

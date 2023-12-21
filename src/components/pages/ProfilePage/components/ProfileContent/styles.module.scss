@@ -1,0 +1,16 @@
+@import "@/styles/variables.scss";
+
+.profileContent {
+    min-height: 100%;
+
+    &_h {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        margin-left: 10%;
+        font-size: $h1;
+    }
+
+    &_inputText {
+        
+    }
+}
