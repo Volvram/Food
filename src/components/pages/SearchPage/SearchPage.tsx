@@ -27,7 +27,6 @@ const SearchPage: React.FC = () => {
     if (router.query.search || router.query.seeMore) {
       searchPageStore.setSearchMode("commonSearch");
     } else {
-      // router.push({ query: { ...router.query, page: 1 } });
       searchPageStore.setSearchMode("categories");
     }
   }, [router.query.search, router.query.seeMore]);

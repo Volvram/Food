@@ -18,8 +18,14 @@ const FoodCard: React.FC<FoodCardType> = ({ item }) => {
         <img src={item.image} />
       </div>
       <div className={style.food_card_info}>
-        <div className={style.food_card_info_title}>{item.title}</div>
-        <div className={style.food_card_info_about}>{item.description}</div>
+        <div className={style.food_card_info_title}>
+          {item.name.length > 20 ? `${item.name.slice(0, 20)}...` : item.name}
+        </div>
+        <div className={style.food_card_info_about}>
+          {item.notes.length > 40
+            ? `${item.notes.slice(0, 40)}...`
+            : item.notes}
+        </div>
         <div className={style.food_card_info_icons}>
           <div className={style.food_card_info_icons_time}>
             <Image src={clockIcon} alt="" />
