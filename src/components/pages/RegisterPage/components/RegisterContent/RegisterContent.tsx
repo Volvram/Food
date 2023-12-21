@@ -1,5 +1,8 @@
 import React from "react";
 
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -7,6 +10,7 @@ import { useRouter } from "next/router";
 import styles from "./styles.module.scss";
 import vkIcon from "@/assets/img/vk_icon.png";
 import { Button } from "@/components/Button";
+import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
 
 const RegisterContent: React.FC = () => {
@@ -15,7 +19,7 @@ const RegisterContent: React.FC = () => {
   return (
     <div className={styles.registerContent}>
       <div className={styles.registerContent_block}>
-        <h1 className={styles.registerContent_block_h}>Регистрация</h1>
+        <h1 className={styles.registerContent_block_h}>Присоединяйся</h1>
         <div className={styles.registerContent_block_alternative}>
           <Image
             src={vkIcon}
@@ -45,6 +49,87 @@ const RegisterContent: React.FC = () => {
           onChange={() => {}}
           placeholder="Пароль"
           type="password"
+          className={styles.registerContent_block_input}
+          containerClassName={styles.registerContent_block_inputContainer}
+        />
+        <span className={styles.registerContent_block_text}>
+          Повторите пароль
+        </span>
+        <Input
+          onChange={() => {}}
+          placeholder="Пароль"
+          type="password"
+          className={styles.registerContent_block_input}
+          containerClassName={styles.registerContent_block_inputContainer}
+        />
+        <div className={styles.registerContent_block_hr} />
+        <div className={styles.registerContent_block_personal}>
+          <div className={styles.registerContent_block_personal_height}>
+            <span className={styles.registerContent_block_personal_height_text}>
+              Рост
+            </span>
+            <Counter
+              className={styles.registerContent_block_personal_height_input}
+              onChange={() => {}}
+              min={150}
+              max={250}
+            />
+          </div>
+          <div className={styles.registerContent_block_personal_weight}>
+            <span className={styles.registerContent_block_personal_text}>
+              Вес
+            </span>
+            <Counter
+              className={styles.registerContent_block_personal_weight_input}
+              onChange={() => {}}
+              min={30}
+              max={250}
+            />
+          </div>
+        </div>
+        <span className={styles.registerContent_block_text}>Дата рождения</span>
+        <Input
+          onChange={() => {}}
+          placeholder="18.12.2023"
+          className={styles.registerContent_block_input}
+          containerClassName={styles.registerContent_block_inputContainer}
+        />
+        <span className={styles.registerContent_block_text}>Пол</span>
+        <RadioGroup
+          className={styles.registerContent_block_check}
+          aria-labelledby="demo-radio-buttons-group-label"
+          // defaultValue={searchFiltersStore.searchType}
+          name="gender"
+          // onChange={(event: React.ChangeEvent, value: string) => {
+          //   searchFiltersStore.setSearchType(value);
+          // }}
+        >
+          <FormControlLabel
+            value="Мужчина"
+            control={<Radio />}
+            label="Мужчина"
+          />
+          <FormControlLabel
+            value="Женщина"
+            control={<Radio />}
+            label="Женщина"
+          />
+        </RadioGroup>
+        <span className={styles.registerContent_block_text}>
+          Какова ваша цель?
+        </span>
+        <Input
+          onChange={() => {}}
+          placeholder="Сбросить вес"
+          className={styles.registerContent_block_input}
+          containerClassName={styles.registerContent_block_inputContainer}
+        />
+        <span className={styles.registerContent_block_text}>
+          Каков ваш уровень активности?
+        </span>
+        <Input
+          onChange={() => {}}
+          placeholder="Малоподвижный"
           className={styles.registerContent_block_input}
           containerClassName={styles.registerContent_block_inputContainer}
         />

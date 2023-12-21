@@ -129,5 +129,39 @@
                 text-decoration: underline;
             }
         }
+
+        &_hr {
+            margin-bottom: 20px;
+            width: 100%;
+            border-bottom: 1px solid $very-light-gray;
+        }
+
+        &_personal {
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            &_height {
+                &_input {
+                    margin-top: 12px;
+                    border: 1px solid #EDF2F7;
+                }
+            }
+            &_weight {
+                &_input {
+                    margin-top: 12px;
+                    border: 1px solid #EDF2F7;
+                }
+            }
+        }
+
+        &_check{
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            align-items: center;
+        }
     }
 }

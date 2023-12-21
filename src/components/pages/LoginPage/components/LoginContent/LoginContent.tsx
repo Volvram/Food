@@ -37,9 +37,15 @@ const LoginContent: React.FC = () => {
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
 
+  React.useEffect(() => {
+    localStorage.setItem("users", JSON.stringify(users));
+  }, []);
+
   const onLogin = () => {
     if (email.current?.value && password.current?.value) {
-      const existedUser = users.find(
+      const usersBase = JSON.parse(localStorage.getItem("users") ?? "");
+
+      const existedUser = usersBase.find(
         (user) => user.email === email.current?.value,
       );
       if (existedUser) {
@@ -64,7 +70,7 @@ const LoginContent: React.FC = () => {
   return (
     <div className={styles.loginContent}>
       <div className={styles.loginContent_block}>
-        <h1 className={styles.loginContent_block_h}>Войти</h1>
+        <h1 className={styles.loginContent_block_h}>Давайте начнем</h1>
         <div className={styles.loginContent_block_alternative}>
           <Image
             src={vkIcon}

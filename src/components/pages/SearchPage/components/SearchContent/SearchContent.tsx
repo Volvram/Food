@@ -672,7 +672,6 @@ const SearchContent: React.FC<SearchContentProps> = ({ searchMode }) => {
   const searchContentStore = useLocalStore(() => new SearchContentStore());
 
   // @TODO Убрать имитацию
-
   React.useEffect(() => {
     searchContentStore.setCategories(categories);
     searchContentStore.setCategoriesDishes(categoriesDishes);
@@ -691,9 +690,9 @@ const SearchContent: React.FC<SearchContentProps> = ({ searchMode }) => {
       searchContentStore.setDishes(dishes);
     }
 
+    // @FIX Здесь удаляется значение поиска при обновлении страницы
     handlePageChange(1);
   }, [router.query.search]);
-
   // @TODO ------------------------------------
 
   React.useEffect(() => {

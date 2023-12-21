@@ -1,5 +1,6 @@
 import React from "react";
 
+import { dishes } from "../SearchPage/components/SearchContent/SearchContent";
 import DishContent from "./components/DishContent/DishContent";
 import styles from "./styles.module.scss";
 import Header from "@/components/Header/Header";
@@ -10,6 +11,10 @@ type DishPageType = {
 };
 
 const DishPage: React.FC<DishPageType> = ({ id }) => {
+  // TODO Заменить временную заглушку
+  const tempDish = dishes.find((item) => item.id == id);
+  // TODO ----------------------
+
   return (
     <div className={styles.dishPage}>
       <Meta
@@ -19,7 +24,11 @@ const DishPage: React.FC<DishPageType> = ({ id }) => {
       />
       <main>
         <Header />
-        <DishContent dish={id} />
+        {tempDish ? (
+          <DishContent dish={tempDish} />
+        ) : (
+          <h1>Данные не найдены</h1>
+        )}
       </main>
     </div>
   );

@@ -1,0 +1,31 @@
+@import "@/styles/variables.scss";
+
+.counter {
+    padding: 10px 15px;
+    border-radius: 20px;
+    background-color: $white;
+    box-shadow: $light-shadow;
+    min-width: 70px;
+    max-width: 100px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &_controller {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        &_arrow {
+            cursor: pointer;
+            width: 13px;
+            height: 7px;
+        }
+    }
+
+    &_disabled {
+        cursor: default;
+        opacity: 0.5;
+    }
+}
