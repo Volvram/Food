@@ -7,6 +7,7 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
+import { observer } from "mobx-react-lite";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -16,19 +17,44 @@ import { Button } from "@/components/Button";
 import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
 import { formatDate } from "@/config/formatDate";
+import ProfileContentStore from "@/store/ProfileContentStore";
 import rootStore from "@/store/RootStore/instance";
+import { useLocalStore } from "@/utils/useLocalStore";
 
 const ProfileContent: React.FC = () => {
   const router = useRouter();
-  const [user, setUser] = React.useState<any>(rootStore.user.tempUser);
   const [editMode, setEditMode] = React.useState(false);
+
+  const profileContentStore = useLocalStore(() => new ProfileContentStore());
 
   // TODO Заменить временную заглушку
   React.useEffect(() => {
     if (rootStore.user.tempUser) {
-      setUser(rootStore.user.tempUser);
+      profileContentStore.setEmail(rootStore.user.tempUser.email);
+      profileContentStore.setPassword(rootStore.user.tempUser.password);
+      profileContentStore.setAvatar(rootStore.user.tempUser.avatar);
+      profileContentStore.setHeight(rootStore.user.tempUser.height);
+      profileContentStore.setWeight(rootStore.user.tempUser.weight);
+      profileContentStore.setBirthDate(rootStore.user.tempUser.birthdate);
+      profileContentStore.setGender(rootStore.user.tempUser.gender);
+      profileContentStore.setDietPoint(rootStore.user.tempUser.dietPoint);
+      profileContentStore.setActivityLevel(
+        rootStore.user.tempUser.activityLevel,
+      );
     }
-  }, []);
+  }, [rootStore.user.tempUser]);
+
+  const handleEdit = () => {
+    const newUser = profileContentStore.editMock();
+
+    if (newUser) {
+      localStorage.setItem("user", JSON.stringify(newUser));
+    } else {
+      window.location.reload();
+    }
+
+    setEditMode(false);
+  };
 
   const handleDelete = () => {
     const answer = confirm(
@@ -56,7 +82,7 @@ const ProfileContent: React.FC = () => {
             placeholder="Электронная почта"
             className={styles.profileContent_input}
             containerClassName={styles.profileContent_inputContainer}
-            value={user ? user.email : ""}
+            value={profileContentStore.email ?? ""}
             disabled={!editMode}
           />
           <Button>Сменить пароль</Button>
@@ -72,9 +98,9 @@ const ProfileContent: React.FC = () => {
           </div>
         </div>
         <div className={styles.profileContent_main_vr} />
-        {user && user.avatar ? (
+        {profileContentStore.avatar ? (
           <img
-            src={user && user.avatar}
+            src={profileContentStore.avatar}
             className={styles.profileContent_main_avatar}
           />
         ) : (
@@ -112,8 +138,9 @@ const ProfileContent: React.FC = () => {
             <Counter
               className={styles.profileContent_personal_indexes_index_input}
               onChange={() => {}}
-              defaultNumber={user ? user.height : 5}
+              defaultNumber={profileContentStore.height ?? 0}
               disabled={!editMode}
+              input
             />
           </div>
           <div className={styles.profileContent_personal_indexes_index}>
@@ -123,31 +150,34 @@ const ProfileContent: React.FC = () => {
             <Counter
               className={styles.profileContent_personal_indexes_index_input}
               onChange={() => {}}
-              defaultNumber={user ? user.weight : undefined}
+              defaultNumber={profileContentStore.weight ?? 0}
               disabled={!editMode}
+              input
             />
           </div>
         </div>
-
         <span className={styles.profileContent_inputText}>Дата рождения</span>
         <Input
           onChange={() => {}}
           placeholder="18.12.2023"
           className={styles.profileContent_input}
           containerClassName={styles.profileContent_inputContainer}
-          value={user ? String(formatDate(user.birthdate)) : ""}
+          value={
+            profileContentStore.birthDate
+              ? String(formatDate(profileContentStore.birthDate))
+              : ""
+          }
           disabled={!editMode}
         />
         <span className={styles.profileContent_inputText}>Пол</span>
         <RadioGroup
           className={styles.profileContent_check}
           aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue={user ? user.gender : "Мужчина"}
-          value={user ? user.gender : "Мужчина"}
+          value={profileContentStore.gender ?? "Мужчина"}
           name="gender"
-          // onChange={(event: React.ChangeEvent, value: string) => {
-          //   searchFiltersStore.setSearchType(value);
-          // }}
+          onChange={(event: React.ChangeEvent, value: string) => {
+            editMode && profileContentStore.setGender(value);
+          }}
         >
           <FormControlLabel
             value="Мужчина"
@@ -171,9 +201,9 @@ const ProfileContent: React.FC = () => {
           <Select
             labelId="demo-simple-select-standard-label"
             id="demo-simple-select-standard"
-            value={user ? user.dietPoint : "Сбросить вес"}
+            value={profileContentStore.dietPoint ?? "Сбросить вес"}
             onChange={(event: SelectChangeEvent) => {
-              // registerContentStore.setDietPoint(event.target.value);
+              profileContentStore.setDietPoint(event.target.value);
             }}
             label="Цель"
           >
@@ -198,9 +228,9 @@ const ProfileContent: React.FC = () => {
           <Select
             labelId="demo-simple-select-standard-label"
             id="demo-simple-select-standard"
-            value={user ? user.activityLevel : "Малоподвижный"}
+            value={profileContentStore.activityLevel ?? "Малоподвижный"}
             onChange={(event: SelectChangeEvent) => {
-              // registerContentStore.setActivityLevel(event.target.value);
+              profileContentStore.setActivityLevel(event.target.value);
             }}
             label="Цель"
           >
@@ -215,7 +245,7 @@ const ProfileContent: React.FC = () => {
       {editMode ? (
         <Button
           onClick={() => {
-            setEditMode(false);
+            handleEdit();
           }}
           className={styles.profileContent_edit}
         >
@@ -243,4 +273,4 @@ const ProfileContent: React.FC = () => {
   );
 };
 
-export default ProfileContent;
+export default observer(ProfileContent);
