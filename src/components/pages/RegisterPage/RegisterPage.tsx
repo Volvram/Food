@@ -4,6 +4,7 @@ import RegisterContent from "./components/RegisterContent/RegisterContent";
 import styles from "./styles.module.scss";
 import Header from "@/components/Header/Header";
 import Meta from "@/components/Meta/Meta";
+import "./MuiRegisterPage.scss";
 
 const RegisterPage: React.FC = () => {
   return (

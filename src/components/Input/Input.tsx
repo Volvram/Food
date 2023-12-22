@@ -13,7 +13,7 @@ type InputProps = Omit<
   /** Значение поля */
   value?: string | string[];
   /** Callback, вызываемый при вводе данных в поле */
-  onChange: (value: string | string[]) => void;
+  onChange: ((value: string | string[]) => void) | ((value: string) => void);
   forwardedRef?: React.RefObject<HTMLInputElement> | null;
   className?: string;
   containerClassName?: string;

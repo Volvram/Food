@@ -1,8 +1,12 @@
 import React from "react";
 
+import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import MenuItem from "@mui/material/MenuItem";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { observer } from "mobx-react-lite";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,9 +16,13 @@ import vkIcon from "@/assets/img/vk_icon.png";
 import { Button } from "@/components/Button";
 import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
+import RegisterContentStore from "@/store/RegisterContentStore";
+import { useLocalStore } from "@/utils/useLocalStore";
 
 const RegisterContent: React.FC = () => {
   const router = useRouter();
+
+  const registerContentStore = useLocalStore(() => new RegisterContentStore());
 
   return (
     <div className={styles.registerContent}>
@@ -39,14 +47,18 @@ const RegisterContent: React.FC = () => {
           Электронная почта
         </span>
         <Input
-          onChange={() => {}}
-          placeholder="Электронная почта"
+          onChange={(value: string) => {
+            registerContentStore.setEmail(value);
+          }}
+          placeholder="example@mail.com"
           className={styles.registerContent_block_input}
           containerClassName={styles.registerContent_block_inputContainer}
         />
         <span className={styles.registerContent_block_text}>Пароль</span>
         <Input
-          onChange={() => {}}
+          onChange={(value: string) => {
+            registerContentStore.setPassword(value);
+          }}
           placeholder="Пароль"
           type="password"
           className={styles.registerContent_block_input}
@@ -56,8 +68,10 @@ const RegisterContent: React.FC = () => {
           Повторите пароль
         </span>
         <Input
-          onChange={() => {}}
-          placeholder="Пароль"
+          onChange={(value: string) => {
+            registerContentStore.setRepeatPassword(value);
+          }}
+          placeholder="Повторите пароль"
           type="password"
           className={styles.registerContent_block_input}
           containerClassName={styles.registerContent_block_inputContainer}
@@ -107,7 +121,9 @@ const RegisterContent: React.FC = () => {
         </div>
         <span className={styles.registerContent_block_text}>Дата рождения</span>
         <Input
-          onChange={() => {}}
+          onChange={(value: string) => {
+            registerContentStore.setBirthDate(value);
+          }}
           placeholder="18.12.2023"
           className={styles.registerContent_block_input}
           containerClassName={styles.registerContent_block_inputContainer}
@@ -116,11 +132,11 @@ const RegisterContent: React.FC = () => {
         <RadioGroup
           className={styles.registerContent_block_check}
           aria-labelledby="demo-radio-buttons-group-label"
-          // defaultValue={searchFiltersStore.searchType}
+          defaultValue={registerContentStore.gender}
           name="gender"
-          // onChange={(event: React.ChangeEvent, value: string) => {
-          //   searchFiltersStore.setSearchType(value);
-          // }}
+          onChange={(event: React.ChangeEvent, value: string) => {
+            registerContentStore.setGender(value);
+          }}
         >
           <FormControlLabel
             value="Мужчина"
@@ -136,21 +152,46 @@ const RegisterContent: React.FC = () => {
         <span className={styles.registerContent_block_text}>
           Какова ваша цель?
         </span>
-        <Input
-          onChange={() => {}}
-          placeholder="Сбросить вес"
-          className={styles.registerContent_block_input}
-          containerClassName={styles.registerContent_block_inputContainer}
-        />
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+          <Select
+            labelId="demo-simple-select-standard-label"
+            id="demo-simple-select-standard"
+            value={registerContentStore.dietPoint}
+            onChange={(event: SelectChangeEvent) => {
+              registerContentStore.setDietPoint(event.target.value);
+            }}
+            label="Цель"
+          >
+            <MenuItem value="Сбросить вес">
+              <em>Сбросить вес</em>
+            </MenuItem>
+            <MenuItem value="Набрать вес">Набрать вес</MenuItem>
+            <MenuItem value="Нарастить мышечную массу">
+              Нарастить мышечную массу
+            </MenuItem>
+            <MenuItem value="Вылечиться">Вылечиться</MenuItem>
+          </Select>
+        </FormControl>
         <span className={styles.registerContent_block_text}>
           Каков ваш уровень активности?
         </span>
-        <Input
-          onChange={() => {}}
-          placeholder="Малоподвижный"
-          className={styles.registerContent_block_input}
-          containerClassName={styles.registerContent_block_inputContainer}
-        />
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+          <Select
+            labelId="demo-simple-select-standard-label"
+            id="demo-simple-select-standard"
+            value={registerContentStore.activityLevel}
+            onChange={(event: SelectChangeEvent) => {
+              registerContentStore.setActivityLevel(event.target.value);
+            }}
+            label="Цель"
+          >
+            <MenuItem value="Малоподвижный">
+              <em>Малоподвижный</em>
+            </MenuItem>
+            <MenuItem value="Среднеподвижный">Среднеподвижный</MenuItem>
+            <MenuItem value="Активный">Активный</MenuItem>
+          </Select>
+        </FormControl>
         <Button
           onClick={() => {
             router.push("/");
@@ -172,4 +213,4 @@ const RegisterContent: React.FC = () => {
   );
 };
 
-export default RegisterContent;
+export default observer(RegisterContent);
