@@ -1,21 +1,27 @@
 import React from "react";
 
+import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import MenuItem from "@mui/material/MenuItem";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import styles from "./styles.module.scss";
 import vkIcon from "@/assets/img/vk_icon.png";
 import { Button } from "@/components/Button";
 import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
-import rootStore from "@/store/RootStore/instance";
 import { formatDate } from "@/config/formatDate";
+import rootStore from "@/store/RootStore/instance";
 
 const ProfileContent: React.FC = () => {
-  const [user, setUser] = React.useState<any>(null);
+  const router = useRouter();
+  const [user, setUser] = React.useState<any>(rootStore.user.tempUser);
+  const [editMode, setEditMode] = React.useState(false);
 
   // TODO Заменить временную заглушку
   React.useEffect(() => {
@@ -23,6 +29,18 @@ const ProfileContent: React.FC = () => {
       setUser(rootStore.user.tempUser);
     }
   }, []);
+
+  const handleDelete = () => {
+    const answer = confirm(
+      "Подтвердить удаление аккаунта? Это действие необратимо",
+    );
+
+    if (answer) {
+      localStorage.removeItem("user");
+      rootStore.user.checkUserMock();
+      router.push("/");
+    }
+  };
   // TODO --------------------------
 
   return (
@@ -39,7 +57,7 @@ const ProfileContent: React.FC = () => {
             className={styles.profileContent_input}
             containerClassName={styles.profileContent_inputContainer}
             value={user ? user.email : ""}
-            disabled
+            disabled={!editMode}
           />
           <Button>Сменить пароль</Button>
           <div className={styles.profileContent_main_data_connect}>
@@ -94,9 +112,8 @@ const ProfileContent: React.FC = () => {
             <Counter
               className={styles.profileContent_personal_indexes_index_input}
               onChange={() => {}}
-              defaultNumber={user ? user.height : undefined}
-              min={150}
-              max={250}
+              defaultNumber={user ? user.height : 5}
+              disabled={!editMode}
             />
           </div>
           <div className={styles.profileContent_personal_indexes_index}>
@@ -107,8 +124,7 @@ const ProfileContent: React.FC = () => {
               className={styles.profileContent_personal_indexes_index_input}
               onChange={() => {}}
               defaultNumber={user ? user.weight : undefined}
-              min={30}
-              max={250}
+              disabled={!editMode}
             />
           </div>
         </div>
@@ -120,13 +136,14 @@ const ProfileContent: React.FC = () => {
           className={styles.profileContent_input}
           containerClassName={styles.profileContent_inputContainer}
           value={user ? String(formatDate(user.birthdate)) : ""}
-          disabled
+          disabled={!editMode}
         />
         <span className={styles.profileContent_inputText}>Пол</span>
         <RadioGroup
           className={styles.profileContent_check}
           aria-labelledby="demo-radio-buttons-group-label"
-          // defaultValue={searchFiltersStore.searchType}
+          defaultValue={user ? user.gender : "Мужчина"}
+          value={user ? user.gender : "Мужчина"}
           name="gender"
           // onChange={(event: React.ChangeEvent, value: string) => {
           //   searchFiltersStore.setSearchType(value);
@@ -146,32 +163,82 @@ const ProfileContent: React.FC = () => {
         <span className={styles.profileContent_InputText}>
           Какова ваша цель?
         </span>
-        <Input
-          onChange={() => {}}
-          placeholder="Сбросить вес"
-          className={styles.profileContent_input}
-          containerClassName={styles.profileContent_inputContainer}
-          value={user ? user.diet_point : ""}
-          disabled
-        />
+        <FormControl
+          variant="standard"
+          sx={{ m: 1, minWidth: 120 }}
+          disabled={!editMode}
+        >
+          <Select
+            labelId="demo-simple-select-standard-label"
+            id="demo-simple-select-standard"
+            value={user ? user.dietPoint : "Сбросить вес"}
+            onChange={(event: SelectChangeEvent) => {
+              // registerContentStore.setDietPoint(event.target.value);
+            }}
+            label="Цель"
+          >
+            <MenuItem value="Сбросить вес">
+              <em>Сбросить вес</em>
+            </MenuItem>
+            <MenuItem value="Набрать вес">Набрать вес</MenuItem>
+            <MenuItem value="Нарастить мышечную массу">
+              Нарастить мышечную массу
+            </MenuItem>
+            <MenuItem value="Вылечиться">Вылечиться</MenuItem>
+          </Select>
+        </FormControl>
         <span className={styles.profileContent_InputText}>
           Каков ваш уровень активности?
         </span>
-        <Input
-          onChange={() => {}}
-          placeholder="Малоподвижный"
-          className={styles.profileContent_input}
-          containerClassName={styles.profileContent_inputContainer}
-          value={user ? user.activity_level : ""}
-          disabled
-        />
+        <FormControl
+          variant="standard"
+          sx={{ m: 1, minWidth: 120 }}
+          disabled={!editMode}
+        >
+          <Select
+            labelId="demo-simple-select-standard-label"
+            id="demo-simple-select-standard"
+            value={user ? user.activityLevel : "Малоподвижный"}
+            onChange={(event: SelectChangeEvent) => {
+              // registerContentStore.setActivityLevel(event.target.value);
+            }}
+            label="Цель"
+          >
+            <MenuItem value="Малоподвижный">
+              <em>Малоподвижный</em>
+            </MenuItem>
+            <MenuItem value="Среднеподвижный">Среднеподвижный</MenuItem>
+            <MenuItem value="Активный">Активный</MenuItem>
+          </Select>
+        </FormControl>
       </div>
-      <Button className={styles.profileContent_edit}>Редактировать</Button>
+      {editMode ? (
+        <Button
+          onClick={() => {
+            setEditMode(false);
+          }}
+          className={styles.profileContent_edit}
+        >
+          Отредактировать
+        </Button>
+      ) : (
+        <Button
+          onClick={() => {
+            setEditMode(true);
+          }}
+          className={styles.profileContent_edit}
+        >
+          Редактировать
+        </Button>
+      )}
+
       <p>
         * Если вы удалите свой аккаунт, все ваши данные будут безвозвратно
         удалены
       </p>
-      <div className={styles.profileContent_delete}>Удалить аккаунт</div>
+      <div className={styles.profileContent_delete} onClick={handleDelete}>
+        Удалить аккаунт
+      </div>
     </div>
   );
 };

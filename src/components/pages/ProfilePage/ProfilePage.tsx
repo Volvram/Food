@@ -4,6 +4,7 @@ import ProfileContent from "./components/ProfileContent/ProfileContent";
 import styles from "./styles.module.scss";
 import Header from "@/components/Header/Header";
 import Meta from "@/components/Meta/Meta";
+import "./MuiProfilePage.scss";
 
 const ProfilePage: React.FC = () => {
   return (

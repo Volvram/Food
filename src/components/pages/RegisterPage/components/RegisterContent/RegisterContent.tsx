@@ -24,6 +24,24 @@ const RegisterContent: React.FC = () => {
 
   const registerContentStore = useLocalStore(() => new RegisterContentStore());
 
+  // TODO Заменить временную заглушку
+  const onRegister = () => {
+    const usersBase = JSON.parse(localStorage.getItem("users") ?? "");
+
+    const newUser = registerContentStore.registerMock();
+
+    if (newUser) {
+      usersBase.push(newUser);
+
+      localStorage.setItem("users", JSON.stringify(usersBase));
+
+      localStorage.setItem("user", JSON.stringify(newUser));
+
+      router.push("/profile");
+    }
+  };
+  // TODO ---------------------------
+
   return (
     <div className={styles.registerContent}>
       <div className={styles.registerContent_block}>
@@ -93,9 +111,10 @@ const RegisterContent: React.FC = () => {
                 className={
                   styles.registerContent_block_personal_indexes_index_input
                 }
-                onChange={() => {}}
-                min={150}
-                max={250}
+                onChange={(value) => {
+                  registerContentStore.setHeight(value);
+                }}
+                input
               />
             </div>
             <div
@@ -112,9 +131,10 @@ const RegisterContent: React.FC = () => {
                 className={
                   styles.registerContent_block_personal_indexes_index_input
                 }
-                onChange={() => {}}
-                min={30}
-                max={250}
+                onChange={(value) => {
+                  registerContentStore.setWeight(value);
+                }}
+                input
               />
             </div>
           </div>
@@ -124,7 +144,7 @@ const RegisterContent: React.FC = () => {
           onChange={(value: string) => {
             registerContentStore.setBirthDate(value);
           }}
-          placeholder="18.12.2023"
+          placeholder="2023-12-18"
           className={styles.registerContent_block_input}
           containerClassName={styles.registerContent_block_inputContainer}
         />
@@ -132,7 +152,7 @@ const RegisterContent: React.FC = () => {
         <RadioGroup
           className={styles.registerContent_block_check}
           aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue={registerContentStore.gender}
+          value={registerContentStore.gender}
           name="gender"
           onChange={(event: React.ChangeEvent, value: string) => {
             registerContentStore.setGender(value);
@@ -193,9 +213,7 @@ const RegisterContent: React.FC = () => {
           </Select>
         </FormControl>
         <Button
-          onClick={() => {
-            router.push("/");
-          }}
+          onClick={onRegister}
           className={styles.registerContent_block_button}
         >
           Зарегистрироваться

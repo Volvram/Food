@@ -51,7 +51,7 @@
             object-fit: cover;
             border-radius: 80px;
 
-            &_fake {
+            &__fake {
                 width: 288px;
                 height: 288px;
                 background-color: $gray;
@@ -146,6 +146,7 @@
     }
 
     &_delete {
+        cursor: pointer;
         margin-top: 8px;
         margin-bottom: 20px;
         background-color: $white;

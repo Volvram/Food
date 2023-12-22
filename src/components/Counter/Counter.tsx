@@ -13,34 +13,51 @@ export type CounterProps = {
   max?: number;
   min?: number;
   className?: string;
+  input?: boolean;
   disabled?: boolean;
 };
 
 export const Counter: React.FC<CounterProps> = ({
   onChange,
-  max = 10,
+  max = Infinity,
   min = 0,
-  defaultNumber = min,
+  defaultNumber = 0,
   className,
+  input = false,
   disabled = false,
-  ...rest
 }) => {
-  const [counter, setCounter] = React.useState(defaultNumber);
-  const counterRef = React.useRef<HTMLSpanElement | null>(null);
+  const [counter, setCounter] = React.useState<number>(defaultNumber);
 
   React.useEffect(() => {
-    onChange(counter);
-  }, [counter]);
+    setCounter(defaultNumber);
+  }, [defaultNumber]);
 
   const handleIncrease = () => {
     if (counter < max) {
       setCounter((prev) => prev + 1);
+      onChange(counter);
     }
   };
 
   const handleDecrease = () => {
     if (counter > min) {
       setCounter((prev) => prev - 1);
+      onChange(counter);
+    }
+  };
+
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const target = event.target;
+    setCounter(Number(target.value));
+  };
+
+  const handleBlur = () => {
+    if (counter < min) {
+      setCounter(min);
+    } else if (counter > max) {
+      setCounter(max);
+    } else {
+      onChange(counter);
     }
   };
 
@@ -51,8 +68,19 @@ export const Counter: React.FC<CounterProps> = ({
   );
 
   return (
-    <div className={classNames} {...rest}>
-      <span ref={counterRef}>{counter}</span>
+    <div className={classNames}>
+      {input ? (
+        <input
+          type="number"
+          value={counter}
+          className={styles.counter_input}
+          disabled={disabled}
+          onInput={handleInput}
+          onBlur={handleBlur}
+        />
+      ) : (
+        <span>{counter}</span>
+      )}
       <div className={styles.counter_controller}>
         <Image
           onClick={handleIncrease}

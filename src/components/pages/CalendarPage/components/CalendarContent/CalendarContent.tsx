@@ -4,7 +4,6 @@ import { getNextWeekDatesAndDays } from "./helpers/helpers";
 import s from "./styles.module.scss";
 
 const CalendarContent: React.FC = () => {
-  console.log(getNextWeekDatesAndDays());
   return (
     <div className={s.calendar}>
       <div className={s.calendar_month}>Декабрь 2023</div>

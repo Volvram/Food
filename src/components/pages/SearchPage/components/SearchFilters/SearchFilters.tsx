@@ -59,7 +59,7 @@ const SearchFilters: React.FC<SearchFiltersType> = ({ onClose }) => {
         <RadioGroup
           className={style.filtersearch_inner_check}
           aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue={searchFiltersStore.searchType}
+          value={searchFiltersStore.searchType}
           name="search-type"
           onChange={(event: React.ChangeEvent, value: string) => {
             searchFiltersStore.setSearchType(value);
