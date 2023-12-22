@@ -5,7 +5,7 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 import styles from "./styles.module.scss";
 import vkIcon from "@/assets/img/vk_icon.png";
@@ -64,27 +64,45 @@ const RegisterContent: React.FC = () => {
         />
         <div className={styles.registerContent_block_hr} />
         <div className={styles.registerContent_block_personal}>
-          <div className={styles.registerContent_block_personal_height}>
-            <span className={styles.registerContent_block_personal_height_text}>
-              Рост
-            </span>
-            <Counter
-              className={styles.registerContent_block_personal_height_input}
-              onChange={() => {}}
-              min={150}
-              max={250}
-            />
-          </div>
-          <div className={styles.registerContent_block_personal_weight}>
-            <span className={styles.registerContent_block_personal_text}>
-              Вес
-            </span>
-            <Counter
-              className={styles.registerContent_block_personal_weight_input}
-              onChange={() => {}}
-              min={30}
-              max={250}
-            />
+          <div className={styles.registerContent_block_personal_indexes}>
+            <div
+              className={styles.registerContent_block_personal_indexes_index}
+            >
+              <span
+                className={
+                  styles.registerContent_block_personal_indexes_index_text
+                }
+              >
+                Рост
+              </span>
+              <Counter
+                className={
+                  styles.registerContent_block_personal_indexes_index_input
+                }
+                onChange={() => {}}
+                min={150}
+                max={250}
+              />
+            </div>
+            <div
+              className={styles.registerContent_block_personal_indexes_index}
+            >
+              <span
+                className={
+                  styles.registerContent_block_personal_indexes_index_text
+                }
+              >
+                Вес
+              </span>
+              <Counter
+                className={
+                  styles.registerContent_block_personal_indexes_index_input
+                }
+                onChange={() => {}}
+                min={30}
+                max={250}
+              />
+            </div>
           </div>
         </div>
         <span className={styles.registerContent_block_text}>Дата рождения</span>

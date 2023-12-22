@@ -3,7 +3,7 @@ import React, { useRef } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 import styles from "./styles.module.scss";
 import vkIcon from "@/assets/img/vk_icon.png";
@@ -35,6 +35,17 @@ export const users = [
     diet_point: "Сбросить вес",
     activity_level: "Среднеподвижный",
   },
+  // {
+  //   email: "yuliabobrovich@gmail.com",
+  //   password: "123",
+  //   avatar:
+  //     "",
+  //   height: 167,
+  //   weight: 55,
+  //   birthdate: "2002-07-29",
+  //   diet_point: "Сбросить вес",
+  //   activity_level: "Среднеподвижный",
+  // },
 ];
 // TODO ----------------------
 
@@ -54,7 +65,7 @@ const LoginContent: React.FC = () => {
       const usersBase = JSON.parse(localStorage.getItem("users") ?? "");
 
       const existedUser = usersBase.find(
-        (user) => user.email === email.current?.value,
+        (user: any) => user.email === email.current?.value,
       );
       if (existedUser) {
         if (existedUser.password === password.current.value) {

@@ -10,7 +10,7 @@ const Dish: React.FC = () => {
   const router = useRouter();
 
   // TODO Заменить временную заглушку
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     rootStore.user.checkUserMock();
   }, []);
   // TODO ----------------------

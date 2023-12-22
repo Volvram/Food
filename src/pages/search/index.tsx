@@ -6,7 +6,7 @@ import rootStore from "@/store/RootStore/instance";
 
 const Search: React.FC = () => {
   // TODO Заменить временную заглушку
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     rootStore.user.checkUserMock();
   }, []);
   // TODO ----------------------

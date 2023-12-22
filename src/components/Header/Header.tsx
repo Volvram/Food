@@ -8,6 +8,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import styles from "./styles.module.scss";
 import { Button } from "@/components/Button";
@@ -16,6 +17,8 @@ import rootStore from "@/store/RootStore/instance";
 import useWindowDimensions from "@/utils/useWindowDimensions";
 
 const Header: React.FC = () => {
+  const router = useRouter();
+
   const { width } = useWindowDimensions();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -33,6 +36,7 @@ const Header: React.FC = () => {
     if (answer) {
       localStorage.removeItem("user");
       rootStore.user.checkUserMock();
+      router.push("/");
     }
   };
   // TODO ----------------------
@@ -119,13 +123,24 @@ const Header: React.FC = () => {
           {
             // TODO Заменить временную заглушку
             rootStore.user.tempUser ? (
-              <div
-                className={styles.header_login_logout}
-                onClick={() => {
-                  logoutUser();
-                }}
-              >
-                Выйти
+              <div className={styles.header_login_panel}>
+                <Link
+                  href={"/profile"}
+                  className={styles.header_login_panel_link}
+                >
+                  <img
+                    src={rootStore.user.tempUser.avatar}
+                    className={styles.header_login_panel_avatar}
+                  />
+                </Link>
+                <div
+                  className={styles.header_login_panel_logout}
+                  onClick={() => {
+                    logoutUser();
+                  }}
+                >
+                  Выйти
+                </div>
               </div>
             ) : (
               // TODO ----------------------

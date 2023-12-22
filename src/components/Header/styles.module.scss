@@ -40,32 +40,33 @@
     }
 
     &_login {
-        // &_button {
-        //     cursor: pointer;
-        //     padding: 10px 15px;
-        //     color: white;
-        //     border: none;
-        //     border-radius: 12px;
-        //     background-color: $black-primary;
-        //     -webkit-border-radius: 12px;
-        //     -moz-border-radius: 12px;
-        //     -ms-border-radius: 12px;
-        //     -o-border-radius: 12px;
-        //     margin-left: 20px;
+        &_panel {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
 
-        //     &:hover {
-        //         background-color: $black;
-        //     }
-        // }
+            &_link {
+               display: flex;
+               align-items: center;
+               justify-content: center;
+            }
 
-        &_logout {
-            cursor: pointer;
-            background-color: $white;
-            color: $light-blue;
-            text-decoration: underline;
-
-            &:hover{
-                color: $gray;
+            &_logout {
+                cursor: pointer;
+                background-color: $white;
+                color: $light-blue;
+                text-decoration: underline;
+    
+                &:hover{
+                    color: $gray;
+                }
+            }
+    
+            &_avatar {
+                margin-right: 6px;
+                width: auto;
+                height: 24px;
+                border-radius: 50px;
             }
         }
     }
