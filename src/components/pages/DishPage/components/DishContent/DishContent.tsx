@@ -128,9 +128,9 @@ const DishPage: React.FC<DishContentType> = ({ dish }) => {
             <Counter onChange={() => {}} min={1} />
           </div>
           <div className={styles.dishContent_nutrition_portions_type}>
-            <span className={styles.dishContent_nutrition_portions_type_text}>
+            {/* <span className={styles.dishContent_nutrition_portions_type_text}>
               Вид порции
-            </span>
+            </span> */}
             <div></div>
           </div>
         </div>
