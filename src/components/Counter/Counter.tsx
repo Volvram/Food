@@ -34,15 +34,19 @@ export const Counter: React.FC<CounterProps> = ({
 
   const handleIncrease = () => {
     if (counter < max) {
-      setCounter((prev) => prev + 1);
-      onChange(counter);
+      setCounter((prev) => {
+        onChange(prev + 1);
+        return prev + 1;
+      });
     }
   };
 
   const handleDecrease = () => {
     if (counter > min) {
-      setCounter((prev) => prev - 1);
-      onChange(counter);
+      setCounter((prev) => {
+        onChange(prev - 1);
+        return prev - 1;
+      });
     }
   };
 
@@ -72,7 +76,7 @@ export const Counter: React.FC<CounterProps> = ({
       {input ? (
         <input
           type="number"
-          value={counter}
+          value={counter == 0 || counter == Infinity ? "" : counter}
           className={styles.counter_input}
           disabled={disabled}
           onInput={handleInput}

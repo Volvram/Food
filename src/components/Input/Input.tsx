@@ -14,6 +14,7 @@ type InputProps = Omit<
   value?: string | string[];
   /** Callback, вызываемый при вводе данных в поле */
   onChange: (value: string | string[]) => void;
+  onEnterClick?: (value: string | string[]) => void;
   forwardedRef?: React.RefObject<HTMLInputElement> | null;
   className?: string;
   containerClassName?: string;
@@ -25,6 +26,7 @@ type InputProps = Omit<
 export const Input: React.FC<InputProps> = ({
   value = "",
   onChange,
+  onEnterClick,
   forwardedRef,
   className,
   containerClassName,
@@ -35,7 +37,23 @@ export const Input: React.FC<InputProps> = ({
 }) => {
   const [currentValue, setValue] = React.useState<string | string[]>(value);
 
-  const inputRef = forwardedRef || React.createRef<HTMLInputElement>;
+  const inputRef = forwardedRef || React.useRef<HTMLInputElement | null>(null);
+
+  React.useEffect(() => {
+    const enterClick = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        onEnterClick && onEnterClick(currentValue);
+      }
+    };
+
+    inputRef.current &&
+      inputRef.current.addEventListener("keydown", enterClick);
+
+    return () => {
+      inputRef.current &&
+        inputRef.current.removeEventListener("keydown", enterClick);
+    };
+  }, [inputRef]);
 
   React.useEffect(() => {
     setValue(value);

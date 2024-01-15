@@ -14,6 +14,7 @@ import { Input } from "@/components/Input";
 import Meta from "@/components/Meta/Meta";
 import WithModal from "@/components/WithModal/WithModal";
 import { debounce } from "@/config/debounce";
+import { FiltersType } from "@/store/SearchFiltersStore";
 import SearchPageStore from "@/store/SearchPageStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 import "./MuiSearchPage.scss";
@@ -70,6 +71,10 @@ const SearchPage: React.FC = () => {
             onClose={() => {
               searchPageStore.toggleIsOpenFilters();
             }}
+            onSubmit={(filters: FiltersType) => {
+              searchPageStore.setFilters(filters);
+            }}
+            filters={searchPageStore.filters}
           />
         </WithModal>
         <div className={styles.searchPage_body_search}>

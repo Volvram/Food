@@ -1,0 +1,16 @@
+@import "@/styles/variables.scss";
+
+.range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    &_label {
+        padding-left: 10px;
+    }
+
+    &_counter {
+        margin-top: 10px;
+        border: 1px solid $light-gray;
+    }
+}
