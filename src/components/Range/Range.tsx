@@ -1,5 +1,7 @@
 import React from "react";
 
+import cn from "classnames";
+
 import { Counter } from "../Counter";
 import styles from "./styles.module.scss";
 
@@ -10,6 +12,7 @@ type RangeType = {
   defaultTo?: number;
   onFromChange: (value: number) => void;
   onToChange: (value: number) => void;
+  className?: string;
 };
 
 export const Range: React.FC<RangeType> = ({
@@ -19,9 +22,10 @@ export const Range: React.FC<RangeType> = ({
   defaultTo,
   onFromChange,
   onToChange,
+  className,
 }) => {
   return (
-    <div className={styles.range}>
+    <div className={cn(styles.range, className)}>
       <div>
         <label htmlFor="from" className={styles.range_label}>
           {from}

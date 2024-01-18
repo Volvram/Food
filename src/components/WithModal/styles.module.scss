@@ -1,6 +1,8 @@
+@import "@/styles/variables.scss";
+
 .modal{
     outline: none;
-    background-color: white;
+    background-color: $white;
     position: absolute;
     top: 0;
     right: 0;
@@ -8,14 +10,26 @@
     bottom: 0;
     margin: auto;
     width: fit-content;
-    min-width: 450px;
+    min-width: 310px;
     height: fit-content;
-    overflow: hidden;
+    overflow: auto;
     z-index: 9999;
     border-radius: 20px;
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
     -ms-border-radius: 20px;
     -o-border-radius: 20px;
-    
+}
+
+@media screen and (max-width: $tablet) {
+    .modal {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: $phone) {
+    .modal {
+        height: 100%;
+        border-radius: 0px;
+    }
 }

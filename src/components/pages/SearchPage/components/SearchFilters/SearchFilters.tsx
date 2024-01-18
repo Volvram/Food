@@ -53,6 +53,12 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
             label="Продукты"
           />
         </RadioGroup>
+        <CloseIcon
+          onClick={() => {
+            onClose();
+          }}
+          className={style.filtersearch_inner_close}
+        />
         {searchFiltersStore.searchType == "Блюдо" && (
           <>
             <div className={style.filtersearch_inner_accordion}>
@@ -74,6 +80,7 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
                       to: value,
                     });
                   }}
+                  className={style.filtersearch_inner_accordion_range}
                 />
               </FilterAccordion>
               <FilterAccordion title="Кухня">
@@ -133,6 +140,7 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
                       to: value,
                     });
                   }}
+                  className={style.filtersearch_inner_accordion_range}
                 />
               </FilterAccordion>
               <FilterAccordion title="Метод приготовления">
