@@ -1,0 +1,51 @@
+@import "@/styles/variables.scss";
+
+.general {
+    margin-top: 40px;
+    margin-left: 10%;
+    margin-right: 10%;
+    
+    &_note {
+        font-size: $p1;
+        color: $dark-gray;
+    }
+
+    &_table {
+        margin-top: 13px;
+        margin-bottom: 13px;
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+
+        &_head {
+            background-color: $light-gray;
+            // *table* border-radius: 10px;
+            tr:first-child td:first-child { border-top-left-radius: 10px; }
+            tr:first-child td:last-child { border-top-right-radius: 10px; }
+        }
+
+        &_body {
+            // *table* border-radius: 10px;
+            tr:last-child td:first-child { border-bottom-left-radius: 10px; }
+            tr:last-child td:last-child { border-bottom-right-radius: 10px; }
+        }
+
+        td {
+            border: solid 1px $light-gray;
+            border-style: none none solid none;
+            padding: 10px;
+        }
+    }
+}
+
+@media screen and (max-width: $phone) {
+    .general {
+        &_note {
+            font-size: $p2;
+        }
+
+        &_table {
+            font-size: $p2;
+        }
+    }
+}

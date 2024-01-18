@@ -1,0 +1,110 @@
+@import "@/styles/variables.scss";
+
+.nutrition {
+    &_h {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        margin-left: 10%;
+        font-size: $h2;
+    }
+
+    &_text {
+        margin-left: 10%;
+        margin-right: 30%;
+        margin-bottom: 20px;
+        color: $dark-gray;
+        font-size: $p1;
+    }
+
+    &_portions {
+        margin: 0 auto;
+        padding: 20px 40px;
+        width: 50%;
+        background-color: $light-violet;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &_amount {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+
+            &_text {
+                color: $dark-gray
+            }
+        }
+
+        &_type {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+
+            &_text {
+                color: $dark-gray;
+            }
+        }
+    }
+
+    &_macro {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        margin-left: 10%;
+        color: $black;
+        font-size: $h3;
+    }
+
+    &_charts {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        margin-left: 15%;
+        margin-right: 10%;
+        display: flex;
+        align-items: center;
+
+        &_energy {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            &_num {
+                font-size: $h2;
+            }
+
+            &_text {
+                color: $dark-gray;
+                text-align: center;
+            }
+        }
+
+        &_vr {
+            margin-left: 10%;
+            margin-right: 10%;
+            height: 200px;
+            border-left: 2px solid $light-gray;
+        }
+
+        &_index {
+            margin-left: 15px;
+            margin-right: 15px;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            &_num {
+                font-size: $h2;
+            }
+
+            &_text {
+                color: $dark-gray;
+            }
+        }
+    }
+}

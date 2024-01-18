@@ -1,0 +1,36 @@
+@import "@/styles/variables.scss";
+
+.additional {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-left: 15%;
+    padding-right: 15%;
+    background-color: $light-violet;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4%;
+
+    &_card {
+        padding: 20px;
+        width: 150px;
+        height: 100px;
+        background-color: $white;
+        border-radius: 20px;
+        box-shadow: $light-shadow;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        &_icon {
+            margin-bottom: 20px;
+        }
+
+        &_text {
+            color: $dark-gray;
+            text-align: center;
+        }
+    }
+}
