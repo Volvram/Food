@@ -11,6 +11,7 @@ import "react-multi-carousel/lib/styles.css";
 
 import FoodCard from "./components/FoodCard/FoodCard";
 import styles from "./styles.module.scss";
+import { responsiveCarousel } from "@/config/responsiveCarousel";
 import { shuffle } from "@/config/shuffle";
 import SearchContentStore, {
   CategoriesType,
@@ -647,25 +648,6 @@ type SearchContentProps = {
   searchMode: "categories" | "commonSearch";
 };
 
-const responsive = {
-  superLargeDesktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 4,
-  },
-  desktop: {
-    breakpoint: { max: 1024, min: 768 },
-    items: 3,
-  },
-  tablet: {
-    breakpoint: { max: 768, min: 464 },
-    items: 2,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-  },
-};
-
 const SearchContent: React.FC<SearchContentProps> = ({ searchMode }) => {
   const router = useRouter();
 
@@ -735,7 +717,7 @@ const SearchContent: React.FC<SearchContentProps> = ({ searchMode }) => {
                 <h2>{category.name}</h2>
                 <Carousel
                   className={styles.searchContent_categories_carousel}
-                  responsive={responsive}
+                  responsive={responsiveCarousel}
                 >
                   {randomizedCurrentDishes?.map((item) => (
                     <Link

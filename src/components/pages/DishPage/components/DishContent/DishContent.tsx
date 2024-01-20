@@ -4,6 +4,7 @@ import Additional from "./components/Additional/Additional";
 import General from "./components/General/General";
 import Ingredients from "./components/Ingredients/Ingredients";
 import Nutrition from "./components/Nutricion/Nutricion";
+import Other from "./components/Other/Other";
 import styles from "./styles.module.scss";
 import { DishType } from "@/store/SearchContentStore";
 
@@ -29,6 +30,7 @@ const DishPage: React.FC<DishContentProps> = ({ dish }) => {
       <Nutrition dish={dish} />
       <General />
       <Ingredients />
+      <Other />
     </div>
   );
 };
