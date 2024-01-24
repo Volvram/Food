@@ -1,22 +1,31 @@
 import React from "react";
 
-import { getNextWeekDatesAndDays } from "./helpers/helpers";
+import { observer } from "mobx-react-lite";
+
 import s from "./styles.module.scss";
+import CalendarContentStore from "@/store/CalendarContentStore";
+import { useLocalStore } from "@/utils/useLocalStore";
 
 const CalendarContent: React.FC = () => {
+  const calendarContentStore = useLocalStore(() => new CalendarContentStore());
+
   return (
     <div className={s.calendar}>
-      <div className={s.calendar_month}>Декабрь 2023</div>
+      <div className={s.calendar_month}>
+        {calendarContentStore.currentMonthStr}{" "}
+        {calendarContentStore.currentYear}
+      </div>
       <div className={s.calendar_list}>
-        {getNextWeekDatesAndDays().map((el) => {
+        {calendarContentStore.currentWeek.map((el) => {
           return (
-            <div key={el.date} className={s.calendar_card}>
+            <div key={el.day} className={s.calendar_card}>
               <div className={s.calendar_card_inner}>
                 <div className={s.calendar_card_week}>
                   <div className={s.calendar_card_week_title}>
-                    {el.date} · {el.dayOfWeek}
+                    {el.day} {el.month.toLowerCase().slice(0, 3)} ·{" "}
+                    {el.dayOfTheWeek}
                   </div>
-                  <div className={s.calendar_card_week_count}>11</div>
+                  <div className={s.calendar_card_week_count}>0</div>
                 </div>
                 <div className={s.calendar_card_inner_card}>
                   <div className={s.calendar_card_inner_card_title}>
@@ -121,4 +130,4 @@ const CalendarContent: React.FC = () => {
   );
 };
 
-export default CalendarContent;
+export default observer(CalendarContent);
