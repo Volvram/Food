@@ -1,8 +1,10 @@
+@import "@/styles/variables.scss";
+
 .calendar{
   margin-left: 20px;
   margin-right: 20px;
   min-height: 90vh;
-  overflow: auto;
+  overflow: hidden;
 
   &_month{
     color: #1D2130;
@@ -11,18 +13,21 @@
     font-style: normal;
     font-weight: 700;
     line-height: 120%;
-    margin-bottom: 53px;
+    margin-bottom: 48px;
   }
   &_list{
+    height: 75svh;
     display: flex;
     gap: 25px;
     justify-content: space-between;
+    overflow: auto;
   }
   &_card{
     display: flex;
     flex-wrap: nowrap;
     &_week{
       display: flex;
+      align-items: center;
       gap: 10px;
       color: #1D2130;
       text-align: center;
@@ -30,10 +35,17 @@
       font-style: normal;
       font-weight: 700;
       line-height: 120%;
-      margin-bottom: 21px;
+      margin-bottom: 16px;
 
       &_title {
+        padding: 5px;
         white-space: nowrap;
+
+        &__active {
+          background-color: $black-primary;
+          border-radius: 10px;
+          color: $white;
+        }
       }
     }
 

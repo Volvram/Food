@@ -34,55 +34,46 @@ const daysOfWeek = [
   "Суббота",
 ];
 
-type DayOfTheWeekType = {
-  day: number;
+export type DayOfTheWeekType = {
+  date: Date;
   dayOfTheWeek: string;
   month: string;
 };
 
 type PrivateFields =
-  | "_currentYear"
-  | "_currentMonth"
+  | "_currentDate"
   | "_currentMonthStr"
   | "_currentMonthDays"
   | "_currentWeek";
 
 class CalendarContentStore implements ILocalStore {
-  private _currentYear = new Date().getFullYear();
-  private _currentMonth = new Date().getMonth();
-  private _currentMonthStr = months[this._currentMonth];
+  private _currentDate = new Date();
+  private _currentMonthStr = months[this._currentDate.getMonth()];
   private _currentMonthDays = new Date(
-    this._currentYear,
-    this._currentMonth,
+    this._currentDate.getFullYear(),
+    this._currentDate.getMonth(),
     0,
   ).getDate();
-  //
-  private _currentDayOfTheWeek = new Date().getDay();
-  private _currentDayOfTheWeekStr = daysOfWeek[this._currentDayOfTheWeek];
-  private _currentDay = new Date().getDate();
+  private _currentDayOfTheWeekStr = daysOfWeek[this._currentDate.getDay()];
   private _currentSunday =
     this._currentDayOfTheWeekStr == "Воскресенье"
-      ? this._currentDay
-      : (this._currentDay + (7 - new Date().getDay())) % this._currentMonthDays;
+      ? this._currentDate.getDate()
+      : (this._currentDate.getDate() + (7 - new Date().getDay())) %
+        this._currentMonthDays;
   private _currentMonday =
     Math.abs(this._currentSunday - 6) % this._currentMonthDays;
   private _currentWeek: DayOfTheWeekType[] = [];
 
   constructor() {
     makeObservable<CalendarContentStore, PrivateFields>(this, {
-      _currentYear: observable,
-      setCurrentYear: action,
-      currentYear: computed,
-      _currentMonth: observable,
-      setCurrentMonth: action,
-      currentMonth: computed,
+      _currentDate: observable,
+      setCurrentDate: action,
+      currentDate: computed,
       _currentMonthStr: observable,
       currentMonthStr: computed,
       _currentMonthDays: observable,
       currentMonthDays: computed,
-      currentDayOfTheWeek: computed,
       currentDayOfTheWeekStr: computed,
-      currentDay: computed,
       currentSunday: computed,
       currentMonday: computed,
       _currentWeek: observable,
@@ -103,7 +94,11 @@ class CalendarContentStore implements ILocalStore {
     if (this._currentSunday > this._currentMonday) {
       for (let i = this._currentMonday; i <= this._currentSunday; i++) {
         this._currentWeek.push({
-          day: i,
+          date: new Date(
+            this._currentDate.getFullYear(),
+            this._currentDate.getMonth(),
+            i,
+          ),
           dayOfTheWeek: ruDaysOfWeek[dayOfWeekCounter++],
           month: this._currentMonthStr,
         });
@@ -112,25 +107,29 @@ class CalendarContentStore implements ILocalStore {
       // Если число воскресенья меньше понедельника
       // Если число воскресенья меньше и текущего дня, то понедельник относится к текущему месяцу, иначе к предыдущему
       const [daysOfMondayMonth, mondayMonth, nextMonth] =
-        this._currentSunday < this._currentDay
+        this._currentSunday < this._currentDate.getDate()
           ? [
               this._currentMonthDays,
               this._currentMonthStr,
-              months[(this._currentMonth + 1) % 12],
+              months[(this._currentDate.getMonth() + 1) % 12],
             ]
           : [
               new Date(
-                this._currentYear,
-                (this._currentMonth - 1) % 12,
+                this._currentDate.getFullYear(),
+                (this._currentDate.getMonth() - 1) % 12,
                 0,
               ).getDate(),
-              months[this._currentMonth - (1 % 12)],
+              months[this._currentDate.getMonth() - (1 % 12)],
               this._currentMonthStr,
             ];
 
       for (let i = this._currentMonday; i <= daysOfMondayMonth; i++) {
         this._currentWeek.push({
-          day: i,
+          date: new Date(
+            this._currentDate.getFullYear(),
+            this._currentDate.getMonth(),
+            i,
+          ),
           dayOfTheWeek: ruDaysOfWeek[dayOfWeekCounter++],
           month: mondayMonth,
         });
@@ -138,7 +137,11 @@ class CalendarContentStore implements ILocalStore {
 
       for (let i = 1; i <= this._currentSunday; i++) {
         this._currentWeek.push({
-          day: i,
+          date: new Date(
+            this._currentDate.getFullYear(),
+            this._currentDate.getMonth(),
+            i,
+          ),
           dayOfTheWeek: ruDaysOfWeek[dayOfWeekCounter++],
           month: nextMonth,
         });
@@ -146,20 +149,12 @@ class CalendarContentStore implements ILocalStore {
     }
   }
 
-  setCurrentYear(currentYear: number) {
-    this._currentYear = currentYear;
+  setCurrentDate(currentDate: Date) {
+    this._currentDate = currentDate;
   }
 
-  get currentYear() {
-    return this._currentYear;
-  }
-
-  setCurrentMonth(currentMonth: number) {
-    this._currentMonth = currentMonth;
-  }
-
-  get currentMonth() {
-    return this._currentMonth;
+  get currentDate() {
+    return this._currentDate;
   }
 
   get currentMonthStr() {
@@ -170,16 +165,8 @@ class CalendarContentStore implements ILocalStore {
     return this._currentMonthDays;
   }
 
-  get currentDayOfTheWeek() {
-    return this._currentDayOfTheWeek;
-  }
-
   get currentDayOfTheWeekStr() {
     return this._currentDayOfTheWeekStr;
-  }
-
-  get currentDay() {
-    return this._currentDay;
   }
 
   get currentSunday() {
@@ -203,12 +190,12 @@ class CalendarContentStore implements ILocalStore {
   }
 
   readonly handleMonthChange: IReactionDisposer = reaction(
-    () => this._currentMonth,
+    () => this._currentDate.getMonth(),
     () => {
-      this._currentMonthStr = months[this._currentMonth];
+      this._currentMonthStr = months[this._currentDate.getMonth()];
       this._currentMonthDays = new Date(
-        this._currentYear,
-        this._currentMonth,
+        this._currentDate.getFullYear(),
+        this._currentDate.getMonth(),
         0,
       ).getDate();
     },
