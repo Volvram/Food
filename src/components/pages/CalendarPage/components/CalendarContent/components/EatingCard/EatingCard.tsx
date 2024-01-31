@@ -9,7 +9,7 @@ type EatingCardProps = {
 
 const EatingCard: React.FC<EatingCardProps> = ({ weekDay }) => {
   const [eaten, setEaten] = React.useState(
-    weekDay.date.getDate() - new Date().getDate() >= 0 ? false : true,
+    weekDay.date.getTime() - Date.now() >= 0 ? false : true,
   );
 
   return (

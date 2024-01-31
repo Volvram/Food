@@ -57,11 +57,12 @@ class CalendarContentStore implements ILocalStore {
   private _currentDayOfTheWeekStr = daysOfWeek[this._currentDate.getDay()];
   private _currentSunday =
     this._currentDayOfTheWeekStr == "Воскресенье"
-      ? this._currentDate.getDate()
-      : (this._currentDate.getDate() + (7 - new Date().getDay())) %
-        this._currentMonthDays;
-  private _currentMonday =
-    Math.abs(this._currentSunday - 6) % this._currentMonthDays;
+      ? this._currentDate
+      : new Date(
+          this._currentDate.getFullYear(),
+          this._currentDate.getMonth(),
+          this._currentDate.getDate() + (7 - this._currentDate.getDay()),
+        );
   private _currentWeek: DayOfTheWeekType[] = [];
 
   constructor() {
@@ -75,7 +76,6 @@ class CalendarContentStore implements ILocalStore {
       currentMonthDays: computed,
       currentDayOfTheWeekStr: computed,
       currentSunday: computed,
-      currentMonday: computed,
       _currentWeek: observable,
       setCurrentWeek: action,
       currentWeek: computed,
@@ -89,64 +89,33 @@ class CalendarContentStore implements ILocalStore {
     ruDaysOfWeek = ruDaysOfWeek.slice(1);
 
     // Счетчик текущего дня недели
-    let dayOfWeekCounter = 0;
+    let dayOfWeekCounter = 7;
 
-    if (this._currentSunday > this._currentMonday) {
-      for (let i = this._currentMonday; i <= this._currentSunday; i++) {
-        this._currentWeek.push({
-          date: new Date(
-            this._currentDate.getFullYear(),
-            this._currentDate.getMonth(),
-            i,
-          ),
-          dayOfTheWeek: ruDaysOfWeek[dayOfWeekCounter++],
-          month: this._currentMonthStr,
-        });
-      }
-    } else {
-      // Если число воскресенья меньше понедельника
-      // Если число воскресенья меньше и текущего дня, то понедельник относится к текущему месяцу, иначе к предыдущему
-      const [daysOfMondayMonth, mondayMonth, nextMonth] =
-        this._currentSunday < this._currentDate.getDate()
-          ? [
-              this._currentMonthDays,
-              this._currentMonthStr,
-              months[(this._currentDate.getMonth() + 1) % 12],
-            ]
-          : [
-              new Date(
-                this._currentDate.getFullYear(),
-                (this._currentDate.getMonth() - 1) % 12,
-                0,
-              ).getDate(),
-              months[this._currentDate.getMonth() - (1 % 12)],
-              this._currentMonthStr,
-            ];
+    // Заполняем неделю с воскресенья
+    let currentDay = {
+      date: this._currentSunday,
+      dayOfTheWeek: ruDaysOfWeek[dayOfWeekCounter--],
+      month: months[this._currentSunday.getMonth()],
+    };
 
-      for (let i = this._currentMonday; i <= daysOfMondayMonth; i++) {
-        this._currentWeek.push({
-          date: new Date(
-            this._currentDate.getFullYear(),
-            this._currentDate.getMonth(),
-            i,
-          ),
-          dayOfTheWeek: ruDaysOfWeek[dayOfWeekCounter++],
-          month: mondayMonth,
-        });
-      }
+    this._currentWeek.push(currentDay);
 
-      for (let i = 1; i <= this._currentSunday; i++) {
-        this._currentWeek.push({
-          date: new Date(
-            this._currentDate.getFullYear(),
-            this._currentDate.getMonth(),
-            i,
-          ),
-          dayOfTheWeek: ruDaysOfWeek[dayOfWeekCounter++],
-          month: nextMonth,
-        });
-      }
+    while (dayOfWeekCounter > 0) {
+      currentDay = {
+        date: new Date(
+          currentDay.date.getFullYear(),
+          currentDay.date.getMonth(),
+          currentDay.date.getDate() - 1,
+        ),
+        dayOfTheWeek: ruDaysOfWeek[dayOfWeekCounter--],
+        month: months[currentDay.date.getMonth()],
+      };
+
+      this._currentWeek.push(currentDay);
     }
+
+    // Переворачиваем неделю
+    this._currentWeek = this._currentWeek.slice().reverse();
   }
 
   setCurrentDate(currentDate: Date) {
@@ -171,10 +140,6 @@ class CalendarContentStore implements ILocalStore {
 
   get currentSunday() {
     return this._currentSunday;
-  }
-
-  get currentMonday() {
-    return this._currentMonday;
   }
 
   setCurrentWeek(currentWeek: DayOfTheWeekType[]) {
