@@ -89,7 +89,7 @@ class CalendarContentStore implements ILocalStore {
     ruDaysOfWeek = ruDaysOfWeek.slice(1);
 
     // Счетчик текущего дня недели
-    let dayOfWeekCounter = 7;
+    let dayOfWeekCounter = 6;
 
     // Заполняем неделю с воскресенья
     let currentDay = {
@@ -100,7 +100,7 @@ class CalendarContentStore implements ILocalStore {
 
     this._currentWeek.push(currentDay);
 
-    while (dayOfWeekCounter > 0) {
+    while (dayOfWeekCounter >= 0) {
       currentDay = {
         date: new Date(
           currentDay.date.getFullYear(),
