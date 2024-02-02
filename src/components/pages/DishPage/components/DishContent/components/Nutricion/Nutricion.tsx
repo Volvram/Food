@@ -3,6 +3,7 @@ import React from "react";
 import { Chart, ArcElement } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
+import { roundedDoughnutPlugin } from "./roundedDoughnutPlugin";
 import styles from "./styles.module.scss";
 import { Counter } from "@/components/Counter";
 import { DishType } from "@/store/SearchContentStore";
@@ -20,8 +21,8 @@ const Nutrition: React.FC<NutritionProps> = ({ dish }) => {
       {
         label: "Углеводы",
         data: [dish.carbs, dish.protein + dish.fat],
-        backgroundColor: ["#6B7CFF", "#D4D4D4"],
-        borderColor: ["#6B7CFF", "#D4D4D4"],
+        backgroundColor: ["#455AFF", "#F5F5F5"],
+        borderColor: ["#455AFF", "#F5F5F5"],
         borderWidth: 0,
       },
     ],
@@ -33,9 +34,13 @@ const Nutrition: React.FC<NutritionProps> = ({ dish }) => {
       {
         label: "Белки",
         data: [dish.protein, dish.carbs + dish.fat],
-        backgroundColor: ["#6B7CFF", "#D4D4D4"],
-        borderColor: ["#6B7CFF", "#D4D4D4"],
+        backgroundColor: ["#455AFF", "#F5F5F5"],
+        borderColor: ["#455AFF", "#F5F5F5"],
         borderWidth: 1,
+        borderRadius: [
+          { outerStart: 15, outerEnd: 15, innerStart: 15, innerEnd: 15 },
+          0,
+        ],
       },
     ],
   };
@@ -46,9 +51,10 @@ const Nutrition: React.FC<NutritionProps> = ({ dish }) => {
       {
         label: "Жиры",
         data: [dish.fat, dish.carbs + dish.protein],
-        backgroundColor: ["#6B7CFF", "#D4D4D4"],
-        borderColor: ["#6B7CFF", "#D4D4D4"],
+        backgroundColor: ["#455AFF", "#F5F5F5"],
+        borderColor: ["#455AFF", "#F5F5F5"],
         borderWidth: 1,
+        borderRadius: 15,
       },
     ],
   };
@@ -90,7 +96,11 @@ const Nutrition: React.FC<NutritionProps> = ({ dish }) => {
             options={{
               responsive: true,
               maintainAspectRatio: true,
+              cutout: 45,
             }}
+            width={120}
+            height={120}
+            plugins={[roundedDoughnutPlugin]}
           />
           <h2 className={styles.nutrition_charts_index_num}>{dish.carbs}</h2>
           <span className={styles.nutrition_charts_index_text}>Углеводы</span>
@@ -101,7 +111,10 @@ const Nutrition: React.FC<NutritionProps> = ({ dish }) => {
             options={{
               responsive: true,
               maintainAspectRatio: true,
+              cutout: 45,
             }}
+            width={120}
+            height={120}
           />
           <h2 className={styles.nutrition_charts_index_num}>{dish.protein}</h2>
           <span className={styles.nutrition_charts_index_text}>Белки</span>
@@ -112,7 +125,10 @@ const Nutrition: React.FC<NutritionProps> = ({ dish }) => {
             options={{
               responsive: true,
               maintainAspectRatio: true,
+              cutout: 45,
             }}
+            width={120}
+            height={120}
           />
           <h2 className={styles.nutrition_charts_index_num}>{dish.fat}</h2>
           <span className={styles.nutrition_charts_index_text}>Жиры</span>
