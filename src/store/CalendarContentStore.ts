@@ -98,9 +98,9 @@ class CalendarContentStore implements ILocalStore {
       month: months[this._currentSunday.getMonth()],
     };
 
-    this._currentWeek.push(currentDay);
-
     while (dayOfWeekCounter >= 0) {
+      this._currentWeek.push(currentDay);
+
       currentDay = {
         date: new Date(
           currentDay.date.getFullYear(),
@@ -108,11 +108,14 @@ class CalendarContentStore implements ILocalStore {
           currentDay.date.getDate() - 1,
         ),
         dayOfTheWeek: ruDaysOfWeek[dayOfWeekCounter--],
-        month: months[currentDay.date.getMonth()],
+        month: "",
       };
 
-      this._currentWeek.push(currentDay);
+      // Подстановка месяца от уже измененной даты
+      currentDay.month = months[currentDay.date.getMonth()];
     }
+
+    this._currentWeek.push(currentDay);
 
     // Переворачиваем неделю
     this._currentWeek = this._currentWeek.slice().reverse();

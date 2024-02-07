@@ -9,21 +9,127 @@ import CalendarContentStore from "@/store/CalendarContentStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 
 const CalendarContent: React.FC = () => {
+  const listRef = React.useRef<HTMLDivElement | null>(null);
+  const currentDayRef = React.useRef<HTMLDivElement | null>(null);
+
   const calendarContentStore = useLocalStore(() => new CalendarContentStore());
+
+  React.useEffect(() => {
+    if (listRef.current && currentDayRef.current) {
+      listRef.current.scrollTo({
+        top: 0,
+        left: currentDayRef.current.offsetLeft - 25,
+        behavior: "smooth",
+      });
+    }
+  }, [currentDayRef.current]);
+
+  const previousWeek = () => {
+    listRef.current?.animate(
+      [
+        {
+          transform: "translateX(0%)",
+        },
+        {
+          transform: "translateX(100%)",
+        },
+      ],
+      {
+        duration: 500,
+        fill: "forwards",
+      },
+    );
+
+    listRef.current?.animate(
+      [
+        {
+          transform: "translateX(-100%)",
+        },
+        {
+          transform: "translateX(0%)",
+        },
+      ],
+      {
+        delay: 500,
+        duration: 500,
+        fill: "forwards",
+      },
+    );
+  };
+
+  const nextWeek = () => {
+    listRef.current?.animate(
+      [
+        {
+          transform: "translateX(0%)",
+        },
+        {
+          transform: "translateX(-100%)",
+        },
+      ],
+      {
+        duration: 500,
+        fill: "forwards",
+      },
+    );
+
+    listRef.current?.animate(
+      [
+        {
+          transform: "translateX(100%)",
+        },
+        {
+          transform: "translateX(0%)",
+        },
+      ],
+      {
+        delay: 500,
+        duration: 500,
+        fill: "forwards",
+      },
+    );
+  };
 
   return (
     <div className={s.calendar}>
-      <div className={s.calendar_month}>
-        {calendarContentStore.currentMonthStr}{" "}
-        {calendarContentStore.currentDate.getFullYear()}
+      <div className={s.calendar_panel}>
+        <div className={s.calendar_panel_month}>
+          {calendarContentStore.currentMonthStr}{" "}
+          {calendarContentStore.currentDate.getFullYear()}
+        </div>
+        <div className={s.calendar_panel_arrows}>
+          <div
+            onClick={() => {
+              previousWeek();
+            }}
+            className={s.calendar_panel_arrows_prev}
+          >
+            {"<"}
+          </div>
+          <div
+            onClick={() => {
+              nextWeek();
+            }}
+            className={s.calendar_panel_arrows_next}
+          >
+            {">"}
+          </div>
+        </div>
       </div>
-      <div className={s.calendar_list}>
+
+      <div ref={listRef} className={s.calendar_list}>
         {calendarContentStore.currentWeek.map((weekDay) => {
           return (
             <div key={weekDay.date.toString()} className={s.calendar_card}>
               <div className={s.calendar_card_inner}>
                 <div className={s.calendar_card_week}>
                   <div
+                    ref={
+                      weekDay.date.getDate() ==
+                      calendarContentStore.currentDate.getDate()
+                        ? currentDayRef
+                        : null
+                    }
                     className={cn(
                       s.calendar_card_week_title,
                       weekDay.date.getDate() ==
