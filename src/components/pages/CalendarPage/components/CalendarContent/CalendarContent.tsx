@@ -55,6 +55,8 @@ const CalendarContent: React.FC = () => {
         fill: "forwards",
       },
     );
+
+    calendarContentStore.setPreviousWeek();
   };
 
   const nextWeek = () => {
@@ -88,14 +90,15 @@ const CalendarContent: React.FC = () => {
         fill: "forwards",
       },
     );
+
+    calendarContentStore.setNextWeek();
   };
 
   return (
     <div className={s.calendar}>
       <div className={s.calendar_panel}>
         <div className={s.calendar_panel_month}>
-          {calendarContentStore.currentMonthStr}{" "}
-          {calendarContentStore.currentDate.getFullYear()}
+          {calendarContentStore.monthStr} {calendarContentStore.year}
         </div>
         <div className={s.calendar_panel_arrows}>
           <div
@@ -118,22 +121,22 @@ const CalendarContent: React.FC = () => {
       </div>
 
       <div ref={listRef} className={s.calendar_list}>
-        {calendarContentStore.currentWeek.map((weekDay) => {
+        {calendarContentStore.week.map((weekDay) => {
           return (
             <div key={weekDay.date.toString()} className={s.calendar_card}>
               <div className={s.calendar_card_inner}>
                 <div className={s.calendar_card_week}>
                   <div
                     ref={
-                      weekDay.date.getDate() ==
-                      calendarContentStore.currentDate.getDate()
+                      weekDay.date.getTime() ==
+                      calendarContentStore.currentDate.getTime()
                         ? currentDayRef
                         : null
                     }
                     className={cn(
                       s.calendar_card_week_title,
-                      weekDay.date.getDate() ==
-                        calendarContentStore.currentDate.getDate() &&
+                      weekDay.date.getTime() ==
+                        calendarContentStore.currentDate.getTime() &&
                         s.calendar_card_week_title__active,
                     )}
                   >

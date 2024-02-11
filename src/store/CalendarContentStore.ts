@@ -34,6 +34,11 @@ const daysOfWeek = [
   "Суббота",
 ];
 
+// Начало недели с понедельника
+let ruDaysOfWeek = daysOfWeek.slice(0);
+ruDaysOfWeek.push(ruDaysOfWeek[0]);
+ruDaysOfWeek = ruDaysOfWeek.slice(1);
+
 export type DayOfTheWeekType = {
   date: Date;
   dayOfTheWeek: string;
@@ -42,14 +47,20 @@ export type DayOfTheWeekType = {
 
 type PrivateFields =
   | "_currentDate"
-  | "_currentMonthStr"
-  | "_currentMonthDays"
-  | "_currentWeek";
+  | "_year"
+  | "_monthStr"
+  | "_monthDays"
+  | "_week";
 
 class CalendarContentStore implements ILocalStore {
-  private _currentDate = new Date();
-  private _currentMonthStr = months[this._currentDate.getMonth()];
-  private _currentMonthDays = new Date(
+  private _currentDate = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    new Date().getDate(),
+  );
+  private _year = this._currentDate.getFullYear();
+  private _monthStr = months[this._currentDate.getMonth()];
+  private _monthDays = new Date(
     this._currentDate.getFullYear(),
     this._currentDate.getMonth(),
     0,
@@ -63,62 +74,59 @@ class CalendarContentStore implements ILocalStore {
           this._currentDate.getMonth(),
           this._currentDate.getDate() + (7 - this._currentDate.getDay()),
         );
-  private _currentWeek: DayOfTheWeekType[] = [];
+  private _week: DayOfTheWeekType[] = [];
 
   constructor() {
     makeObservable<CalendarContentStore, PrivateFields>(this, {
       _currentDate: observable,
       setCurrentDate: action,
       currentDate: computed,
-      _currentMonthStr: observable,
-      currentMonthStr: computed,
-      _currentMonthDays: observable,
-      currentMonthDays: computed,
+      _year: observable,
+      setYear: action,
+      year: computed,
+      _monthStr: observable,
+      setMonthStr: action,
+      monthStr: computed,
+      _monthDays: observable,
+      setMonthDays: action,
+      monthDays: computed,
       currentDayOfTheWeekStr: computed,
       currentSunday: computed,
-      _currentWeek: observable,
-      setCurrentWeek: action,
-      currentWeek: computed,
+      _week: observable,
+      setWeek: action,
+      week: computed,
     });
 
     // **Подсчет дней недели**
 
-    // Начало недели с понедельника
-    let ruDaysOfWeek = daysOfWeek.slice(0);
-    ruDaysOfWeek.push(ruDaysOfWeek[0]);
-    ruDaysOfWeek = ruDaysOfWeek.slice(1);
-
-    // Счетчик текущего дня недели
-    let dayOfWeekCounter = 6;
-
     // Заполняем неделю с воскресенья
+    let currentDate = this._currentSunday;
     let currentDay = {
-      date: this._currentSunday,
-      dayOfTheWeek: ruDaysOfWeek[dayOfWeekCounter--],
-      month: months[this._currentSunday.getMonth()],
+      date: currentDate,
+      dayOfTheWeek: daysOfWeek[currentDate.getDay()],
+      month: months[currentDate.getMonth()],
     };
 
-    while (dayOfWeekCounter >= 0) {
-      this._currentWeek.push(currentDay);
+    while (daysOfWeek[currentDate.getDay()] != daysOfWeek[1]) {
+      this._week.push(currentDay);
+
+      currentDate = new Date(
+        currentDay.date.getFullYear(),
+        currentDay.date.getMonth(),
+        currentDay.date.getDate() - 1,
+      );
 
       currentDay = {
-        date: new Date(
-          currentDay.date.getFullYear(),
-          currentDay.date.getMonth(),
-          currentDay.date.getDate() - 1,
-        ),
-        dayOfTheWeek: ruDaysOfWeek[dayOfWeekCounter--],
-        month: "",
+        date: currentDate,
+        dayOfTheWeek: daysOfWeek[currentDate.getDay()],
+        month: months[currentDate.getMonth()],
       };
-
-      // Подстановка месяца от уже измененной даты
-      currentDay.month = months[currentDay.date.getMonth()];
     }
 
-    this._currentWeek.push(currentDay);
+    this._week.push(currentDay);
 
     // Переворачиваем неделю
-    this._currentWeek = this._currentWeek.slice().reverse();
+    this._week = this._week.slice().reverse();
   }
 
   setCurrentDate(currentDate: Date) {
@@ -129,12 +137,28 @@ class CalendarContentStore implements ILocalStore {
     return this._currentDate;
   }
 
-  get currentMonthStr() {
-    return this._currentMonthStr;
+  setYear(year: number) {
+    this._year = year;
   }
 
-  get currentMonthDays() {
-    return this._currentMonthDays;
+  get year() {
+    return this._year;
+  }
+
+  setMonthStr(monthStr: string) {
+    this._monthStr = monthStr;
+  }
+
+  get monthStr() {
+    return this._monthStr;
+  }
+
+  setMonthDays(monthDays: number) {
+    this._monthDays = monthDays;
+  }
+
+  get monthDays() {
+    return this._monthDays;
   }
 
   get currentDayOfTheWeekStr() {
@@ -145,27 +169,82 @@ class CalendarContentStore implements ILocalStore {
     return this._currentSunday;
   }
 
-  setCurrentWeek(currentWeek: DayOfTheWeekType[]) {
-    this._currentWeek = currentWeek;
+  setWeek(currentWeek: DayOfTheWeekType[]) {
+    this._week = currentWeek;
   }
 
-  get currentWeek() {
-    return this._currentWeek;
+  get week() {
+    return this._week;
+  }
+
+  setPreviousWeek() {
+    this.setWeek(
+      this._week.map((day) => {
+        const newDate = new Date(
+          day.date.getFullYear(),
+          day.date.getMonth(),
+          day.date.getDate() - 7,
+        );
+
+        return {
+          date: newDate,
+          dayOfTheWeek: daysOfWeek[newDate.getDay()],
+          month: months[newDate.getMonth()],
+        };
+      }),
+    );
+  }
+
+  setNextWeek() {
+    this.setWeek(
+      this._week.map((day) => {
+        const newDate = new Date(
+          day.date.getFullYear(),
+          day.date.getMonth(),
+          day.date.getDate() + 7,
+        );
+
+        return {
+          date: newDate,
+          dayOfTheWeek: daysOfWeek[newDate.getDay()],
+          month: months[newDate.getMonth()],
+        };
+      }),
+    );
   }
 
   destroy() {
     this.handleMonthChange();
+    this.handleWeekChange();
   }
 
   readonly handleMonthChange: IReactionDisposer = reaction(
     () => this._currentDate.getMonth(),
     () => {
-      this._currentMonthStr = months[this._currentDate.getMonth()];
-      this._currentMonthDays = new Date(
-        this._currentDate.getFullYear(),
-        this._currentDate.getMonth(),
-        0,
-      ).getDate();
+      this.setMonthStr(months[this._currentDate.getMonth()]);
+      this.setMonthDays(
+        new Date(
+          this._currentDate.getFullYear(),
+          this._currentDate.getMonth(),
+          0,
+        ).getDate(),
+      );
+      this.setYear(this._currentDate.getFullYear());
+    },
+  );
+
+  readonly handleWeekChange: IReactionDisposer = reaction(
+    () => this._week,
+    () => {
+      this.setMonthStr(this._week[0].month);
+      this.setMonthDays(
+        new Date(
+          this._week[0].date.getFullYear(),
+          this._week[0].date.getMonth(),
+          0,
+        ).getDate(),
+      );
+      this.setYear(this._week[0].date.getFullYear());
     },
   );
 }
