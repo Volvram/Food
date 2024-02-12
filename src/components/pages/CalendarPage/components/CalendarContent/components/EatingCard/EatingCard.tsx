@@ -1,13 +1,14 @@
 import React from "react";
 
 import styles from "./styles.module.scss";
-import { DayOfTheWeekType } from "@/store/CalendarContentStore";
+import { DayOfTheWeekType, MealType } from "@/store/CalendarContentStore";
 
 type EatingCardProps = {
   weekDay: DayOfTheWeekType;
+  meal: MealType;
 };
 
-const EatingCard: React.FC<EatingCardProps> = ({ weekDay }) => {
+const EatingCard: React.FC<EatingCardProps> = ({ weekDay, meal }) => {
   const [eaten, setEaten] = React.useState(
     weekDay.date.getTime() - Date.now() >= 0 ? false : true,
   );
@@ -59,7 +60,7 @@ const EatingCard: React.FC<EatingCardProps> = ({ weekDay }) => {
           )}
         </div>
         <div className={styles.eatingCard_inner_card_title_text}>
-          Lorem ipsum dolor sit amet.
+          {meal.title}
         </div>
       </div>
       <div className={styles.eatingCard_inner_card_data}>

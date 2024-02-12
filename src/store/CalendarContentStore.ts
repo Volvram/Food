@@ -39,10 +39,17 @@ let ruDaysOfWeek = daysOfWeek.slice(0);
 ruDaysOfWeek.push(ruDaysOfWeek[0]);
 ruDaysOfWeek = ruDaysOfWeek.slice(1);
 
+export type MealType = {
+  id: string;
+  eatingId: string;
+  title: string;
+};
+
 export type DayOfTheWeekType = {
   date: Date;
   dayOfTheWeek: string;
   month: string;
+  meals: MealType[];
 };
 
 type PrivateFields =
@@ -50,7 +57,8 @@ type PrivateFields =
   | "_year"
   | "_monthStr"
   | "_monthDays"
-  | "_week";
+  | "_week"
+  | "_isOpenAddMeal";
 
 class CalendarContentStore implements ILocalStore {
   private _currentDate = new Date(
@@ -75,6 +83,7 @@ class CalendarContentStore implements ILocalStore {
           this._currentDate.getDate() + (7 - this._currentDate.getDay()),
         );
   private _week: DayOfTheWeekType[] = [];
+  private _isOpenAddMeal = false;
 
   constructor() {
     makeObservable<CalendarContentStore, PrivateFields>(this, {
@@ -95,6 +104,9 @@ class CalendarContentStore implements ILocalStore {
       _week: observable,
       setWeek: action,
       week: computed,
+      _isOpenAddMeal: observable,
+      setIsOpenAddMeal: action,
+      isOpenAddMeal: computed,
     });
 
     // **Подсчет дней недели**
@@ -105,6 +117,28 @@ class CalendarContentStore implements ILocalStore {
       date: currentDate,
       dayOfTheWeek: daysOfWeek[currentDate.getDay()],
       month: months[currentDate.getMonth()],
+      meals: [
+        {
+          id: "1",
+          eatingId: "1",
+          title: "Lorem ipsum dolor sit amet.",
+        },
+        {
+          id: "2",
+          eatingId: "1",
+          title: "dolor sit amet Lorem ipsum.",
+        },
+        {
+          id: "3",
+          eatingId: "1",
+          title: "Lorem ipsum dolor sit amet.",
+        },
+        {
+          id: "4",
+          eatingId: "1",
+          title: "Lorem ipsum dolor sit amet.",
+        },
+      ],
     };
 
     while (daysOfWeek[currentDate.getDay()] != daysOfWeek[1]) {
@@ -120,6 +154,13 @@ class CalendarContentStore implements ILocalStore {
         date: currentDate,
         dayOfTheWeek: daysOfWeek[currentDate.getDay()],
         month: months[currentDate.getMonth()],
+        meals: [
+          {
+            id: "1",
+            eatingId: "1",
+            title: "Lorem ipsum dolor sit amet.",
+          },
+        ],
       };
     }
 
@@ -190,6 +231,7 @@ class CalendarContentStore implements ILocalStore {
           date: newDate,
           dayOfTheWeek: daysOfWeek[newDate.getDay()],
           month: months[newDate.getMonth()],
+          meals: day.meals,
         };
       }),
     );
@@ -208,10 +250,23 @@ class CalendarContentStore implements ILocalStore {
           date: newDate,
           dayOfTheWeek: daysOfWeek[newDate.getDay()],
           month: months[newDate.getMonth()],
+          meals: day.meals,
         };
       }),
     );
   }
+
+  setIsOpenAddMeal(isOpenAddMeal: boolean) {
+    this._isOpenAddMeal = isOpenAddMeal;
+  }
+
+  get isOpenAddMeal() {
+    return this._isOpenAddMeal;
+  }
+
+  toggleIsOpenAddMeal = () => {
+    this.setIsOpenAddMeal(!this._isOpenAddMeal);
+  };
 
   destroy() {
     this.handleMonthChange();

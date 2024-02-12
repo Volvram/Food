@@ -16,16 +16,9 @@
             align-items: center;
         }
 
-        &_close {
-            cursor: pointer;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-        }
-
         &_accordion {
             &_range {
-
+                display: flex;
             }
         }
 

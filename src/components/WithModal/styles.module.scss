@@ -19,6 +19,13 @@
     -moz-border-radius: 20px;
     -ms-border-radius: 20px;
     -o-border-radius: 20px;
+
+    &_close {
+        cursor: pointer;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
 }
 
 @media screen and (max-width: $tablet) {

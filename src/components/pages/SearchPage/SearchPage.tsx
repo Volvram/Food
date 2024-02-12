@@ -66,6 +66,7 @@ const SearchPage: React.FC = () => {
         <WithModal
           open={searchPageStore.isOpenFilters}
           onClose={searchPageStore.toggleIsOpenFilters}
+          withCross={true}
         >
           <SearchFilters
             onClose={() => {

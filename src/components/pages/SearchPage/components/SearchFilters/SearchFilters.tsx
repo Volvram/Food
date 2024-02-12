@@ -53,12 +53,6 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
             label="Продукты"
           />
         </RadioGroup>
-        <CloseIcon
-          onClick={() => {
-            onClose();
-          }}
-          className={style.filtersearch_inner_close}
-        />
         {searchFiltersStore.searchType == "Блюдо" && (
           <>
             <div className={style.filtersearch_inner_accordion}>

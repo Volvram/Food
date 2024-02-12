@@ -3,8 +3,10 @@ import React from "react";
 import cn from "classnames";
 import { observer } from "mobx-react-lite";
 
+import AddMeal from "./components/AddMeal/AddMeal";
 import EatingCard from "./components/EatingCard/EatingCard";
 import s from "./styles.module.scss";
+import WithModal from "@/components/WithModal/WithModal";
 import CalendarContentStore from "@/store/CalendarContentStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 
@@ -96,6 +98,13 @@ const CalendarContent: React.FC = () => {
 
   return (
     <div className={s.calendar}>
+      <WithModal
+        open={calendarContentStore.isOpenAddMeal}
+        onClose={calendarContentStore.toggleIsOpenAddMeal}
+        withCross={true}
+      >
+        <AddMeal />
+      </WithModal>
       <div className={s.calendar_panel}>
         <div className={s.calendar_panel_month}>
           {calendarContentStore.monthStr} {calendarContentStore.year}
@@ -146,8 +155,19 @@ const CalendarContent: React.FC = () => {
                   </div>
                   <div className={s.calendar_card_week_count}>0</div>
                 </div>
-                <EatingCard weekDay={weekDay} />
-                <div className={s.calendar_card_btn}>
+                <div className={s.calendar_card_meals}>
+                  {weekDay.meals.map((meal) => {
+                    return (
+                      <EatingCard key={meal.id} weekDay={weekDay} meal={meal} />
+                    );
+                  })}
+                </div>
+                <div
+                  className={s.calendar_card_btn}
+                  onClick={() => {
+                    calendarContentStore.toggleIsOpenAddMeal();
+                  }}
+                >
                   <>
                     <svg
                       width="17"
