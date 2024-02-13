@@ -103,7 +103,10 @@ const CalendarContent: React.FC = () => {
         onClose={calendarContentStore.toggleIsOpenAddMeal}
         withCross={true}
       >
-        <AddMeal />
+        <AddMeal
+          weekDay={calendarContentStore.chosenWeekDay}
+          onClose={calendarContentStore.toggleIsOpenAddMeal}
+        />
       </WithModal>
       <div className={s.calendar_panel}>
         <div className={s.calendar_panel_month}>
@@ -166,6 +169,7 @@ const CalendarContent: React.FC = () => {
                   className={s.calendar_card_btn}
                   onClick={() => {
                     calendarContentStore.toggleIsOpenAddMeal();
+                    calendarContentStore.setChosenWeekDay(weekDay);
                   }}
                 >
                   <>

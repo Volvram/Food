@@ -58,7 +58,8 @@ type PrivateFields =
   | "_monthStr"
   | "_monthDays"
   | "_week"
-  | "_isOpenAddMeal";
+  | "_isOpenAddMeal"
+  | "_chosenWeekDay";
 
 class CalendarContentStore implements ILocalStore {
   private _currentDate = new Date(
@@ -84,6 +85,7 @@ class CalendarContentStore implements ILocalStore {
         );
   private _week: DayOfTheWeekType[] = [];
   private _isOpenAddMeal = false;
+  private _chosenWeekDay: DayOfTheWeekType | null = null;
 
   constructor() {
     makeObservable<CalendarContentStore, PrivateFields>(this, {
@@ -107,6 +109,9 @@ class CalendarContentStore implements ILocalStore {
       _isOpenAddMeal: observable,
       setIsOpenAddMeal: action,
       isOpenAddMeal: computed,
+      _chosenWeekDay: observable,
+      setChosenWeekDay: action,
+      chosenWeekDay: computed,
     });
 
     // **Подсчет дней недели**
@@ -267,6 +272,14 @@ class CalendarContentStore implements ILocalStore {
   toggleIsOpenAddMeal = () => {
     this.setIsOpenAddMeal(!this._isOpenAddMeal);
   };
+
+  setChosenWeekDay(chosenWeekDay: DayOfTheWeekType | null) {
+    this._chosenWeekDay = chosenWeekDay;
+  }
+
+  get chosenWeekDay() {
+    return this._chosenWeekDay;
+  }
 
   destroy() {
     this.handleMonthChange();
