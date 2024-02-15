@@ -2,4 +2,76 @@
 
 .addMeal {
     padding: 20px 20px;
+    display: flex;
+    flex-direction: column;
+
+    &_h {
+        font-size: $h2;
+        margin: 0 auto;
+    }
+
+    &_search{
+        margin-top: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+
+        &_searchInput {
+            padding: 10px 40px 10px 19px;
+            min-width: 200px;
+            width: 60%;
+            border-radius: 20px;
+            border: 1px solid $very-light-gray;
+    
+            &_container {
+                margin-top: 20px;
+                margin-left: auto;
+                margin-right: auto;
+                width: fit-content;
+            }
+        }
+
+        &_filters {
+            cursor: pointer;
+        }
+    }
+
+    &_searchList {
+        margin-top: 20px;
+        max-height: 300px;
+        overflow-y: auto;
+
+        display: flex;
+        flex-direction: column;
+
+        &_dish {
+            cursor: pointer;
+            border-bottom: 1px solid $light-gray;
+
+            display: flex;
+            align-items: center;
+
+            &:hover {
+                background-color: $very-light-gray;
+            }
+
+            &_title {
+                padding: 5px 5px;
+            }
+
+            &_img {
+                margin-left: auto;
+                width: 40px;
+                height: 40px;
+                object-fit: cover;
+            }
+        }
+    }
+
+    &_btn {
+        margin-top: 20px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }

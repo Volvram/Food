@@ -2,10 +2,10 @@ import React from "react";
 
 import Image from "next/image";
 
-import { DishType } from "../../SearchContent";
 import style from "./styles.module.scss";
 import clockIcon from "@/assets/img/clock.png";
 import favoritesIcon from "@/assets/img/favorites.png";
+import { DishType } from "@/store/SearchContentStore";
 
 type FoodCardType = {
   item: DishType;

@@ -1,8 +1,16 @@
 import React from "react";
 
+import TuneIcon from "@mui/icons-material/Tune";
+import { observer } from "mobx-react-lite";
+
 import styles from "./styles.module.scss";
+import magnifier from "@/assets/img/magnifier.png";
 import { Button } from "@/components/Button";
+import { Input } from "@/components/Input";
+import { debounce } from "@/config/debounce";
+import AddMealStore from "@/store/AddMealStore";
 import { DayOfTheWeekType } from "@/store/CalendarContentStore";
+import { useLocalStore } from "@/utils/useLocalStore";
 
 type AddMealProps = {
   weekDay: DayOfTheWeekType | null;
@@ -10,17 +18,61 @@ type AddMealProps = {
 };
 
 const AddMeal: React.FC<AddMealProps> = ({ weekDay, onClose }) => {
+  const addMealStore = useLocalStore(() => new AddMealStore());
+
+  const handleSearchChange = React.useCallback(
+    debounce((value: string) => {
+      addMealStore.setSearch(value);
+    }),
+    // (value: string) => {
+    //   setSearch(value);
+    // },
+    [],
+  );
+
   return (
     <div className={styles.addMeal}>
+      <h2 className={styles.addMeal_h}>Добавить приём пищи</h2>
+      <div className={styles.addMeal_search}>
+        <Input
+          value={addMealStore.search}
+          className={styles.addMeal_search_searchInput}
+          containerClassName={styles.addMeal_searchInput_container}
+          onChange={handleSearchChange}
+          placeholder="Какое блюдо вас интересует?"
+          icon={magnifier}
+        />
+        <TuneIcon
+          className={styles.addMeal_search_filters}
+          onClick={() => {}}
+        />
+      </div>
+      <div className={styles.addMeal_searchList}>
+        {addMealStore.searchList.map((dish) => {
+          return (
+            <div key={dish.id} className={styles.addMeal_searchList_dish}>
+              <span className={styles.addMeal_searchList_dish_title}>
+                {dish.name}
+              </span>
+              <img
+                src={dish.image}
+                alt={dish.name}
+                className={styles.addMeal_searchList_dish_img}
+              />
+            </div>
+          );
+        })}
+      </div>
       <Button
         onClick={() => {
           weekDay?.meals.push({
             id: `${Math.random()}`,
             eatingId: "2",
-            title: "Blah blah blah.",
+            title: "Blah blah blah",
           });
           onClose();
         }}
+        className={styles.addMeal_btn}
       >
         Добавить
       </Button>
@@ -28,4 +80,4 @@ const AddMeal: React.FC<AddMealProps> = ({ weekDay, onClose }) => {
   );
 };
 
-export default AddMeal;
+export default observer(AddMeal);
