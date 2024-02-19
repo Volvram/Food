@@ -47,10 +47,14 @@ const SearchPage: React.FC = () => {
     searchPageStore.toggleSeeMore();
     searchPageStore.seeMore
       ? router.push({
-          query: { ...router.query, seeMore: searchPageStore.seeMore },
+          query: {
+            ...router.query,
+            seeMore: searchPageStore.seeMore,
+            search: "",
+          },
         })
       : router.push({
-          query: { ...router.query, seeMore: null },
+          query: { ...router.query, seeMore: null, search: "" },
         });
   }, [router]);
 

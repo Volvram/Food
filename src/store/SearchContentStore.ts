@@ -1,17 +1,61 @@
-import { makeObservable, observable, action, computed } from "mobx";
+import axios from "axios";
+import {
+  makeObservable,
+  observable,
+  action,
+  computed,
+  runInAction,
+} from "mobx";
 
+import { HOST } from "@/config/host";
 import { ILocalStore } from "@/utils/useLocalStore";
 
-export type DishType = {
-  id: string;
+interface Category {
+  id: number;
   name: string;
-  image: string;
-  notes: string;
+}
+
+interface KitchenType {
+  id: number;
+  name: string;
+}
+
+interface CookingMethod {
+  id: number;
+  name: string;
+}
+
+type Dish = {
+  id: number;
+  name: string;
+  image?: string | null;
+  description: string | null;
+  cooking_time: number;
+  energy: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  category: Category;
+  kitchen_type: KitchenType;
+  cooking_method: CookingMethod;
+  dietary_needs: string | null;
+  dish_product_links: any[] | null;
+  tags: any[] | null;
+  nutrients: any[] | null;
+};
+
+// @TODO Убрать заглушку
+export type DishType = {
+  id: string | number;
+  name: string;
+  image?: string | null;
+  description: string | null;
   energy: number;
   protein: number;
   carbs: number;
   fat: number;
 };
+// -------------------
 
 export type CategoryType = {
   id: string;
@@ -33,7 +77,7 @@ type PrivateFields =
 class SearchContentStore implements ILocalStore {
   private _categories: CategoryType[] = [];
   private _categoriesDishes: CategoriesType[] = [];
-  private _dishes: DishType[] = [];
+  private _dishes: DishType[] | Dish[] = [];
   private _currentPageDishes: DishType[] = [];
   private _countPerPage = 12;
 
@@ -73,12 +117,33 @@ class SearchContentStore implements ILocalStore {
     return this._categoriesDishes;
   }
 
-  setDishes(dishes: DishType[]) {
+  setDishes(dishes: DishType[] | Dish[]) {
     this._dishes = dishes;
   }
 
   get dishes() {
     return this._dishes;
+  }
+
+  async requestDishes(search?: string | string[]) {
+    try {
+      const result = await axios({
+        url: `${HOST}/dishes/search`,
+        method: "POST",
+        data: search
+          ? {
+              name_search: search,
+            }
+          : {},
+      });
+
+      runInAction(async () => {
+        const dishes = await result.data;
+        this.setDishes(dishes);
+      });
+    } catch (e) {
+      console.log("SearchContentStore", e);
+    }
   }
 
   setCurrentPageDishes(currentPageDishes: DishType[]) {
