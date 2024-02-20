@@ -6,7 +6,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import { observer } from "mobx-react-lite";
@@ -33,6 +33,10 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
   const searchFiltersStore = useLocalStore(
     () => new SearchFiltersStore(filters),
   );
+
+  React.useLayoutEffect(() => {
+    searchFiltersStore.requestFilters();
+  }, []);
 
   return (
     <div className={style.filtersearch}>
@@ -82,18 +86,20 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
                   <Select
                     labelId="demo-simple-select-standard-label"
                     id="demo-simple-select-standard"
-                    value={searchFiltersStore.kitchen}
-                    onChange={(event: SelectChangeEvent) => {
-                      searchFiltersStore.setKitchen(event.target.value);
-                    }}
+                    value={searchFiltersStore.kitchen.name}
+                    onChange={searchFiltersStore.handleKitchenChange}
                     label="Кухня"
                   >
                     <MenuItem value="Любая">
                       <em>Любая</em>
                     </MenuItem>
-                    <MenuItem value="Русская">Русская</MenuItem>
-                    <MenuItem value="Китайская">Китайская</MenuItem>
-                    <MenuItem value="Вьетнамская">Вьетнамская</MenuItem>
+                    {searchFiltersStore.allKitchen.map((kitchen) => {
+                      return (
+                        <MenuItem key={kitchen.id} value={kitchen.name}>
+                          {kitchen.name}
+                        </MenuItem>
+                      );
+                    })}
                   </Select>
                 </FormControl>
               </FilterAccordion>
@@ -102,17 +108,20 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
                   <Select
                     labelId="demo-simple-select-standard-label"
                     id="demo-simple-select-standard"
-                    value={searchFiltersStore.category}
-                    onChange={(event: SelectChangeEvent) => {
-                      searchFiltersStore.setCategory(event.target.value);
-                    }}
+                    value={searchFiltersStore.category.name}
+                    onChange={searchFiltersStore.handleCategoryChange}
                     label="Категория"
                   >
                     <MenuItem value="Любая">
                       <em>Любая</em>
                     </MenuItem>
-                    <MenuItem value="Диетическая">Диетическая</MenuItem>
-                    <MenuItem value="Гипоаллергенная">Гипоаллергенная</MenuItem>
+                    {searchFiltersStore.allCategories.map((category) => {
+                      return (
+                        <MenuItem key={category.id} value={category.name}>
+                          {category.name}
+                        </MenuItem>
+                      );
+                    })}
                   </Select>
                 </FormControl>
               </FilterAccordion>
@@ -142,18 +151,25 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
                   <Select
                     labelId="demo-simple-select-standard-label"
                     id="demo-simple-select-standard"
-                    value={searchFiltersStore.cookingMethod}
-                    onChange={(event: SelectChangeEvent) => {
-                      searchFiltersStore.setCookingMethod(event.target.value);
-                    }}
+                    value={searchFiltersStore.cookingMethod.name}
+                    onChange={searchFiltersStore.handleCookingMethodChange}
                     label="Метод приготовления"
                   >
                     <MenuItem value="Любой">
                       <em>Любой</em>
                     </MenuItem>
-                    <MenuItem value="Варить">Варить</MenuItem>
-                    <MenuItem value="Жарить">Жарить</MenuItem>
-                    <MenuItem value="Тушить">Тушить</MenuItem>
+                    {searchFiltersStore.allCookingMethods.map(
+                      (cookingMethod) => {
+                        return (
+                          <MenuItem
+                            key={cookingMethod.id}
+                            value={cookingMethod.name}
+                          >
+                            {cookingMethod.name}
+                          </MenuItem>
+                        );
+                      },
+                    )}
                   </Select>
                 </FormControl>
               </FilterAccordion>

@@ -10,10 +10,10 @@ import {
 import { HOST } from "@/config/host";
 import { ILocalStore } from "@/utils/useLocalStore";
 
-interface Category {
-  id: number;
+export type CategoryType = {
+  id: string | number;
   name: string;
-}
+};
 
 interface KitchenType {
   id: number;
@@ -35,7 +35,7 @@ type Dish = {
   protein: number;
   carbs: number;
   fat: number;
-  category: Category;
+  category: CategoryType;
   kitchen_type: KitchenType;
   cooking_method: CookingMethod;
   dietary_needs: string | null;
@@ -56,11 +56,6 @@ export type DishType = {
   fat: number;
 };
 // -------------------
-
-export type CategoryType = {
-  id: string;
-  name: string;
-};
 
 export type CategoriesType = {
   category: string;
@@ -142,7 +137,7 @@ class SearchContentStore implements ILocalStore {
         this.setDishes(dishes);
       });
     } catch (e) {
-      console.log("SearchContentStore", e);
+      console.log("SearchContentStore ", e);
     }
   }
 

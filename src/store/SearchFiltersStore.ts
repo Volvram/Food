@@ -1,5 +1,15 @@
-import { makeObservable, observable, action, computed } from "mobx";
+import { SelectChangeEvent } from "@mui/material/Select";
+import axios from "axios";
+import {
+  makeObservable,
+  observable,
+  action,
+  computed,
+  runInAction,
+} from "mobx";
 
+import { CategoryType } from "./SearchContentStore";
+import { HOST } from "@/config/host";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 export type FiltersType = {
@@ -8,23 +18,36 @@ export type FiltersType = {
     from: number;
     to: number;
   };
-  kitchen: string;
-  category: string;
+  kitchen: KitchenType;
+  category: CategoryType;
   cookingTime: {
     from: number;
     to: number;
   };
-  cookingMethod: string;
+  cookingMethod: CookingMethodType;
   removeDrinks: boolean;
   products: string[];
+};
+
+export type CookingMethodType = {
+  id: string | number;
+  name: string;
+};
+
+export type KitchenType = {
+  id: string | number;
+  name: string;
 };
 
 type PrivateFields =
   | "_searchType"
   | "_energy"
+  | "_allKitchen"
   | "_kitchen"
+  | "_allCategories"
   | "_category"
   | "_cookingTime"
+  | "_allCookingMethods"
   | "_cookingMethod"
   | "_removeDrinks"
   | "_products"
@@ -36,13 +59,25 @@ class SearchFiltersStore implements ILocalStore {
     from: 0,
     to: Infinity,
   };
-  private _kitchen: string = "Любая";
-  private _category: string = "Любая";
+  private _allKitchen: KitchenType[] = [];
+  private _kitchen: KitchenType = {
+    id: 0,
+    name: "Любая",
+  };
+  private _allCategories: CategoryType[] = [];
+  private _category: CategoryType = {
+    id: 0,
+    name: "Любая",
+  };
   private _cookingTime = {
     from: 0,
     to: Infinity,
   };
-  private _cookingMethod: string = "Любой";
+  private _allCookingMethods: CookingMethodType[] = [];
+  private _cookingMethod: CookingMethodType = {
+    id: 0,
+    name: "Любой",
+  };
   private _removeDrinks: boolean = false;
   private _productInput: string | string[] = "";
   private _products: string[] = [];
@@ -55,15 +90,22 @@ class SearchFiltersStore implements ILocalStore {
       _energy: observable,
       setEnergy: action,
       energy: computed,
+      _allKitchen: observable,
       _kitchen: observable,
       setKitchen: action,
       kitchen: computed,
+      _allCategories: observable,
+      setAllCategories: action,
+      allCategories: computed,
       _category: observable,
       setCategory: action,
       category: computed,
       _cookingTime: observable,
       setCookingTime: action,
       cookingTime: computed,
+      _allCookingMethods: observable,
+      setAllCookingMethods: action,
+      allCookingMethods: computed,
       _cookingMethod: observable,
       setCookingMethod: action,
       cookingMethod: computed,
@@ -103,7 +145,15 @@ class SearchFiltersStore implements ILocalStore {
     return this._energy;
   }
 
-  setKitchen(kitchen: string) {
+  setAllKitchen(allKitchen: KitchenType[]) {
+    this._allKitchen = allKitchen;
+  }
+
+  get allKitchen() {
+    return this._allKitchen;
+  }
+
+  setKitchen(kitchen: KitchenType) {
     this._kitchen = kitchen;
   }
 
@@ -111,13 +161,49 @@ class SearchFiltersStore implements ILocalStore {
     return this._kitchen;
   }
 
-  setCategory(category: string) {
+  handleKitchenChange = (event: SelectChangeEvent) => {
+    if (event.target.value == "Любая") {
+      this.setKitchen({
+        id: 0,
+        name: "Любая",
+      });
+    } else {
+      const newKitchen = this.allKitchen.find((kitchen) => {
+        return kitchen.name == event.target.value;
+      });
+      newKitchen && this.setKitchen(newKitchen);
+    }
+  };
+
+  setAllCategories(allCategories: CategoryType[]) {
+    this._allCategories = allCategories;
+  }
+
+  get allCategories() {
+    return this._allCategories;
+  }
+
+  setCategory(category: CategoryType) {
     this._category = category;
   }
 
   get category() {
     return this._category;
   }
+
+  handleCategoryChange = (event: SelectChangeEvent) => {
+    if (event.target.value == "Любая") {
+      this.setCategory({
+        id: 0,
+        name: "Любая",
+      });
+    } else {
+      const newCategory = this.allCategories.find((category) => {
+        return category.name == event.target.value;
+      });
+      newCategory && this.setCategory(newCategory);
+    }
+  };
 
   setCookingTime(cookingTime: { from: number; to: number }) {
     cookingTime.to = cookingTime.to === 0 ? Infinity : cookingTime.to;
@@ -128,13 +214,35 @@ class SearchFiltersStore implements ILocalStore {
     return this._cookingTime;
   }
 
-  setCookingMethod(cookingMethod: string) {
+  setAllCookingMethods(allCookingMethods: CookingMethodType[]) {
+    this._allCookingMethods = allCookingMethods;
+  }
+
+  get allCookingMethods() {
+    return this._allCookingMethods;
+  }
+
+  setCookingMethod(cookingMethod: CookingMethodType) {
     this._cookingMethod = cookingMethod;
   }
 
   get cookingMethod() {
     return this._cookingMethod;
   }
+
+  handleCookingMethodChange = (event: SelectChangeEvent) => {
+    if (event.target.value == "Любой") {
+      this.setCookingMethod({
+        id: 0,
+        name: "Любой",
+      });
+    } else {
+      const newCookingMethod = this.allCookingMethods.find((cookingMethod) => {
+        return cookingMethod.name == event.target.value;
+      });
+      newCookingMethod && this.setCookingMethod(newCookingMethod);
+    }
+  };
 
   setRemoveDrinks(removeDrinks: boolean) {
     this._removeDrinks = removeDrinks;
@@ -186,6 +294,33 @@ class SearchFiltersStore implements ILocalStore {
     this.setCookingMethod(filters.cookingMethod);
     this.setRemoveDrinks(filters.removeDrinks);
     this.setProducts(filters.products);
+  }
+
+  async requestFilters() {
+    try {
+      const kitchen = await axios({
+        url: `${HOST}/kitchen_types`,
+        method: "GET",
+      });
+
+      const categories = await axios({
+        url: `${HOST}/categories`,
+        method: "GET",
+      });
+
+      const cookingMethods = await axios({
+        url: `${HOST}/cooking_methods`,
+        method: "GET",
+      });
+
+      runInAction(() => {
+        this.setAllKitchen(kitchen.data);
+        this.setAllCategories(categories.data);
+        this.setAllCookingMethods(cookingMethods.data);
+      });
+    } catch (e) {
+      console.log("SearchFiltersStore ", e);
+    }
   }
 
   destroy() {}
