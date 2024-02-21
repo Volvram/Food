@@ -103,6 +103,31 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
                   </Select>
                 </FormControl>
               </FilterAccordion>
+              <FilterAccordion title="Диетические потребности">
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                  <Select
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    value={searchFiltersStore.dietaryNeeds.name}
+                    onChange={searchFiltersStore.handleDietaryNeedsChange}
+                    label="Диетические потребности"
+                  >
+                    <MenuItem value="Любые">
+                      <em>Любые</em>
+                    </MenuItem>
+                    {searchFiltersStore.allDietaryNeeds.map((dietaryNeeds) => {
+                      return (
+                        <MenuItem
+                          key={dietaryNeeds.id}
+                          value={dietaryNeeds.name}
+                        >
+                          {dietaryNeeds.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </FilterAccordion>
               <FilterAccordion title="Категория">
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                   <Select
@@ -170,6 +195,28 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
                         );
                       },
                     )}
+                  </Select>
+                </FormControl>
+              </FilterAccordion>
+              <FilterAccordion title="Теги">
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                  <Select
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    value={searchFiltersStore.tags.name}
+                    onChange={searchFiltersStore.handleTagsChange}
+                    label="Теги"
+                  >
+                    <MenuItem value="Любые">
+                      <em>Любые</em>
+                    </MenuItem>
+                    {searchFiltersStore.allTags.map((tag) => {
+                      return (
+                        <MenuItem key={tag.id} value={tag.name}>
+                          {tag.name}
+                        </MenuItem>
+                      );
+                    })}
                   </Select>
                 </FormControl>
               </FilterAccordion>
@@ -241,9 +288,11 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
               searchType: searchFiltersStore.searchType,
               energy: searchFiltersStore.energy,
               kitchen: searchFiltersStore.kitchen,
+              dietaryNeeds: searchFiltersStore.dietaryNeeds,
               category: searchFiltersStore.category,
               cookingTime: searchFiltersStore.cookingTime,
               cookingMethod: searchFiltersStore.cookingMethod,
+              tags: searchFiltersStore.tags,
               removeDrinks: searchFiltersStore.removeDrinks,
               products: searchFiltersStore.products,
             };

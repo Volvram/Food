@@ -19,14 +19,26 @@ export type FiltersType = {
     to: number;
   };
   kitchen: KitchenType;
+  dietaryNeeds: DietaryNeedsType;
   category: CategoryType;
   cookingTime: {
     from: number;
     to: number;
   };
   cookingMethod: CookingMethodType;
+  tags: TagType;
   removeDrinks: boolean;
   products: string[];
+};
+
+export type KitchenType = {
+  id: string | number;
+  name: string;
+};
+
+export type DietaryNeedsType = {
+  id: string | number;
+  name: string;
 };
 
 export type CookingMethodType = {
@@ -34,7 +46,7 @@ export type CookingMethodType = {
   name: string;
 };
 
-export type KitchenType = {
+export type TagType = {
   id: string | number;
   name: string;
 };
@@ -44,11 +56,15 @@ type PrivateFields =
   | "_energy"
   | "_allKitchen"
   | "_kitchen"
+  | "_allDietaryNeeds"
+  | "_dietaryNeeds"
   | "_allCategories"
   | "_category"
   | "_cookingTime"
   | "_allCookingMethods"
   | "_cookingMethod"
+  | "_allTags"
+  | "_tags"
   | "_removeDrinks"
   | "_products"
   | "_productInput";
@@ -64,6 +80,11 @@ class SearchFiltersStore implements ILocalStore {
     id: 0,
     name: "Любая",
   };
+  private _allDietaryNeeds: DietaryNeedsType[] = [];
+  private _dietaryNeeds: DietaryNeedsType = {
+    id: 0,
+    name: "Любые",
+  };
   private _allCategories: CategoryType[] = [];
   private _category: CategoryType = {
     id: 0,
@@ -78,6 +99,11 @@ class SearchFiltersStore implements ILocalStore {
     id: 0,
     name: "Любой",
   };
+  private _allTags: TagType[] = [];
+  private _tags: TagType = {
+    id: 0,
+    name: "Любые",
+  };
   private _removeDrinks: boolean = false;
   private _productInput: string | string[] = "";
   private _products: string[] = [];
@@ -91,9 +117,17 @@ class SearchFiltersStore implements ILocalStore {
       setEnergy: action,
       energy: computed,
       _allKitchen: observable,
+      setAllKitchen: action,
+      allKitchen: computed,
       _kitchen: observable,
       setKitchen: action,
       kitchen: computed,
+      _allDietaryNeeds: observable,
+      setAllDietaryNeeds: action,
+      allDietaryNeeds: computed,
+      _dietaryNeeds: observable,
+      setDietaryNeeds: action,
+      dietaryNeeds: computed,
       _allCategories: observable,
       setAllCategories: action,
       allCategories: computed,
@@ -109,6 +143,12 @@ class SearchFiltersStore implements ILocalStore {
       _cookingMethod: observable,
       setCookingMethod: action,
       cookingMethod: computed,
+      _allTags: observable,
+      setAllTags: action,
+      allTags: computed,
+      _tags: observable,
+      setTags: action,
+      tags: computed,
       _removeDrinks: observable,
       setRemoveDrinks: action,
       removeDrinks: computed,
@@ -172,6 +212,36 @@ class SearchFiltersStore implements ILocalStore {
         return kitchen.name == event.target.value;
       });
       newKitchen && this.setKitchen(newKitchen);
+    }
+  };
+
+  setAllDietaryNeeds(allDietaryNeeds: DietaryNeedsType[]) {
+    this._allDietaryNeeds = allDietaryNeeds;
+  }
+
+  get allDietaryNeeds() {
+    return this._allDietaryNeeds;
+  }
+
+  setDietaryNeeds(dietaryNeeds: DietaryNeedsType) {
+    this._dietaryNeeds = dietaryNeeds;
+  }
+
+  get dietaryNeeds() {
+    return this._dietaryNeeds;
+  }
+
+  handleDietaryNeedsChange = (event: SelectChangeEvent) => {
+    if (event.target.value == "Любые") {
+      this.setDietaryNeeds({
+        id: 0,
+        name: "Любые",
+      });
+    } else {
+      const newDietaryNeeds = this.allDietaryNeeds.find((dietaryNeeds) => {
+        return dietaryNeeds.name == event.target.value;
+      });
+      newDietaryNeeds && this.setDietaryNeeds(newDietaryNeeds);
     }
   };
 
@@ -244,6 +314,36 @@ class SearchFiltersStore implements ILocalStore {
     }
   };
 
+  setAllTags(allTags: TagType[]) {
+    this._allTags = allTags;
+  }
+
+  get allTags() {
+    return this._allTags;
+  }
+
+  setTags(tags: TagType) {
+    this._tags = tags;
+  }
+
+  get tags() {
+    return this._tags;
+  }
+
+  handleTagsChange = (event: SelectChangeEvent) => {
+    if (event.target.value == "Любые") {
+      this.setTags({
+        id: 0,
+        name: "Любые",
+      });
+    } else {
+      const newTags = this.allTags.find((tag) => {
+        return tag.name == event.target.value;
+      });
+      newTags && this.setTags(newTags);
+    }
+  };
+
   setRemoveDrinks(removeDrinks: boolean) {
     this._removeDrinks = removeDrinks;
   }
@@ -289,9 +389,11 @@ class SearchFiltersStore implements ILocalStore {
     this.setSearchType(filters.searchType);
     this.setEnergy(filters.energy);
     this.setKitchen(filters.kitchen);
+    this.setDietaryNeeds(filters.dietaryNeeds);
     this.setCategory(filters.category);
     this.setCookingTime(filters.cookingTime);
     this.setCookingMethod(filters.cookingMethod);
+    this.setTags(filters.tags);
     this.setRemoveDrinks(filters.removeDrinks);
     this.setProducts(filters.products);
   }
@@ -300,6 +402,11 @@ class SearchFiltersStore implements ILocalStore {
     try {
       const kitchen = await axios({
         url: `${HOST}/kitchen_types`,
+        method: "GET",
+      });
+
+      const dietaryNeeds = await axios({
+        url: `${HOST}/dietary_needs`,
         method: "GET",
       });
 
@@ -313,10 +420,17 @@ class SearchFiltersStore implements ILocalStore {
         method: "GET",
       });
 
+      const tags = await axios({
+        url: `${HOST}/tags`,
+        method: "GET",
+      });
+
       runInAction(() => {
         this.setAllKitchen(kitchen.data);
+        this.setAllDietaryNeeds(dietaryNeeds.data);
         this.setAllCategories(categories.data);
         this.setAllCookingMethods(cookingMethods.data);
+        this.setAllTags(tags.data);
       });
     } catch (e) {
       console.log("SearchFiltersStore ", e);
