@@ -25,12 +25,16 @@ const SearchPage: React.FC = () => {
   const searchPageStore = useLocalStore(() => new SearchPageStore());
 
   React.useEffect(() => {
-    if (router.query.search || router.query.seeMore) {
+    if (
+      router.query.search ||
+      router.query.seeMore ||
+      searchPageStore.filters
+    ) {
       searchPageStore.setSearchMode("commonSearch");
     } else {
       searchPageStore.setSearchMode("categories");
     }
-  }, [router.query.search, router.query.seeMore]);
+  }, [router.query.search, router.query.seeMore, searchPageStore.filters]);
 
   React.useEffect(() => {
     searchPageStore.setSeeMore(Boolean(router.query.seeMore));
@@ -76,7 +80,7 @@ const SearchPage: React.FC = () => {
             onClose={() => {
               searchPageStore.toggleIsOpenFilters();
             }}
-            onSubmit={(filters: FiltersType) => {
+            onSubmit={(filters: FiltersType | null) => {
               searchPageStore.setFilters(filters);
             }}
             filters={searchPageStore.filters}
@@ -109,7 +113,10 @@ const SearchPage: React.FC = () => {
           </div>
         )}
 
-        <SearchContent searchMode={searchPageStore.searchMode} />
+        <SearchContent
+          searchMode={searchPageStore.searchMode}
+          filters={searchPageStore.filters}
+        />
 
         {!searchPageStore.seeMore && (
           <div className={styles.searchPage_body_afterContent}>

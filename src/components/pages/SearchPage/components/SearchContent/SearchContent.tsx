@@ -18,6 +18,7 @@ import SearchContentStore, {
   CategoryType,
   DishType,
 } from "@/store/SearchContentStore";
+import { FiltersType } from "@/store/SearchFiltersStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 
 // TODO Заменить временную заглушку
@@ -646,9 +647,13 @@ export const categoriesDishes: CategoriesType[] = [
 
 type SearchContentProps = {
   searchMode: "categories" | "commonSearch";
+  filters: FiltersType | null;
 };
 
-const SearchContent: React.FC<SearchContentProps> = ({ searchMode }) => {
+const SearchContent: React.FC<SearchContentProps> = ({
+  searchMode,
+  filters,
+}) => {
   const router = useRouter();
 
   const searchContentStore = useLocalStore(() => new SearchContentStore());
@@ -680,24 +685,31 @@ const SearchContent: React.FC<SearchContentProps> = ({ searchMode }) => {
   React.useEffect(() => {
     if (searchMode == "commonSearch") {
       if (router.query.search) {
-        searchContentStore.requestDishes(router.query.search);
+        searchContentStore.requestDishes(filters, router.query.search);
       } else {
-        searchContentStore.requestDishes();
+        searchContentStore.requestDishes(filters);
       }
 
       // @FIX Здесь удаляется значение поиска при обновлении страницы
       handlePageChange(1);
     }
-  }, [searchMode, router.query.search]);
+  }, [searchMode, filters, router.query.search]);
 
   React.useEffect(() => {
     handlePageChange(router.query.page ? Number(router.query.page) : 1);
-  }, [searchContentStore.dishes]);
+  }, [searchContentStore.dishes, searchContentStore.products]);
 
   const handlePageChange = React.useCallback(
     (value: number) => {
       searchContentStore.setCurrentPageDishes(
         searchContentStore.dishes.slice(
+          (value - 1) * searchContentStore.countPerPage,
+          value * searchContentStore.countPerPage,
+        ),
+      );
+
+      searchContentStore.setCurrentPageProducts(
+        searchContentStore.products.slice(
           (value - 1) * searchContentStore.countPerPage,
           value * searchContentStore.countPerPage,
         ),
@@ -747,17 +759,29 @@ const SearchContent: React.FC<SearchContentProps> = ({ searchMode }) => {
       ) : (
         <div className={styles.searchContent_commonSearch}>
           <div className={styles.searchContent_commonSearch_items}>
-            {searchContentStore.currentPageDishes.map((item) => {
-              return (
-                <Link
-                  key={item.id}
-                  href={`dishes/${item.id}`}
-                  className={styles.searchContent_item}
-                >
-                  <FoodCard item={item} />
-                </Link>
-              );
-            })}
+            {filters?.searchType == "Блюда" || filters == null
+              ? searchContentStore.currentPageDishes.map((item) => {
+                  return (
+                    <Link
+                      key={item.id}
+                      href={`dishes/${item.id}`}
+                      className={styles.searchContent_item}
+                    >
+                      <FoodCard item={item} />
+                    </Link>
+                  );
+                })
+              : searchContentStore.currentPageProducts.map((item) => {
+                  return (
+                    <Link
+                      key={item.id}
+                      href={`dishes/${item.id}`}
+                      className={styles.searchContent_item}
+                    >
+                      <FoodCard item={item} />
+                    </Link>
+                  );
+                })}
           </div>
           <Pagination
             className={styles.searchContent_commonSearch_pagination}

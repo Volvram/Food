@@ -58,7 +58,7 @@ class SearchPageStore implements ILocalStore {
     return this._seeMore;
   }
 
-  setFilters(filters: FiltersType) {
+  setFilters(filters: FiltersType | null) {
     this._filters = filters;
   }
 

@@ -7,6 +7,7 @@ import {
   runInAction,
 } from "mobx";
 
+import { FiltersType, TagType } from "./SearchFiltersStore";
 import { HOST } from "@/config/host";
 import { ILocalStore } from "@/utils/useLocalStore";
 
@@ -40,8 +41,20 @@ type Dish = {
   cooking_method: CookingMethod;
   dietary_needs: string | null;
   dish_product_links: any[] | null;
-  tags: any[] | null;
+  tags: TagType[] | null;
   nutrients: any[] | null;
+};
+
+export type ProductType = {
+  id: number;
+  name: string;
+  description: string | null;
+  energy: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  nutrients: any[] | null;
+  serving_sizes: any[] | null;
 };
 
 // @TODO Убрать заглушку
@@ -67,13 +80,16 @@ type PrivateFields =
   | "_categoriesDishes"
   | "_dishes"
   | "_currentPageDishes"
+  | "_products"
   | "_countPerPage";
 
 class SearchContentStore implements ILocalStore {
   private _categories: CategoryType[] = [];
   private _categoriesDishes: CategoriesType[] = [];
   private _dishes: DishType[] | Dish[] = [];
-  private _currentPageDishes: DishType[] = [];
+  private _currentPageDishes: DishType[] | Dish[] = [];
+  private _products: ProductType[] = [];
+  private _currentPageProducts: ProductType[] = [];
   private _countPerPage = 12;
 
   constructor() {
@@ -87,6 +103,9 @@ class SearchContentStore implements ILocalStore {
       _dishes: observable,
       setDishes: action,
       dishes: computed,
+      _products: observable,
+      setProducts: action,
+      products: computed,
       _currentPageDishes: observable,
       setCurrentPageDishes: action,
       currentPageDishes: computed,
@@ -120,21 +139,28 @@ class SearchContentStore implements ILocalStore {
     return this._dishes;
   }
 
-  async requestDishes(search?: string | string[]) {
+  async requestDishes(filters: FiltersType | null, search?: string | string[]) {
     try {
-      const result = await axios({
-        url: `${HOST}/dishes/search`,
-        method: "POST",
-        data: search
-          ? {
-              name_search: search,
-            }
-          : {},
-      });
+      const result =
+        filters?.searchType == "Блюда"
+          ? await axios({
+              url: `${HOST}/dishes/search`,
+              method: "POST",
+              data: search
+                ? {
+                    name_search: search,
+                  }
+                : {},
+            })
+          : await axios({
+              url: `${HOST}/products`,
+              method: "GET",
+            });
 
       runInAction(async () => {
-        const dishes = await result.data;
-        this.setDishes(dishes);
+        filters?.searchType == "Блюда"
+          ? this.setDishes(result.data)
+          : this.setProducts(result.data);
       });
     } catch (e) {
       console.log("SearchContentStore ", e);
@@ -147,6 +173,22 @@ class SearchContentStore implements ILocalStore {
 
   get currentPageDishes() {
     return this._currentPageDishes;
+  }
+
+  setProducts(products: ProductType[]) {
+    this._products = products;
+  }
+
+  get products() {
+    return this._products;
+  }
+
+  setCurrentPageProducts(currentPageProducts: ProductType[]) {
+    this._currentPageProducts = currentPageProducts;
+  }
+
+  get currentPageProducts() {
+    return this._currentPageProducts;
   }
 
   setCountPerPage(countPerPage: number) {

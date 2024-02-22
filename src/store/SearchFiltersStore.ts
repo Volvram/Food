@@ -70,7 +70,7 @@ type PrivateFields =
   | "_productInput";
 
 class SearchFiltersStore implements ILocalStore {
-  private _searchType: string = "Блюдо";
+  private _searchType: string = "Блюда";
   private _energy = {
     from: 0,
     to: Infinity,

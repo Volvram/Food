@@ -21,7 +21,7 @@ import { useLocalStore } from "@/utils/useLocalStore";
 
 type SearchFiltersType = {
   onClose: () => void;
-  onSubmit: (filters: FiltersType) => void;
+  onSubmit: (filters: FiltersType | null) => void;
   filters: FiltersType | null;
 };
 
@@ -50,14 +50,14 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
             searchFiltersStore.setSearchType(value);
           }}
         >
-          <FormControlLabel value="Блюдо" control={<Radio />} label="Блюдо" />
+          <FormControlLabel value="Блюда" control={<Radio />} label="Блюда" />
           <FormControlLabel
             value="Продукты"
             control={<Radio />}
             label="Продукты"
           />
         </RadioGroup>
-        {searchFiltersStore.searchType == "Блюдо" && (
+        {searchFiltersStore.searchType == "Блюда" && (
           <>
             <div className={style.filtersearch_inner_accordion}>
               <FilterAccordion title="Калорийность">
@@ -282,26 +282,36 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
           </>
         )}
 
-        <Button
-          onClick={() => {
-            const filters = {
-              searchType: searchFiltersStore.searchType,
-              energy: searchFiltersStore.energy,
-              kitchen: searchFiltersStore.kitchen,
-              dietaryNeeds: searchFiltersStore.dietaryNeeds,
-              category: searchFiltersStore.category,
-              cookingTime: searchFiltersStore.cookingTime,
-              cookingMethod: searchFiltersStore.cookingMethod,
-              tags: searchFiltersStore.tags,
-              removeDrinks: searchFiltersStore.removeDrinks,
-              products: searchFiltersStore.products,
-            };
-            onSubmit(filters);
-            onClose();
-          }}
-        >
-          Применить
-        </Button>
+        <div className={style.filtersearch_inner_buttons}>
+          <Button
+            onClick={() => {
+              onSubmit(null);
+              onClose();
+            }}
+          >
+            Сбросить
+          </Button>
+          <Button
+            onClick={() => {
+              const filters = {
+                searchType: searchFiltersStore.searchType,
+                energy: searchFiltersStore.energy,
+                kitchen: searchFiltersStore.kitchen,
+                dietaryNeeds: searchFiltersStore.dietaryNeeds,
+                category: searchFiltersStore.category,
+                cookingTime: searchFiltersStore.cookingTime,
+                cookingMethod: searchFiltersStore.cookingMethod,
+                tags: searchFiltersStore.tags,
+                removeDrinks: searchFiltersStore.removeDrinks,
+                products: searchFiltersStore.products,
+              };
+              onSubmit(filters);
+              onClose();
+            }}
+          >
+            Применить
+          </Button>
+        </div>
       </div>
     </div>
   );

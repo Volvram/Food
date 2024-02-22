@@ -90,6 +90,12 @@
                 align-items: center;
             }
         }
+
+        &_buttons {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
     }
 }
 
