@@ -140,11 +140,9 @@ class SearchContentStore implements ILocalStore {
   }
 
   async requestDishes(filters: FiltersType | null, search?: string | string[]) {
-    let body: any;
-
+    let body: any = {};
     if (filters) {
       body = {
-        name_search: search ?? "",
         cooking_time_filter: {
           filterType: "BETWEEN",
           value1: filters.cookingTime.from,
@@ -167,24 +165,25 @@ class SearchContentStore implements ILocalStore {
         (body.dietary_needs_ids = [filters.dietaryNeeds.id]);
       filters.tags.id != 0 && (body.tag_ids = [filters.tags.id]);
     }
+    body.name_search = search ?? "";
 
     try {
       const result =
-        filters?.searchType == "Блюда"
+        filters?.searchType == "Продукты"
           ? await axios({
+              url: `${HOST}/products`,
+              method: "GET",
+            })
+          : await axios({
               url: `${HOST}/dishes/search`,
               method: "POST",
               data: body,
-            })
-          : await axios({
-              url: `${HOST}/products`,
-              method: "GET",
             });
 
       runInAction(async () => {
-        filters?.searchType == "Блюда"
-          ? this.setDishes(result.data)
-          : this.setProducts(result.data);
+        filters?.searchType == "Продукты"
+          ? this.setProducts(result.data)
+          : this.setDishes(result.data);
       });
     } catch (e) {
       console.log("SearchContentStore ", e);
