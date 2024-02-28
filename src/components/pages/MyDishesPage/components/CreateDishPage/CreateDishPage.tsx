@@ -1,15 +1,15 @@
 import React from "react";
 
-import MyDishesMenu from "./components/MyDishesMenu/MyDishesMenu";
+import MyDishesMenu from "../MyDishesMenu/MyDishesMenu";
 import styles from "./styles.module.scss";
 import Header from "@/components/Header/Header";
 import Meta from "@/components/Meta/Meta";
 
-const MyDishesPage: React.FC = () => {
+const CreateDishPage: React.FC = () => {
   return (
-    <div className={styles.myDishesPage_body}>
+    <div className={styles.createDishPage_body}>
       <Meta
-        title="Мои блюда"
+        title="Создать блюдо"
         description="Избранные, сохраненные блюда"
         keywords="еда, блюдо, питание, диета, продукт, калорийность, избранное"
       />
@@ -21,4 +21,4 @@ const MyDishesPage: React.FC = () => {
   );
 };
 
-export default MyDishesPage;
+export default CreateDishPage;

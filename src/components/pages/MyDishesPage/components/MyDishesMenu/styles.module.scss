@@ -1,0 +1,28 @@
+@import "@/styles/variables.scss";
+
+.menu {
+    margin: 0 10%;
+    padding: 20px 0px;
+    border-top: 1px solid $light-gray;
+    border-bottom: 1px solid $light-gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+    &_section {
+        white-space: nowrap;
+        text-decoration: none;
+        color: $black-primary;
+        font-size: 16px;
+        line-height: 24px;
+
+        &__active {
+            text-decoration: underline;
+        }
+    }
+
+    &_section:hover{
+        color: #113fe8;
+    }
+}
