@@ -173,6 +173,9 @@ class SearchContentStore implements ILocalStore {
           ? await axios({
               url: `${HOST}/products`,
               method: "GET",
+              params: {
+                search: search ?? "",
+              },
             })
           : await axios({
               url: `${HOST}/dishes/search`,

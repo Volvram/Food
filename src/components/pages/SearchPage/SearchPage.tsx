@@ -100,25 +100,35 @@ const SearchPage: React.FC = () => {
             onClick={searchPageStore.toggleIsOpenFilters}
           />
         </div>
-        {searchPageStore.seeMore && (
-          <div className={styles.searchPage_body_beforeContent}>
+        <div className={styles.searchPage_body_beforeContent}>
+          {searchPageStore.seeMore && !searchPageStore.filters && (
             <Button
               onClick={() => {
                 handleSeeMoreChange();
               }}
-              className={styles.searchPage_body_beforeContent_seeMore}
+              className={styles.searchPage_body_beforeContent_btn}
             >
               Категории
             </Button>
-          </div>
-        )}
+          )}
+          {searchPageStore.filters != null && (
+            <Button
+              onClick={() => {
+                searchPageStore.setFilters(null);
+              }}
+              className={styles.searchPage_body_beforeContent_btn}
+            >
+              Сбросить фильтры
+            </Button>
+          )}
+        </div>
 
         <SearchContent
           searchMode={searchPageStore.searchMode}
           filters={searchPageStore.filters}
         />
 
-        {!searchPageStore.seeMore && (
+        {searchPageStore.searchMode == "categories" && (
           <div className={styles.searchPage_body_afterContent}>
             <Button
               onClick={() => {

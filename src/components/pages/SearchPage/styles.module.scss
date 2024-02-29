@@ -7,11 +7,12 @@
         max-width: $fullhd;
 
         &_beforeContent {
+            margin-left: 50px;
             margin-top: 20px;
             display: flex;
+            gap: 8px;
 
-            &_seeMore {
-                margin-left: 50px;
+            &_btn {
                 padding: 7px 23px 8px 24px;
                 background-color: $white;
                 border-radius: 20px;
