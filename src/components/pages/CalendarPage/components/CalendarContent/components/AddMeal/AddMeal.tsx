@@ -2,9 +2,11 @@ import React from "react";
 
 import TuneIcon from "@mui/icons-material/Tune";
 import { observer } from "mobx-react-lite";
+import Image from "next/image";
 
 import styles from "./styles.module.scss";
 import magnifier from "@/assets/img/magnifier.png";
+import noImage from "@/assets/img/noImage.jpg";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { debounce } from "@/config/debounce";
@@ -54,11 +56,19 @@ const AddMeal: React.FC<AddMealProps> = ({ weekDay, onClose }) => {
               <span className={styles.addMeal_searchList_dish_title}>
                 {dish.name}
               </span>
-              <img
-                src={dish.image}
-                alt={dish.name}
-                className={styles.addMeal_searchList_dish_img}
-              />
+              {dish.image ? (
+                <img
+                  src={dish.image}
+                  alt={dish.name}
+                  className={styles.addMeal_searchList_dish_img}
+                />
+              ) : (
+                <Image
+                  src={noImage}
+                  alt={dish.name}
+                  className={styles.addMeal_searchList_dish_img}
+                />
+              )}
             </div>
           );
         })}

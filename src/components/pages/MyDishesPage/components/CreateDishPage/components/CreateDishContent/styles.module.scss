@@ -1,0 +1,102 @@
+@import "@/styles/variables.scss";
+
+.createDishContent {
+    margin: 20px 10%;
+
+    &_radio {
+        display: flex;
+        flex-direction: row;
+        gap: 40px;
+        align-items: center;
+    }
+
+    &_input {
+        padding: 10px 20px;
+        min-width: 200px;
+        width: 40vw;
+        border-radius: 20px;
+        border: 1px solid $gray;
+
+        &_container {
+            margin-top: 20px;
+            width: fit-content;
+        }
+    }
+
+    &_description {
+        margin-top: 20px;
+        padding: 10px 20px;
+        min-width: 200px;
+        width: 40vw;
+        border: 1px solid $gray;
+        border-radius: 20px;
+        font-family: 'Roboto';
+
+        &:focus {
+            outline-width: 0;
+        }
+    }
+
+    &_block {
+        margin-top: 20px;
+        width: 43vw;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &_counter {
+        margin-left: 10px;
+        border: 1px solid $gray;
+    }
+
+    &_options {
+        display: flex;
+        flex-direction: column;
+        width: 40vw;
+
+        &_text {
+            margin-top: 20px;
+            font-size: $p1;
+            color: $gray;
+        }
+    }
+
+    &_searchList {
+        margin-top: 20px;
+        max-height: 300px;
+        overflow-y: auto;
+        width: 40vw;
+
+        display: flex;
+        flex-direction: column;
+
+        &_dish {
+            cursor: pointer;
+            border-bottom: 1px solid $light-gray;
+
+            display: flex;
+            align-items: center;
+
+            &:hover {
+                background-color: $very-light-gray;
+            }
+
+            &_title {
+                padding: 5px 5px;
+            }
+
+            &_img {
+                margin-left: auto;
+                width: 40px;
+                height: 40px;
+                object-fit: cover;
+            }
+        }
+
+        &_empty {
+            color: $gray;
+            border-bottom: 1px solid $light-gray;
+        }
+    }
+}

@@ -6,11 +6,11 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 
-type FilterAccordionType = React.PropsWithChildren<{
+type CommonAccordionType = React.PropsWithChildren<{
   title: string;
 }>;
 
-const FilterAccordion: React.FC<FilterAccordionType> = ({
+const CommonAccordion: React.FC<CommonAccordionType> = ({
   title,
   children,
 }) => {
@@ -28,4 +28,4 @@ const FilterAccordion: React.FC<FilterAccordionType> = ({
   );
 };
 
-export default FilterAccordion;
+export default CommonAccordion;

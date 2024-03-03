@@ -7,24 +7,15 @@ import {
   runInAction,
 } from "mobx";
 
-import { FiltersType, TagType } from "./SearchFiltersStore";
+import {
+  CategoryType,
+  CookingMethodType,
+  KitchenType,
+  TagType,
+} from "./CreateDishContentStore";
+import { FiltersType } from "./SearchFiltersStore";
 import { HOST } from "@/config/host";
 import { ILocalStore } from "@/utils/useLocalStore";
-
-export type CategoryType = {
-  id: string | number;
-  name: string;
-};
-
-interface KitchenType {
-  id: number;
-  name: string;
-}
-
-interface CookingMethod {
-  id: number;
-  name: string;
-}
 
 type Dish = {
   id: number;
@@ -38,7 +29,7 @@ type Dish = {
   fat: number;
   category: CategoryType;
   kitchen_type: KitchenType;
-  cooking_method: CookingMethod;
+  cooking_method: CookingMethodType;
   dietary_needs: string | null;
   dish_product_links: any[] | null;
   tags: TagType[] | null;

@@ -11,9 +11,9 @@ import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import { observer } from "mobx-react-lite";
 
-import FilterAccordion from "./components/FilterAccordion/FilterAccordion";
 import style from "./styles.module.scss";
 import { Button } from "@/components/Button";
+import CommonAccordion from "@/components/CommonAccordion/CommonAccordion";
 import { Input } from "@/components/Input";
 import { Range } from "@/components/Range";
 import SearchFiltersStore, { FiltersType } from "@/store/SearchFiltersStore";
@@ -60,7 +60,8 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
         {searchFiltersStore.searchType == "Блюда" && (
           <>
             <div className={style.filtersearch_inner_accordion}>
-              <FilterAccordion title="Калорийность">
+              {/* @TODO сделать multidropdown */}
+              <CommonAccordion title="Калорийность">
                 <Range
                   from="От (Ккал)"
                   defaultFrom={searchFiltersStore.energy.from}
@@ -80,8 +81,8 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
                   }}
                   className={style.filtersearch_inner_accordion_range}
                 />
-              </FilterAccordion>
-              <FilterAccordion title="Кухня">
+              </CommonAccordion>
+              <CommonAccordion title="Кухня">
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                   <Select
                     labelId="demo-simple-select-standard-label"
@@ -102,8 +103,8 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
                     })}
                   </Select>
                 </FormControl>
-              </FilterAccordion>
-              <FilterAccordion title="Диетические потребности">
+              </CommonAccordion>
+              <CommonAccordion title="Диетические потребности">
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                   <Select
                     labelId="demo-simple-select-standard-label"
@@ -127,8 +128,8 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
                     })}
                   </Select>
                 </FormControl>
-              </FilterAccordion>
-              <FilterAccordion title="Категория">
+              </CommonAccordion>
+              <CommonAccordion title="Категория">
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                   <Select
                     labelId="demo-simple-select-standard-label"
@@ -149,8 +150,8 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
                     })}
                   </Select>
                 </FormControl>
-              </FilterAccordion>
-              <FilterAccordion title="Время приготовления">
+              </CommonAccordion>
+              <CommonAccordion title="Время приготовления">
                 <Range
                   from="От (минут)"
                   defaultFrom={searchFiltersStore.cookingTime.from}
@@ -170,8 +171,8 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
                   }}
                   className={style.filtersearch_inner_accordion_range}
                 />
-              </FilterAccordion>
-              <FilterAccordion title="Метод приготовления">
+              </CommonAccordion>
+              <CommonAccordion title="Метод приготовления">
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                   <Select
                     labelId="demo-simple-select-standard-label"
@@ -197,8 +198,8 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
                     )}
                   </Select>
                 </FormControl>
-              </FilterAccordion>
-              <FilterAccordion title="Теги">
+              </CommonAccordion>
+              <CommonAccordion title="Теги">
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                   <Select
                     labelId="demo-simple-select-standard-label"
@@ -219,7 +220,8 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
                     })}
                   </Select>
                 </FormControl>
-              </FilterAccordion>
+              </CommonAccordion>
+              {/* --------------------------------- */}
             </div>
             <div className={style.filtersearch_inner_switch}>
               <Typography>Убрать напитки</Typography>

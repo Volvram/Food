@@ -4,5 +4,13 @@
     &_body {
         margin: 0 auto;
         max-width: $fullhd;
+
+        &_radio {
+            margin: 20px 10%;
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            align-items: center;
+        }
     }
 }

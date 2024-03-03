@@ -57,10 +57,10 @@ class AddMealStore implements ILocalStore {
   }
 
   destroy() {
-    this.handleSearchChange();
+    this._handleSearchChange();
   }
 
-  readonly handleSearchChange: IReactionDisposer = reaction(
+  readonly _handleSearchChange: IReactionDisposer = reaction(
     () => this._search,
     () => {
       this.setSearchList(
