@@ -8,10 +8,13 @@ import Image from "next/image";
 
 import styles from "./styles.module.scss";
 import noImage from "@/assets/img/noImage.jpg";
+import { Button } from "@/components/Button";
 import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
 import { debounce } from "@/config/debounce";
-import CreateDishContentStore from "@/store/CreateDishContentStore";
+import CreateDishContentStore, {
+  DishProductLinkType,
+} from "@/store/CreateDishContentStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 
 const CreateDishContent: React.FC = () => {
@@ -32,6 +35,12 @@ const CreateDishContent: React.FC = () => {
     // },
     [],
   );
+
+  const handleAddProduct = React.useCallback((link: DishProductLinkType) => {
+    createDishContentStore.addDishProductLink(link);
+    createDishContentStore.setProductSearch("");
+    createDishContentStore.setProductSearchList([]);
+  }, []);
 
   return (
     <div className={styles.createDishContent}>
@@ -213,33 +222,43 @@ const CreateDishContent: React.FC = () => {
       </div>
       <Input
         onChange={handleProductSearch}
+        value={createDishContentStore.productSearch}
         placeholder="Добавьте продукт"
         className={styles.createDishContent_input}
         containerClassName={styles.createDishContent_input_container}
       />
       <div className={styles.createDishContent_searchList}>
         {createDishContentStore.productSearchList.length ? (
-          createDishContentStore.productSearchList.map((dish) => {
+          createDishContentStore.productSearchList.map((product) => {
             return (
               <div
-                key={dish.id}
+                key={product.id}
+                onClick={() => {
+                  const link = {
+                    product_id: product.id,
+                    product_name: product.name,
+                    unit: `${product["serving_sizes"]}`,
+                    quantity: 1,
+                  };
+                  handleAddProduct(link);
+                }}
                 className={styles.createDishContent_searchList_dish}
               >
                 <span
                   className={styles.createDishContent_searchList_dish_title}
                 >
-                  {dish.name}
+                  {product.name}
                 </span>
-                {dish.image ? (
+                {product.image ? (
                   <img
-                    src={dish.image}
-                    alt={dish.name}
+                    src={product.image}
+                    alt={product.name}
                     className={styles.createDishContent_searchList_dish_img}
                   />
                 ) : (
                   <Image
                     src={noImage}
-                    alt={dish.name}
+                    alt={product.name}
                     className={styles.createDishContent_searchList_dish_img}
                   />
                 )}
@@ -252,6 +271,14 @@ const CreateDishContent: React.FC = () => {
           </div>
         )}
       </div>
+      <Button
+        onClick={() => {
+          createDishContentStore.sendDish();
+        }}
+        className={styles.createDishContent_btn}
+      >
+        Создать
+      </Button>
     </div>
   );
 };

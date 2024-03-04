@@ -10,7 +10,6 @@ import {
   reaction,
 } from "mobx";
 
-import { DishType } from "./SearchContentStore";
 import { HOST } from "@/config/host";
 import { ILocalStore } from "@/utils/useLocalStore";
 
@@ -76,6 +75,27 @@ export type VitaminsType = {
   vitaminK: number;
 };
 
+export type ProductType = {
+  id: number;
+  name: string;
+  description: string | null;
+  image: string | null;
+  energy: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  nutrients: any[] | null;
+  serving_sizes: any[] | null;
+};
+
+export type DishProductLinkType = {
+  dish_id?: number;
+  product_id: number;
+  product_name: string;
+  unit: string;
+  quantity: number;
+};
+
 type PrivateFields =
   | "_name"
   | "_description"
@@ -97,7 +117,8 @@ type PrivateFields =
   | "_tags"
   | "_nutrients"
   | "_productSearch"
-  | "_productSearchList";
+  | "_productSearchList"
+  | "_dishProductLinks";
 
 class CreateDishContentStore implements ILocalStore {
   private _name: string = "";
@@ -164,7 +185,8 @@ class CreateDishContentStore implements ILocalStore {
     },
   };
   private _productSearch = "";
-  private _productSearchList: DishType[] = [];
+  private _productSearchList: ProductType[] = [];
+  private _dishProductLinks: DishProductLinkType[] = [];
 
   constructor() {
     makeObservable<CreateDishContentStore, PrivateFields>(this, {
@@ -229,6 +251,10 @@ class CreateDishContentStore implements ILocalStore {
       setProductSearch: action,
       productSearch: computed,
       _productSearchList: observable,
+      _dishProductLinks: observable,
+      setDishProductLinks: action,
+      dishProductLinks: computed,
+      addDishProductLink: action,
     });
   }
 
@@ -506,7 +532,7 @@ class CreateDishContentStore implements ILocalStore {
     return this._productSearch;
   }
 
-  setProductSearchList(productSearchList: DishType[]) {
+  setProductSearchList(productSearchList: ProductType[]) {
     this._productSearchList = productSearchList;
   }
 
@@ -525,6 +551,54 @@ class CreateDishContentStore implements ILocalStore {
 
     runInAction(() => {
       this.setProductSearchList(result.data);
+    });
+  }
+
+  setDishProductLinks(dishProductLinks: DishProductLinkType[]) {
+    this._dishProductLinks = dishProductLinks;
+  }
+
+  get dishProductLinks() {
+    return this._dishProductLinks;
+  }
+
+  addDishProductLink(dishProductLink: DishProductLinkType) {
+    this._dishProductLinks.push(dishProductLink);
+  }
+
+  removeDishProductLink(productId: number) {
+    this.setDishProductLinks(
+      this._dishProductLinks.filter((link) => link.product_id != productId),
+    );
+  }
+
+  async sendDish() {
+    const dish = {
+      name: this.name,
+      description: this.description,
+      image: this.image,
+      cooking_time: this.cookingTime,
+      energy: this.energy,
+      protein: this.protein,
+      carbs: this.carbs,
+      fat: this.fat,
+      category: this.category,
+      kitchen_type: this.kitchen,
+      cooking_method: this.cookingMethod,
+      dietary_needs: [this.dietaryNeeds],
+      dish_product_links: this.dishProductLinks,
+      tags: [this.tags],
+      nutrients: this.nutrients,
+    };
+
+    const result = await axios({
+      url: `${HOST}/dishes`,
+      method: "POST",
+      data: dish,
+    });
+
+    runInAction(() => {
+      console.log(result);
     });
   }
 

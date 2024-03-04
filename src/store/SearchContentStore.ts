@@ -11,6 +11,7 @@ import {
   CategoryType,
   CookingMethodType,
   KitchenType,
+  ProductType,
   TagType,
 } from "./CreateDishContentStore";
 import { FiltersType } from "./SearchFiltersStore";
@@ -34,18 +35,6 @@ type Dish = {
   dish_product_links: any[] | null;
   tags: TagType[] | null;
   nutrients: any[] | null;
-};
-
-export type ProductType = {
-  id: number;
-  name: string;
-  description: string | null;
-  energy: number;
-  protein: number;
-  carbs: number;
-  fat: number;
-  nutrients: any[] | null;
-  serving_sizes: any[] | null;
 };
 
 // @TODO Убрать заглушку

@@ -13,9 +13,9 @@ import FoodCard from "./components/FoodCard/FoodCard";
 import styles from "./styles.module.scss";
 import { responsiveCarousel } from "@/config/responsiveCarousel";
 import { shuffle } from "@/config/shuffle";
+import { CategoryType } from "@/store/CreateDishContentStore";
 import SearchContentStore, {
   CategoriesType,
-  CategoryType,
   DishType,
 } from "@/store/SearchContentStore";
 import { FiltersType } from "@/store/SearchFiltersStore";
