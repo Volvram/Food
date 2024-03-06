@@ -7,6 +7,7 @@ import { observer } from "mobx-react-lite";
 
 import MyDishesMenu from "../MyDishesMenu/MyDishesMenu";
 import CreateDishContent from "./components/CreateDishContent/CreateDishContent";
+import CreateProductContent from "./components/CreateProductContent/CreateProductContent";
 import styles from "./styles.module.scss";
 import Header from "@/components/Header/Header";
 import Meta from "@/components/Meta/Meta";
@@ -45,7 +46,7 @@ const CreateDishPage: React.FC = () => {
         {createDishPageStore.objectType == "Блюдо" ? (
           <CreateDishContent />
         ) : (
-          <></>
+          <CreateProductContent />
         )}
       </main>
     </div>

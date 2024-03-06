@@ -9,10 +9,12 @@ import Image from "next/image";
 import styles from "./styles.module.scss";
 import noImage from "@/assets/img/noImage.jpg";
 import { Button } from "@/components/Button";
+import { CommonAccordion } from "@/components/CommonAccordion";
 import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
 import { debounce } from "@/config/debounce";
 import CreateDishContentStore, {
+  CurrentProductType,
   DishProductLinkType,
 } from "@/store/CreateDishContentStore";
 import { useLocalStore } from "@/utils/useLocalStore";
@@ -36,10 +38,18 @@ const CreateDishContent: React.FC = () => {
     [],
   );
 
+  const handleSelectProduct = React.useCallback(
+    (currentProduct: CurrentProductType) => {
+      createDishContentStore.setCurrentProduct(currentProduct);
+      createDishContentStore.setProductSearch("");
+      createDishContentStore.setProductSearchList([]);
+    },
+    [],
+  );
+
   const handleAddProduct = React.useCallback((link: DishProductLinkType) => {
     createDishContentStore.addDishProductLink(link);
-    createDishContentStore.setProductSearch("");
-    createDishContentStore.setProductSearchList([]);
+    createDishContentStore.setCurrentProduct(null);
   }, []);
 
   return (
@@ -220,57 +230,135 @@ const CreateDishContent: React.FC = () => {
         </FormControl>
         {/* --------------------------------- */}
       </div>
-      <Input
-        onChange={handleProductSearch}
-        value={createDishContentStore.productSearch}
-        placeholder="Добавьте продукт"
-        className={styles.createDishContent_input}
-        containerClassName={styles.createDishContent_input_container}
-      />
-      <div className={styles.createDishContent_searchList}>
-        {createDishContentStore.productSearchList.length ? (
-          createDishContentStore.productSearchList.map((product) => {
-            return (
-              <div
-                key={product.id}
-                onClick={() => {
-                  const link = {
-                    product_id: product.id,
-                    product_name: product.name,
-                    unit: `${product["serving_sizes"]}`,
-                    quantity: 1,
-                  };
-                  handleAddProduct(link);
-                }}
-                className={styles.createDishContent_searchList_dish}
-              >
-                <span
-                  className={styles.createDishContent_searchList_dish_title}
+      <CommonAccordion
+        title="Продукты"
+        className={styles.createDishContent_accordion}
+      >
+        <Input
+          onChange={handleProductSearch}
+          value={createDishContentStore.productSearch}
+          placeholder="Добавьте продукт"
+          className={styles.createDishContent_input}
+          containerClassName={styles.createDishContent_input_container}
+        />
+        <div className={styles.createDishContent_searchList}>
+          {createDishContentStore.productSearchList.length ? (
+            createDishContentStore.productSearchList.map((product) => {
+              return (
+                <div
+                  key={product.id}
+                  onClick={() => {
+                    const currentProduct = {
+                      ...product,
+                      quantity: 100,
+                    };
+                    handleSelectProduct(currentProduct);
+                  }}
+                  className={styles.createDishContent_searchList_dish}
                 >
-                  {product.name}
-                </span>
-                {product.image ? (
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className={styles.createDishContent_searchList_dish_img}
+                  <span
+                    className={styles.createDishContent_searchList_dish_title}
+                  >
+                    {product.name}
+                  </span>
+                  {product.image ? (
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className={styles.createDishContent_searchList_dish_img}
+                    />
+                  ) : (
+                    <Image
+                      src={noImage}
+                      alt={product.name}
+                      className={styles.createDishContent_searchList_dish_img}
+                    />
+                  )}
+                </div>
+              );
+            })
+          ) : (
+            <div className={styles.createDishContent_searchList_empty}>
+              Продукты не найдены
+            </div>
+          )}
+        </div>
+        {(createDishContentStore.currentProduct ||
+          Boolean(createDishContentStore.dishProductLinks.length)) && (
+          <div className={styles.createDishContent_products}>
+            {createDishContentStore.currentProduct && (
+              <div
+                key={createDishContentStore.currentProduct.id}
+                className={styles.createDishContent_products_current}
+              >
+                <h2 className={styles.createDishContent_products_h}>
+                  Добавить
+                </h2>
+                <div
+                  className={styles.createDishContent_products_current_product}
+                >
+                  <span>{createDishContentStore.currentProduct.name}</span>
+                  <Counter
+                    onChange={(value: number) => {
+                      if (createDishContentStore.currentProduct) {
+                        const currProd = {
+                          ...createDishContentStore.currentProduct,
+                          quantity: value,
+                        };
+                        createDishContentStore.setCurrentProduct(currProd);
+                      }
+                    }}
+                    input={true}
+                    className={styles.createDishContent_counter}
                   />
-                ) : (
-                  <Image
-                    src={noImage}
-                    alt={product.name}
-                    className={styles.createDishContent_searchList_dish_img}
-                  />
+                  <span>Грамм</span>
+                </div>
+                <Button
+                  onClick={() => {
+                    if (createDishContentStore.currentProduct) {
+                      const link = {
+                        product_id: createDishContentStore.currentProduct.id,
+                        product_name:
+                          createDishContentStore.currentProduct.name,
+                        unit: "gramms",
+                        quantity:
+                          createDishContentStore.currentProduct.quantity,
+                      };
+                      handleAddProduct(link);
+                    }
+                  }}
+                  className={styles.createDishContent_btn}
+                >
+                  Добавить
+                </Button>
+              </div>
+            )}
+            {Boolean(createDishContentStore.dishProductLinks.length) && (
+              <div className={styles.createDishContent_products_selected}>
+                <h2 className={styles.createDishContent_products_h}>
+                  Добавлено
+                </h2>
+                {createDishContentStore.dishProductLinks.map(
+                  (dishProductLink) => {
+                    return (
+                      <div
+                        key={dishProductLink.product_id}
+                        className={
+                          styles.createDishContent_products_selected_product
+                        }
+                      >
+                        <span>{dishProductLink.product_name}</span>
+                        <span>({dishProductLink.quantity} г.)</span>
+                      </div>
+                    );
+                  },
                 )}
               </div>
-            );
-          })
-        ) : (
-          <div className={styles.createDishContent_searchList_empty}>
-            Продукты не найдены
+            )}
           </div>
         )}
-      </div>
+      </CommonAccordion>
+
       <Button
         onClick={() => {
           createDishContentStore.sendDish();

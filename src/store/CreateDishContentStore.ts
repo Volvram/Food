@@ -85,7 +85,16 @@ export type ProductType = {
   carbs: number;
   fat: number;
   nutrients: any[] | null;
-  serving_sizes: any[] | null;
+  serving_sizes: ServingSizeType[] | null;
+};
+
+export type CurrentProductType = ProductType & {
+  quantity: number;
+};
+
+export type ServingSizeType = {
+  id: string | number;
+  name: string;
 };
 
 export type DishProductLinkType = {
@@ -118,6 +127,8 @@ type PrivateFields =
   | "_nutrients"
   | "_productSearch"
   | "_productSearchList"
+  | "_currentProduct"
+  | "_selectedProducts"
   | "_dishProductLinks";
 
 class CreateDishContentStore implements ILocalStore {
@@ -186,6 +197,8 @@ class CreateDishContentStore implements ILocalStore {
   };
   private _productSearch = "";
   private _productSearchList: ProductType[] = [];
+  private _currentProduct: CurrentProductType | null = null;
+  private _selectedProducts: ProductType[] = [];
   private _dishProductLinks: DishProductLinkType[] = [];
 
   constructor() {
@@ -251,6 +264,15 @@ class CreateDishContentStore implements ILocalStore {
       setProductSearch: action,
       productSearch: computed,
       _productSearchList: observable,
+      setProductSearchList: action,
+      productSearchList: computed,
+      _currentProduct: observable,
+      setCurrentProduct: action,
+      currentProduct: computed,
+      _selectedProducts: observable,
+      setSelectedProducts: action,
+      selectedProducts: computed,
+      addSelectedProduct: action,
       _dishProductLinks: observable,
       setDishProductLinks: action,
       dishProductLinks: computed,
@@ -554,6 +576,32 @@ class CreateDishContentStore implements ILocalStore {
     });
   }
 
+  setCurrentProduct(currentProduct: CurrentProductType | null) {
+    this._currentProduct = currentProduct;
+  }
+
+  get currentProduct() {
+    return this._currentProduct;
+  }
+
+  setSelectedProducts(selectedProducts: ProductType[]) {
+    this._selectedProducts = selectedProducts;
+  }
+
+  get selectedProducts() {
+    return this._selectedProducts;
+  }
+
+  addSelectedProduct(selectedProduct: ProductType) {
+    this._selectedProducts.push(selectedProduct);
+  }
+
+  removeSelectedProduct(productId: number) {
+    this.setSelectedProducts(
+      this._selectedProducts.filter((link) => link.id != productId),
+    );
+  }
+
   setDishProductLinks(dishProductLinks: DishProductLinkType[]) {
     this._dishProductLinks = dishProductLinks;
   }
@@ -563,7 +611,15 @@ class CreateDishContentStore implements ILocalStore {
   }
 
   addDishProductLink(dishProductLink: DishProductLinkType) {
-    this._dishProductLinks.push(dishProductLink);
+    const exists = this._dishProductLinks.find(
+      (link) => link.product_id == dishProductLink.product_id,
+    );
+    if (exists) {
+      this.removeDishProductLink(dishProductLink.product_id);
+      this._dishProductLinks.push(dishProductLink);
+    } else {
+      this._dishProductLinks.push(dishProductLink);
+    }
   }
 
   removeDishProductLink(productId: number) {

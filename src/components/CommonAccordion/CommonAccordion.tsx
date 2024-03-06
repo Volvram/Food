@@ -8,14 +8,16 @@ import Typography from "@mui/material/Typography";
 
 type CommonAccordionType = React.PropsWithChildren<{
   title: string;
+  className?: string;
 }>;
 
-const CommonAccordion: React.FC<CommonAccordionType> = ({
+export const CommonAccordion: React.FC<CommonAccordionType> = ({
   title,
   children,
+  className,
 }) => {
   return (
-    <Accordion>
+    <Accordion className={className}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
@@ -27,5 +29,3 @@ const CommonAccordion: React.FC<CommonAccordionType> = ({
     </Accordion>
   );
 };
-
-export default CommonAccordion;

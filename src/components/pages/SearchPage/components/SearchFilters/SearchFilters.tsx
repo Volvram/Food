@@ -13,7 +13,7 @@ import { observer } from "mobx-react-lite";
 
 import style from "./styles.module.scss";
 import { Button } from "@/components/Button";
-import CommonAccordion from "@/components/CommonAccordion/CommonAccordion";
+import { CommonAccordion } from "@/components/CommonAccordion";
 import { Input } from "@/components/Input";
 import { Range } from "@/components/Range";
 import SearchFiltersStore, { FiltersType } from "@/store/SearchFiltersStore";
