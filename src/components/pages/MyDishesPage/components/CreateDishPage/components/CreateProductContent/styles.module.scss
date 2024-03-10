@@ -1,5 +1,127 @@
 @import '@/styles/variables.scss';
 
 .createProductContent {
+    margin: 20px 10%;
 
+    &_input {
+        padding: 10px 20px;
+        min-width: 200px;
+        width: 100%;
+        border-radius: 20px;
+        border: 1px solid $gray;
+
+        &_container {
+            margin-top: 20px;
+            width: 80%;
+        }
+    }
+
+    &_description {
+        margin-top: 20px;
+        padding: 10px 20px;
+        min-width: 200px;
+        width: 80%;
+        border: 1px solid $gray;
+        border-radius: 20px;
+        font-family: 'Roboto';
+
+        &:focus {
+            outline-width: 0;
+        }
+    }
+
+    &_block {
+        margin-top: 20px;
+        width: 80%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &_counter {
+        width: 70px;
+        margin-left: 10px;
+        border: 1px solid $gray;
+    }
+
+    &_accordion {
+        margin-top: 20px;
+    }
+
+    &_servingSizes {
+        margin-top: 20px;
+        padding: 10px 20px;
+        border: 1px solid $gray;
+        border-radius: 20px;
+        display: flex;
+
+        &_h {
+            text-align: center;
+            border-bottom: 1px solid $light-gray;
+            font-size: $h3;
+        }
+
+        &_current {
+            border-right: 1px solid $light-gray;
+            display: flex;
+            flex-direction: column;
+            flex-basis: 50%;
+
+            &_size {
+                cursor: pointer;
+                padding: 10px 5px;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+
+                &:hover {
+                    background-color: $very-light-gray;
+                }
+
+                &_counter {
+                    width: min-content;
+                    min-width: 50px;
+                }
+
+                &_text {
+                    margin-right: auto;
+                }
+
+                &_creation {
+                    margin-left: 10px;
+                }
+            }
+        }
+
+        &_selected {
+            margin-left: auto;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid $light-gray;
+            flex-basis: 50%;
+
+            &_size {
+                position: relative;
+                padding: 10px 5px;
+                display: flex;
+                align-items: center;
+
+                &_creation {
+                    margin-left: 10px;
+                }
+
+                &_close {
+                    margin-left: auto;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    &_btn {
+        margin-top: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        width: fit-content;
+    }
 }
