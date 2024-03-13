@@ -9,11 +9,9 @@ import rootStore from "@/store/RootStore/instance";
 const Dish: React.FC = () => {
   const router = useRouter();
 
-  // TODO Заменить временную заглушку
   React.useLayoutEffect(() => {
-    rootStore.user.checkUserMock();
+    rootStore.user.checkAuthorization();
   }, []);
-  // TODO ----------------------
 
   return <DishPage id={router.query.id} />;
 };

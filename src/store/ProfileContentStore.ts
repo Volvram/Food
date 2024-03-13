@@ -1,34 +1,42 @@
+import axios from "axios";
 import { makeObservable, observable, action, computed } from "mobx";
 
+import rootStore from "./RootStore/instance";
+import { HOST } from "@/config/host";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 type PrivateFields =
   | "_email"
   | "_password"
+  | "_name"
   | "_avatar"
   | "_height"
   | "_weight"
   | "_birthdate"
-  | "_gender"
+  | "_sex"
   | "_dietPoint"
-  | "_activityLevel";
+  | "_activityLevel"
+  | "_tempName";
 
 class ProfileContentStore implements ILocalStore {
   private _email: string | null = null;
+  private _name: string | null;
   private _password: string | null = null;
   private _avatar: string | null = null;
   private _height: number | null = null;
   private _weight: number | null = null;
-  private _birthdate: string | null = null;
-  private _gender: string | null = null;
+  private _birthdate: Date | null = null;
+  private _sex: string | null = null;
   private _dietPoint: string | null = null;
   private _activityLevel: string | null = null;
+  private _tempName: string | null = this._email;
 
   constructor() {
     makeObservable<ProfileContentStore, PrivateFields>(this, {
       _email: observable,
       setEmail: action,
       email: computed,
+      _name: observable,
       _password: observable,
       setPassword: action,
       password: computed,
@@ -42,17 +50,20 @@ class ProfileContentStore implements ILocalStore {
       setWeight: action,
       weight: computed,
       _birthdate: observable,
-      setBirthDate: action,
-      birthDate: computed,
-      _gender: observable,
-      setGender: action,
-      gender: computed,
+      setBirthdate: action,
+      birthdate: computed,
+      _sex: observable,
+      setSex: action,
+      sex: computed,
       _dietPoint: observable,
       setDietPoint: action,
       dietPoint: computed,
       _activityLevel: observable,
       setActivityLevel: action,
       activityLevel: computed,
+      _tempName: observable,
+      setTempName: action,
+      tempName: computed,
     });
   }
 
@@ -80,7 +91,7 @@ class ProfileContentStore implements ILocalStore {
     return this._avatar;
   }
 
-  setHeight(height: number) {
+  setHeight(height: number | null) {
     this._height = height;
   }
 
@@ -88,7 +99,7 @@ class ProfileContentStore implements ILocalStore {
     return this._height;
   }
 
-  setWeight(weight: number) {
+  setWeight(weight: number | null) {
     this._weight = weight;
   }
 
@@ -96,20 +107,20 @@ class ProfileContentStore implements ILocalStore {
     return this._weight;
   }
 
-  setBirthDate(birthDate: string) {
+  setBirthdate(birthDate: Date | null) {
     this._birthdate = birthDate;
   }
 
-  get birthDate() {
+  get birthdate() {
     return this._birthdate;
   }
 
-  setGender(gender: string) {
-    this._gender = gender;
+  setSex(sex: string) {
+    this._sex = sex;
   }
 
-  get gender() {
-    return this._gender;
+  get sex() {
+    return this._sex;
   }
 
   setDietPoint(dietPoint: string) {
@@ -128,31 +139,50 @@ class ProfileContentStore implements ILocalStore {
     return this._activityLevel;
   }
 
-  editMock = () => {
-    if (!this._email) {
-      alert("Почта не может быть пустой");
-    } else if (
-      !this._birthdate ||
-      String(new Date(this._birthdate)) == "Invalid Date"
-    ) {
-      alert("Неверный формат даты");
-    } else {
-      const newUser = {
-        email: this._email,
-        avatar: "",
-        height: this._height,
-        weight: this._weight,
-        gender: this._gender,
-        birthdate: this._birthdate,
-        diet_point: this._dietPoint,
-        activity_level: this._activityLevel,
-      };
+  setTempName(name: string) {
+    this._tempName = name;
+  }
 
-      return newUser;
+  get tempName() {
+    return this._tempName;
+  }
+
+  async editUser() {
+    try {
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+      if (
+        !this._birthdate ||
+        String(new Date(this._birthdate)) == "Invalid Date"
+      ) {
+        alert("Неверный формат даты");
+      } else {
+        const body = {
+          image: this.avatar ?? "",
+          name: this.tempName,
+          sex: this.sex,
+          birthdate: this.birthdate,
+          height: this.height,
+          weight: this.weight,
+          // diet_point: this._dietPoint,
+          // activity_level: this._activityLevel,
+        };
+
+        const result = await axios({
+          url: `${HOST}/users/${rootStore.user.id}`,
+          method: "put",
+          data: body,
+          headers: {
+            Authorization: `${tokenType} ${accessToken}`,
+          },
+        });
+
+        return Promise.resolve("Профиль успешно отредактирован!");
+      }
+    } catch (e) {
+      console.log("ProdileContentStore: ", e);
     }
-
-    return;
-  };
+  }
 
   destroy() {}
 }

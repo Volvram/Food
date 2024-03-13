@@ -9,15 +9,13 @@ import rootStore from "@/store/RootStore/instance";
 const MyDishes: React.FC = () => {
   const router = useRouter();
 
-  // TODO Заменить временную заглушку
   React.useLayoutEffect(() => {
-    rootStore.user.checkUserMock();
-
-    if (!rootStore.user.tempUser) {
-      router.push("/login");
-    }
+    rootStore.user.checkAuthorization().then(() => {
+      if (!rootStore.user.authorized) {
+        router.push("/login");
+      }
+    });
   }, []);
-  // TODO ----------------------
 
   return <MyDishesPage />;
 };

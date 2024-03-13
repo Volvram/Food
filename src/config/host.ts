@@ -6,3 +6,6 @@
 
 // ### Local server for web
 export const HOST = "http://localhost:8080/api";
+
+export const KeyCloakHost =
+  "http://localhost:8180/realms/diploma/protocol/openid-connect/token";

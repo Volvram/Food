@@ -7,10 +7,12 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { observer } from "mobx-react-lite";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import styles from "./styles.module.scss";
+import noImage from "@/assets/img/noImage.jpg";
 import { Button } from "@/components/Button";
 import { headerSections } from "@/components/Header/headerSections";
 import rootStore from "@/store/RootStore/instance";
@@ -30,16 +32,14 @@ const Header: React.FC = () => {
     setAnchorEl(null);
   };
 
-  // TODO Заменить временную заглушку
   const logoutUser = () => {
     const answer = confirm("Подтвердить выход из аккаунта?");
     if (answer) {
-      localStorage.removeItem("user");
-      rootStore.user.checkUserMock();
+      rootStore.user.logOut();
+      rootStore.user.checkAuthorization();
       router.push("/");
     }
   };
-  // TODO ----------------------
 
   return (
     <header className={styles.header}>
@@ -122,16 +122,24 @@ const Header: React.FC = () => {
         <div className={styles.header_login}>
           {
             // TODO Заменить временную заглушку
-            rootStore.user.tempUser ? (
+            rootStore.user.authorized ? (
               <div className={styles.header_login_panel}>
                 <Link
                   href={"/profile"}
                   className={styles.header_login_panel_link}
                 >
-                  <img
-                    src={rootStore.user.tempUser.avatar}
-                    className={styles.header_login_panel_avatar}
-                  />
+                  {rootStore.user.avatar ? (
+                    <img
+                      src={rootStore.user.avatar}
+                      className={styles.header_login_panel_avatar}
+                    />
+                  ) : (
+                    <Image
+                      src={noImage}
+                      alt={rootStore.user.name ?? "аватар"}
+                      className={styles.header_login_panel_avatar}
+                    />
+                  )}
                 </Link>
                 <div
                   className={styles.header_login_panel_logout}

@@ -11,11 +11,9 @@ import Header from "@/components/Header/Header";
 import rootStore from "@/store/RootStore/instance";
 
 export default function Home() {
-  // TODO Заменить временную заглушку
   React.useEffect(() => {
-    rootStore.user.checkUserMock();
+    rootStore.user.checkAuthorization();
   }, []);
-  // TODO ----------------------
 
   return (
     <main className={styles.main}>

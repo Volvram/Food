@@ -29,29 +29,27 @@ const ProfileContent: React.FC = () => {
 
   // TODO Заменить временную заглушку
   React.useEffect(() => {
-    if (rootStore.user.tempUser) {
-      profileContentStore.setEmail(rootStore.user.tempUser.email);
-      profileContentStore.setPassword(rootStore.user.tempUser.password);
-      profileContentStore.setAvatar(rootStore.user.tempUser.avatar);
-      profileContentStore.setHeight(rootStore.user.tempUser.height);
-      profileContentStore.setWeight(rootStore.user.tempUser.weight);
-      profileContentStore.setBirthDate(rootStore.user.tempUser.birthdate);
-      profileContentStore.setGender(rootStore.user.tempUser.gender);
-      profileContentStore.setDietPoint(rootStore.user.tempUser.dietPoint);
-      profileContentStore.setActivityLevel(
-        rootStore.user.tempUser.activityLevel,
-      );
+    if (rootStore.user.authorized) {
+      profileContentStore.setEmail(rootStore.user.email ?? "");
+      profileContentStore.setPassword("");
+      profileContentStore.setAvatar(rootStore.user.avatar ?? "");
+      profileContentStore.setHeight(rootStore.user.height ?? null);
+      profileContentStore.setWeight(rootStore.user.weight ?? null);
+      profileContentStore.setBirthdate(rootStore.user.birthdate ?? null);
+      profileContentStore.setSex(rootStore.user.sex ?? "");
+
+      // @TODO обработать недостающие параметры
+      // profileContentStore.setDietPoint(rootStore.user.dietPoint ?? "");
+      // profileContentStore.setActivityLevel(rootStore.user.activityLevel ?? "");
+      // -------------------------------
     }
-  }, [rootStore.user.tempUser]);
+  }, [rootStore.user.authorized]);
 
   const handleEdit = () => {
-    const newUser = profileContentStore.editMock();
-
-    if (newUser) {
-      localStorage.setItem("user", JSON.stringify(newUser));
-    } else {
-      window.location.reload();
-    }
+    profileContentStore.editUser().then((response) => {
+      // window.location.reload();
+      // alert(response);
+    });
 
     setEditMode(false);
   };
@@ -62,8 +60,10 @@ const ProfileContent: React.FC = () => {
     );
 
     if (answer) {
-      localStorage.removeItem("user");
-      rootStore.user.checkUserMock();
+      // ЗАПРОС НА УДАЛЕНИЕ
+
+      rootStore.user.logOut();
+      rootStore.user.checkAuthorization();
       router.push("/");
     }
   };
@@ -83,6 +83,17 @@ const ProfileContent: React.FC = () => {
             className={styles.profileContent_input}
             containerClassName={styles.profileContent_inputContainer}
             value={profileContentStore.email ?? ""}
+            disabled={true}
+          />
+          <span className={styles.profileContent_inputText}>Имя</span>
+          <Input
+            onChange={(value: string) => {
+              profileContentStore.setTempName(value);
+            }}
+            placeholder="Имя"
+            className={styles.profileContent_input}
+            containerClassName={styles.profileContent_inputContainer}
+            // value={profileContentStore.name ?? ""}
             disabled={!editMode}
           />
           <Button>Сменить пароль</Button>
@@ -163,8 +174,8 @@ const ProfileContent: React.FC = () => {
           className={styles.profileContent_input}
           containerClassName={styles.profileContent_inputContainer}
           value={
-            profileContentStore.birthDate
-              ? String(formatDate(profileContentStore.birthDate))
+            profileContentStore.birthdate
+              ? String(formatDate(profileContentStore.birthdate))
               : ""
           }
           disabled={!editMode}
@@ -173,24 +184,20 @@ const ProfileContent: React.FC = () => {
         <RadioGroup
           className={styles.profileContent_check}
           aria-labelledby="demo-radio-buttons-group-label"
-          value={profileContentStore.gender ?? "Мужчина"}
-          name="gender"
+          value={profileContentStore.sex ?? "MALE"}
+          name="sex"
           onChange={(event: React.ChangeEvent, value: string) => {
-            editMode && profileContentStore.setGender(value);
+            editMode && profileContentStore.setSex(value);
           }}
         >
+          <FormControlLabel value="MALE" control={<Radio />} label="Мужчина" />
           <FormControlLabel
-            value="Мужчина"
-            control={<Radio />}
-            label="Мужчина"
-          />
-          <FormControlLabel
-            value="Женщина"
+            value="FEMALE"
             control={<Radio />}
             label="Женщина"
           />
         </RadioGroup>
-        <span className={styles.profileContent_InputText}>
+        {/* <span className={styles.profileContent_InputText}>
           Какова ваша цель?
         </span>
         <FormControl
@@ -240,7 +247,7 @@ const ProfileContent: React.FC = () => {
             <MenuItem value="Среднеподвижный">Среднеподвижный</MenuItem>
             <MenuItem value="Активный">Активный</MenuItem>
           </Select>
-        </FormControl>
+        </FormControl> */}
       </div>
       {editMode ? (
         <Button

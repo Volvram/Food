@@ -8,85 +8,86 @@ import {
 } from "mobx";
 
 import { decodeToken } from "@/config/decodeToken";
-import { HOST } from "@/config/host";
+import { HOST, KeyCloakHost } from "@/config/host";
+
+export type UserType = {
+  id: number;
+  email: string;
+  password: null;
+  image: null;
+  name: string;
+  sex: string;
+  birthdate: Date;
+  height: number;
+  weight: number;
+  roles: string[];
+  createdAt?: string;
+};
 
 type PrivateFields =
-  | "_tempUser"
   | "_authorized"
-  | "_avatar"
-  | "_userId"
+  | "_id"
   | "_name"
-  | "_createdAt"
+  | "_sex"
   | "_email"
-  | "_role"
-  | "_age";
+  | "_birthdate"
+  | "_avatar"
+  | "_roles"
+  | "_height"
+  | "_weight"
+  | "_createdAt";
 
 export default class UserStore {
-  // TODO Заменить временную заглушку
-  private _tempUser: any = null;
-  // TODO ----------------------
-
   private _authorized: boolean | null = null;
-  private _avatar: string | null = null;
-  private _userId: number | null = null;
+  private _id: number | null = null;
   private _name: string | null = null;
-  private _createdAt: string | null = null;
+  private _sex: string | null = null;
   private _email: string | null = null;
-  private _role: string | null = null;
-  private _age: number | null = null;
+  private _birthdate: Date | null = null;
+  private _avatar: string | null = null;
+  private _roles: string[] | null = null;
+  private _height: number | null = null;
+  private _weight: number | null = null;
+  private _createdAt: string | null = null;
 
   constructor() {
     makeObservable<UserStore, PrivateFields>(this, {
-      // TODO Заменить временную заглушку
-      _tempUser: observable,
-      setTempUser: action,
-      tempUser: computed,
-      // TODO ----------------------
-
       _authorized: observable,
       setAuthorized: action,
       authorized: computed,
       checkAuthorization: action,
-      _avatar: observable,
-      setAvatar: action,
-      avatar: computed,
-      _userId: observable,
-      setUserId: action,
-      userId: computed,
+      _id: observable,
+      setId: action,
+      id: computed,
       _name: observable,
       setName: action,
       name: computed,
-      _createdAt: observable,
-      setCreatedAt: action,
-      createdAt: computed,
+      _sex: observable,
+      setSex: action,
+      sex: computed,
       _email: observable,
       setEmail: action,
       email: computed,
-      _role: observable,
-      setRole: action,
-      role: computed,
-      _age: observable,
+      _birthdate: observable,
+      setBirthDate: action,
+      birthdate: computed,
+      _avatar: observable,
+      setAvatar: action,
+      avatar: computed,
+      _roles: observable,
+      setRoles: action,
+      roles: computed,
+      _height: observable,
+      setHeight: action,
+      height: computed,
+      _weight: observable,
+      setWeight: action,
+      weight: computed,
+      _createdAt: observable,
+      setCreatedAt: action,
+      createdAt: computed,
     });
   }
-
-  // TODO Заменить временную заглушку
-  setTempUser(tempUser: any) {
-    this._tempUser = tempUser;
-  }
-
-  get tempUser() {
-    return this._tempUser;
-  }
-
-  checkUserMock() {
-    const currentUser = localStorage.getItem("user") ?? "";
-    if (currentUser) {
-      this.setTempUser(JSON.parse(currentUser));
-    } else {
-      this.setTempUser(null);
-    }
-  }
-  // TODO ----------------------
 
   setAuthorized(authorized: boolean) {
     this._authorized = authorized;
@@ -96,20 +97,12 @@ export default class UserStore {
     return this._authorized;
   }
 
-  setAvatar(avatar: string | null) {
-    this._avatar = avatar;
+  setId(id: number) {
+    this._id = id;
   }
 
-  get avatar() {
-    return this._avatar;
-  }
-
-  setUserId(userId: number) {
-    this._userId = userId;
-  }
-
-  get userId() {
-    return this._userId;
+  get id() {
+    return this._id;
   }
 
   setName(name: string) {
@@ -120,12 +113,12 @@ export default class UserStore {
     return this._name;
   }
 
-  setCreatedAt(createdAt: string) {
-    this._createdAt = createdAt;
+  setSex(sex: string) {
+    this._sex = sex;
   }
 
-  get createdAt() {
-    return this._createdAt;
+  get sex() {
+    return this._sex;
   }
 
   setEmail(email: string) {
@@ -136,43 +129,83 @@ export default class UserStore {
     return this._email;
   }
 
-  setRole(role: string) {
-    this._role = role;
+  setBirthDate(birthdate: Date) {
+    this._birthdate = birthdate;
   }
 
-  get role() {
-    return this._role;
+  get birthdate() {
+    return this._birthdate;
   }
 
-  setAge(age: number) {
-    this._age = age;
+  setAvatar(avatar: string | null) {
+    this._avatar = avatar;
   }
 
-  get age() {
-    return this._age;
+  get avatar() {
+    return this._avatar;
+  }
+
+  setRoles(roles: string[]) {
+    this._roles = roles;
+  }
+
+  get roles() {
+    return this._roles;
+  }
+
+  setHeight(height: number) {
+    this._height = height;
+  }
+
+  get height() {
+    return this._height;
+  }
+
+  setWeight(weight: number) {
+    this._weight = weight;
+  }
+
+  get weight() {
+    return this._weight;
+  }
+
+  setCreatedAt(createdAt: string) {
+    this._createdAt = createdAt;
+  }
+
+  get createdAt() {
+    return this._createdAt;
   }
 
   setAllData(
     authorized: boolean,
-    avatar: string | null,
-    userId: number,
+    id: number,
     name: string,
-    createdAt: string,
+    sex: string,
     email: string,
-    role: string,
-    age: number,
+    birthdate: Date,
+    avatar: string | null,
+    roles: string[],
+    height: number,
+    weight: number,
+    createdAt?: string,
   ) {
     this.setAuthorized(authorized);
-    this.setAvatar(avatar);
-    this.setUserId(userId);
+    this.setId(id);
     this.setName(name);
-    this.setCreatedAt(createdAt);
+    this.setSex(sex);
     this.setEmail(email);
-    this.setRole(role);
-    this.setAge(age);
+    this.setBirthDate(birthdate);
+    this.setAvatar(avatar);
+    this.setRoles(roles);
+    this.setHeight(height);
+    this.setWeight(weight);
+    createdAt && this.setCreatedAt(createdAt);
   }
 
   async checkAuthorization() {
+    const tokenType = localStorage.getItem("token_type");
+
     try {
       const accessToken = localStorage.getItem("access_token");
 
@@ -182,21 +215,24 @@ export default class UserStore {
         const result = await axios(`${HOST}/users/${payload.user_id}`, {
           method: "get",
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `${tokenType} ${accessToken}`,
           },
         });
 
         runInAction(() => {
-          const data = result.data;
+          const data: UserType = result.data;
           this.setAllData(
             true,
-            data.avatar,
             data.id,
             data.name,
-            data.createdAt,
+            data.sex,
             data.email,
-            data.role,
-            data.age,
+            data.birthdate,
+            data.image,
+            data.roles,
+            data.height,
+            data.weight,
+            data.createdAt,
           );
         });
       } else {
@@ -207,28 +243,37 @@ export default class UserStore {
         const refreshToken = localStorage.getItem("refresh_token");
 
         if (refreshToken) {
-          const result = await axios(`${HOST}/auth/refresh`, {
+          const body = new URLSearchParams();
+          body.append("client_id", "diploma-backend");
+          body.append("refresh_token", refreshToken);
+          body.append("grant_type", "refresh_token");
+
+          const result = await axios(KeyCloakHost, {
             method: "post",
+            data: body,
             headers: {
-              Authorization: `Bearer ${refreshToken}`,
+              "Content-Type": "application/x-www-form-urlencoded",
+              // Authorization: `${tokenType} ${refreshToken}`,
             },
           });
 
           runInAction(async () => {
             localStorage.setItem("access_token", result.data.access_token);
             localStorage.setItem("refresh_token", result.data.refresh_token);
+            localStorage.setItem("token_type", result.data.token_type);
             this.checkAuthorization();
           });
         } else {
           throw new Error("no refresh token");
         }
       } catch (e: any) {
+        console.log("UserStore: ", e);
         this._authorized = false;
       }
     }
   }
 
-  resetUser() {
+  logOut() {
     localStorage.setItem("access_token", "");
     localStorage.setItem("refresh_token", "");
   }
