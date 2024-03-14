@@ -48,16 +48,37 @@
         }
 
         &_avatar {
-            width: 288px;
-            height: 288px;
-            object-fit: cover;
-            border-radius: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
 
-            &__fake {
+            &_img {
                 width: 288px;
                 height: 288px;
-                background-color: $gray;
+                object-fit: cover;
                 border-radius: 80px;
+
+                &__fake {
+                    width: 288px;
+                    height: 288px;
+                    background-color: $gray;
+                    border-radius: 80px;
+                }
+            }
+
+            &_load {
+                width: fit-content;
+                display: none;
+
+                &_text {
+                    margin-top: 10px;
+                    cursor: pointer;
+                    color: $blue;
+
+                    &:hover {
+                        color: $light-blue;
+                    }
+                }
             }
         }
 
@@ -138,6 +159,11 @@
                 }
             }
         }
+    }
+
+    &_block {
+        margin-top: 12px;
+        margin-bottom: 25px;
     }
 
     &_check{

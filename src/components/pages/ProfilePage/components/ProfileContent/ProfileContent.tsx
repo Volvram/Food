@@ -1,11 +1,8 @@
 import React from "react";
 
-import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import MenuItem from "@mui/material/MenuItem";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
@@ -14,9 +11,9 @@ import { useRouter } from "next/navigation";
 import styles from "./styles.module.scss";
 import vkIcon from "@/assets/img/vk_icon.png";
 import { Button } from "@/components/Button";
+import { CalendarInput } from "@/components/CalendarInput";
 import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
-import { formatDate } from "@/config/formatDate";
 import ProfileContentStore from "@/store/ProfileContentStore";
 import rootStore from "@/store/RootStore/instance";
 import { useLocalStore } from "@/utils/useLocalStore";
@@ -54,7 +51,6 @@ const ProfileContent: React.FC = () => {
 
   const handleEdit = () => {
     profileContentStore.editUser().then((response) => {
-      // window.location.reload();
       alert(response);
     });
 
@@ -115,14 +111,35 @@ const ProfileContent: React.FC = () => {
           </div>
         </div>
         <div className={styles.profileContent_main_vr} />
-        {profileContentStore.avatar ? (
-          <img
-            src={profileContentStore.avatar}
-            className={styles.profileContent_main_avatar}
+        <div className={styles.profileContent_main_avatar}>
+          {profileContentStore.avatar ? (
+            <img
+              src={profileContentStore.avatar}
+              className={styles.profileContent_main_avatar_img}
+            />
+          ) : (
+            <div className={styles.profileContent_main_avatar_img__fake} />
+          )}
+          <label
+            htmlFor="avatar"
+            className={styles.profileContent_main_avatar_load_text}
+          >
+            Сменить аватарку
+          </label>
+          <input
+            type="file"
+            id="avatar"
+            name="avatar"
+            onChange={(event) => {
+              if (event.target.files) {
+                console.log(event.target.files[0]);
+                profileContentStore.loadImage(event.target.files[0]);
+              }
+            }}
+            className={styles.profileContent_main_avatar_load}
+            accept="image/png, image/jpeg, image/jpg"
           />
-        ) : (
-          <div className={styles.profileContent_main_avatar__fake} />
-        )}
+        </div>
       </div>
       <h1 className={styles.profileContent_h}>Уведомления</h1>
       <div className={styles.profileContent_notifications}>
@@ -178,30 +195,23 @@ const ProfileContent: React.FC = () => {
           </div>
         </div>
         <span className={styles.profileContent_inputText}>Дата рождения</span>
-        <Input
-          onChange={() => {
-            (value: Date) => {
+        <div className={styles.profileContent_block}>
+          <CalendarInput
+            onChange={(value) => {
               profileContentStore.setTempBirthdate(value);
-            };
-          }}
-          placeholder="18.12.2023"
-          className={styles.profileContent_input}
-          containerClassName={styles.profileContent_inputContainer}
-          value={
-            profileContentStore.birthdate
-              ? String(formatDate(profileContentStore.birthdate))
-              : ""
-          }
-          disabled={!editMode}
-        />
+            }}
+            value={profileContentStore.birthdate ?? ""}
+            disabled={!editMode}
+          />
+        </div>
         <span className={styles.profileContent_inputText}>Пол</span>
         <RadioGroup
           className={styles.profileContent_check}
           aria-labelledby="demo-radio-buttons-group-label"
-          value={profileContentStore.sex ?? "MALE"}
+          value={profileContentStore.tempSex ?? "MALE"}
           name="sex"
           onChange={(event: React.ChangeEvent, value: string) => {
-            editMode && profileContentStore.setSex(value);
+            editMode && profileContentStore.setTempSex(value);
           }}
         >
           <FormControlLabel value="MALE" control={<Radio />} label="Мужчина" />
@@ -268,6 +278,9 @@ const ProfileContent: React.FC = () => {
           <Button
             onClick={() => {
               setEditMode(false);
+
+              // @TODO заменить на сброс значений полей к неизмененным
+              window.location.reload();
             }}
             className={styles.profileContent_edit_btn}
           >

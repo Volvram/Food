@@ -1,4 +1,5 @@
 import axios from "axios";
+import dayjs, { Dayjs } from "dayjs";
 import {
   makeObservable,
   observable,
@@ -43,7 +44,7 @@ class ProfileContentStore implements ILocalStore {
   private _tempName: string | null = this._name;
   private _tempHeight: number | null = this._height;
   private _tempWeight: number | null = this._weight;
-  private _tempBirthdate: Date | null = this._birthdate;
+  private _tempBirthdate: Dayjs | null = dayjs(this._birthdate);
   private _tempSex: string | null = this._sex;
 
   constructor() {
@@ -200,20 +201,20 @@ class ProfileContentStore implements ILocalStore {
     return this._tempWeight;
   }
 
-  setTempBirthdate(birthdate: Date | null) {
-    this._birthdate = birthdate;
+  setTempBirthdate(tempBirthdate: Dayjs | null) {
+    this._tempBirthdate = tempBirthdate;
   }
 
   get tempBirthdate() {
-    return this._birthdate;
+    return this._tempBirthdate;
   }
 
-  setTempSex(sex: string | null) {
-    this._sex = sex;
+  setTempSex(tempSex: string | null) {
+    this._tempSex = tempSex;
   }
 
   get tempSex() {
-    return this._sex;
+    return this._tempSex;
   }
 
   setAll(
@@ -234,37 +235,58 @@ class ProfileContentStore implements ILocalStore {
     this.setSex(sex);
   }
 
+  async loadImage(image: File) {
+    try {
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const formData = new FormData();
+      formData.append("file", image);
+
+      const result = await axios({
+        url: `${HOST}/users/file`,
+        method: "post",
+        params: {
+          user_id: rootStore.user.id,
+        },
+        data: formData,
+        headers: {
+          Authorization: `${tokenType} ${accessToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log(result);
+    } catch (e) {
+      console.log("ProfileContentStore: ", e);
+    }
+  }
+
   async editUser() {
     try {
       const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
-      if (
-        !this._birthdate ||
-        String(new Date(this._birthdate)) == "Invalid Date"
-      ) {
-        alert("Неверный формат даты");
-      } else {
-        const body = {
-          name: this.tempName,
-          sex: this.tempSex,
-          birthdate: this.tempBirthdate,
-          height: this.tempHeight,
-          weight: this.tempWeight,
-          // diet_point: this._dietPoint,
-          // activity_level: this._activityLevel,
-        };
 
-        await axios({
-          url: `${HOST}/users/${rootStore.user.id}`,
-          method: "put",
-          data: body,
-          headers: {
-            Authorization: `${tokenType} ${accessToken}`,
-          },
-        });
+      const body = {
+        name: this.tempName,
+        sex: this.tempSex,
+        birthdate: this.tempBirthdate?.format("YYYY-MM-DD"),
+        height: this.tempHeight,
+        weight: this.tempWeight,
+        // diet_point: this._dietPoint,
+        // activity_level: this._activityLevel,
+      };
 
-        return Promise.resolve("Профиль успешно отредактирован!");
-      }
+      await axios({
+        url: `${HOST}/users/${rootStore.user.id}`,
+        method: "put",
+        data: body,
+        headers: {
+          Authorization: `${tokenType} ${accessToken}`,
+        },
+      });
+
+      return Promise.resolve("Профиль успешно отредактирован!");
     } catch (e) {
       console.log("ProfileContentStore: ", e);
     }
@@ -280,7 +302,7 @@ class ProfileContentStore implements ILocalStore {
       this.setTempName(this.name);
       this.setTempHeight(this.height);
       this.setTempWeight(this.weight);
-      this.setTempBirthdate(this.birthdate);
+      this.setTempBirthdate(dayjs(this.birthdate));
       this.setTempSex(this.sex);
     },
   );

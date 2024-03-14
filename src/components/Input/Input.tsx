@@ -19,8 +19,9 @@ type InputProps = Omit<
   className?: string;
   containerClassName?: string;
   disabled?: boolean;
-  icon?: StaticImageData;
+  icon?: StaticImageData | string;
   iconAlt?: string;
+  onIconClick?: () => void;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 export const Input: React.FC<InputProps> = ({
@@ -33,6 +34,7 @@ export const Input: React.FC<InputProps> = ({
   disabled = false,
   icon,
   iconAlt = "",
+  onIconClick,
   ...attributes
 }) => {
   const [currentValue, setValue] = React.useState<string | string[]>(value);
@@ -80,7 +82,17 @@ export const Input: React.FC<InputProps> = ({
         disabled={disabled}
         {...attributes}
       />
-      {icon && <Image src={icon} alt={iconAlt} className={styles.input_icon} />}
+      {icon && (
+        <Image
+          src={icon}
+          onClick={onIconClick}
+          alt={iconAlt}
+          className={cn(
+            styles.input_icon,
+            !disabled && onIconClick && styles.input_icon__clickable,
+          )}
+        />
+      )}
     </div>
   );
 };

@@ -7,6 +7,8 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
     },
+    // Для Mui-X
+    transpilePackages: ['@mui/x-date-pickers']
 }
 
 module.exports = nextConfig

@@ -25,5 +25,9 @@
         // align-center
         top: 50%;
         transform: translateY(-50%);
+
+        &__clickable {
+            cursor: pointer;
+        }
     }
 }
