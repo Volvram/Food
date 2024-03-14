@@ -11,10 +11,8 @@ const CreateDish: React.FC = () => {
 
   // TODO Заменить временную заглушку
   React.useLayoutEffect(() => {
-    rootStore.user.checkAuthorization().then(() => {
-      if (!rootStore.user.authorized) {
-        router.push("/login");
-      }
+    rootStore.user.checkAuthorization().catch(() => {
+      router.push("/login");
     });
   }, []);
   // TODO ----------------------

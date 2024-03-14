@@ -10,10 +10,8 @@ const Journal: React.FC = () => {
   const router = useRouter();
 
   React.useLayoutEffect(() => {
-    rootStore.user.checkAuthorization().then(() => {
-      if (!rootStore.user.authorized) {
-        router.push("/login");
-      }
+    rootStore.user.checkAuthorization().catch(() => {
+      router.push("/login");
     });
   }, []);
 

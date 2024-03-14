@@ -33,7 +33,7 @@ export const Counter: React.FC<CounterProps> = ({
   }, [defaultNumber]);
 
   const handleIncrease = () => {
-    if (counter < max) {
+    if (counter < max && !disabled) {
       setCounter((prev) => {
         onChange(prev + 1);
         return prev + 1;
@@ -42,7 +42,7 @@ export const Counter: React.FC<CounterProps> = ({
   };
 
   const handleDecrease = () => {
-    if (counter > min) {
+    if (counter > min && !disabled) {
       setCounter((prev) => {
         onChange(prev - 1);
         return prev - 1;

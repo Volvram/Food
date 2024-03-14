@@ -89,7 +89,7 @@ export default class UserStore {
     });
   }
 
-  setAuthorized(authorized: boolean) {
+  setAuthorized(authorized: boolean | null) {
     this._authorized = authorized;
   }
 
@@ -97,7 +97,7 @@ export default class UserStore {
     return this._authorized;
   }
 
-  setId(id: number) {
+  setId(id: number | null) {
     this._id = id;
   }
 
@@ -105,7 +105,7 @@ export default class UserStore {
     return this._id;
   }
 
-  setName(name: string) {
+  setName(name: string | null) {
     this._name = name;
   }
 
@@ -113,7 +113,7 @@ export default class UserStore {
     return this._name;
   }
 
-  setSex(sex: string) {
+  setSex(sex: string | null) {
     this._sex = sex;
   }
 
@@ -121,7 +121,7 @@ export default class UserStore {
     return this._sex;
   }
 
-  setEmail(email: string) {
+  setEmail(email: string | null) {
     this._email = email;
   }
 
@@ -129,7 +129,7 @@ export default class UserStore {
     return this._email;
   }
 
-  setBirthDate(birthdate: Date) {
+  setBirthDate(birthdate: Date | null) {
     this._birthdate = birthdate;
   }
 
@@ -145,7 +145,7 @@ export default class UserStore {
     return this._avatar;
   }
 
-  setRoles(roles: string[]) {
+  setRoles(roles: string[] | null) {
     this._roles = roles;
   }
 
@@ -153,7 +153,7 @@ export default class UserStore {
     return this._roles;
   }
 
-  setHeight(height: number) {
+  setHeight(height: number | null) {
     this._height = height;
   }
 
@@ -161,7 +161,7 @@ export default class UserStore {
     return this._height;
   }
 
-  setWeight(weight: number) {
+  setWeight(weight: number | null) {
     this._weight = weight;
   }
 
@@ -169,7 +169,7 @@ export default class UserStore {
     return this._weight;
   }
 
-  setCreatedAt(createdAt: string) {
+  setCreatedAt(createdAt: string | null) {
     this._createdAt = createdAt;
   }
 
@@ -178,17 +178,17 @@ export default class UserStore {
   }
 
   setAllData(
-    authorized: boolean,
-    id: number,
-    name: string,
-    sex: string,
-    email: string,
-    birthdate: Date,
+    authorized: boolean | null,
+    id: number | null,
+    name: string | null,
+    sex: string | null,
+    email: string | null,
+    birthdate: Date | null,
     avatar: string | null,
-    roles: string[],
-    height: number,
-    weight: number,
-    createdAt?: string,
+    roles: string[] | null,
+    height: number | null,
+    weight: number | null,
+    createdAt?: string | null,
   ) {
     this.setAuthorized(authorized);
     this.setId(id);
@@ -203,10 +203,9 @@ export default class UserStore {
     createdAt && this.setCreatedAt(createdAt);
   }
 
-  async checkAuthorization() {
-    const tokenType = localStorage.getItem("token_type");
-
+  async sendAccessToken(): Promise<boolean | never> {
     try {
+      const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
 
       if (accessToken) {
@@ -235,46 +234,80 @@ export default class UserStore {
             data.createdAt,
           );
         });
+        return Promise.resolve(true);
       } else {
         throw new Error("no access token");
       }
-    } catch (e: any) {
-      try {
-        const refreshToken = localStorage.getItem("refresh_token");
-
-        if (refreshToken) {
-          const body = new URLSearchParams();
-          body.append("client_id", "diploma-backend");
-          body.append("refresh_token", refreshToken);
-          body.append("grant_type", "refresh_token");
-
-          const result = await axios(KeyCloakHost, {
-            method: "post",
-            data: body,
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              // Authorization: `${tokenType} ${refreshToken}`,
-            },
-          });
-
-          runInAction(async () => {
-            localStorage.setItem("access_token", result.data.access_token);
-            localStorage.setItem("refresh_token", result.data.refresh_token);
-            localStorage.setItem("token_type", result.data.token_type);
-            this.checkAuthorization();
-          });
-        } else {
-          throw new Error("no refresh token");
-        }
-      } catch (e: any) {
-        console.log("UserStore: ", e);
-        this._authorized = false;
-      }
+    } catch (e) {
+      return Promise.reject(e);
     }
+  }
+
+  async sendRefreshToken(): Promise<boolean | never> {
+    try {
+      const refreshToken = localStorage.getItem("refresh_token");
+
+      if (refreshToken) {
+        const body = new URLSearchParams();
+        body.append("client_id", "diploma-backend");
+        body.append("refresh_token", refreshToken);
+        body.append("grant_type", "refresh_token");
+
+        const result = await axios(KeyCloakHost, {
+          method: "post",
+          data: body,
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        });
+
+        runInAction(async () => {
+          localStorage.setItem("access_token", result.data.access_token);
+          localStorage.setItem("refresh_token", result.data.refresh_token);
+          localStorage.setItem("token_type", result.data.token_type);
+        });
+        return Promise.resolve(true);
+      } else {
+        throw new Error("no refresh token");
+      }
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+
+  async checkAuthorization() {
+    return this.sendAccessToken().then(
+      (response) => {
+        return Promise.resolve(response);
+      },
+      () => {
+        return this.sendRefreshToken().then(
+          () => {
+            this.checkAuthorization();
+          },
+          (e) => {
+            return Promise.reject(e);
+          },
+        );
+      },
+    );
   }
 
   logOut() {
     localStorage.setItem("access_token", "");
     localStorage.setItem("refresh_token", "");
+    this.setAllData(
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
   }
 }

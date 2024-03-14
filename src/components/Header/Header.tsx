@@ -35,9 +35,8 @@ const Header: React.FC = () => {
   const logoutUser = () => {
     const answer = confirm("Подтвердить выход из аккаунта?");
     if (answer) {
-      rootStore.user.logOut();
-      rootStore.user.checkAuthorization();
       router.push("/");
+      rootStore.user.logOut();
     }
   };
 

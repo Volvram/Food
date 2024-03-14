@@ -27,28 +27,35 @@ const ProfileContent: React.FC = () => {
 
   const profileContentStore = useLocalStore(() => new ProfileContentStore());
 
-  // TODO Заменить временную заглушку
   React.useEffect(() => {
-    if (rootStore.user.authorized) {
-      profileContentStore.setEmail(rootStore.user.email ?? "");
-      profileContentStore.setPassword("");
-      profileContentStore.setAvatar(rootStore.user.avatar ?? "");
-      profileContentStore.setHeight(rootStore.user.height ?? null);
-      profileContentStore.setWeight(rootStore.user.weight ?? null);
-      profileContentStore.setBirthdate(rootStore.user.birthdate ?? null);
-      profileContentStore.setSex(rootStore.user.sex ?? "");
+    profileContentStore.setAll(
+      rootStore.user.email,
+      rootStore.user.name,
+      rootStore.user.avatar,
+      rootStore.user.height,
+      rootStore.user.weight,
+      rootStore.user.birthdate,
+      rootStore.user.sex,
+    );
 
-      // @TODO обработать недостающие параметры
-      // profileContentStore.setDietPoint(rootStore.user.dietPoint ?? "");
-      // profileContentStore.setActivityLevel(rootStore.user.activityLevel ?? "");
-      // -------------------------------
-    }
-  }, [rootStore.user.authorized]);
+    // @TODO обработать недостающие параметры
+    // profileContentStore.setDietPoint(rootStore.user.dietPoint ?? "");
+    // profileContentStore.setActivityLevel(rootStore.user.activityLevel ?? "");
+    // -------------------------------
+  }, [
+    rootStore.user.email,
+    rootStore.user.name,
+    rootStore.user.avatar,
+    rootStore.user.height,
+    rootStore.user.weight,
+    rootStore.user.birthdate,
+    rootStore.user.sex,
+  ]);
 
   const handleEdit = () => {
     profileContentStore.editUser().then((response) => {
       // window.location.reload();
-      // alert(response);
+      alert(response);
     });
 
     setEditMode(false);
@@ -67,7 +74,6 @@ const ProfileContent: React.FC = () => {
       router.push("/");
     }
   };
-  // TODO --------------------------
 
   return (
     <div className={styles.profileContent}>
@@ -93,7 +99,7 @@ const ProfileContent: React.FC = () => {
             placeholder="Имя"
             className={styles.profileContent_input}
             containerClassName={styles.profileContent_inputContainer}
-            // value={profileContentStore.name ?? ""}
+            value={profileContentStore.name ?? ""}
             disabled={!editMode}
           />
           <Button>Сменить пароль</Button>
@@ -147,8 +153,10 @@ const ProfileContent: React.FC = () => {
               Рост
             </span>
             <Counter
-              className={styles.profileContent_personal_indexes_index_input}
-              onChange={() => {}}
+              className={styles.profileContent_personal_indexes_index_counter}
+              onChange={(value: number) => {
+                profileContentStore.setTempHeight(value);
+              }}
               defaultNumber={profileContentStore.height ?? 0}
               disabled={!editMode}
               input
@@ -159,8 +167,10 @@ const ProfileContent: React.FC = () => {
               Вес
             </span>
             <Counter
-              className={styles.profileContent_personal_indexes_index_input}
-              onChange={() => {}}
+              className={styles.profileContent_personal_indexes_index_counter}
+              onChange={(value: number) => {
+                profileContentStore.setTempWeight(value);
+              }}
               defaultNumber={profileContentStore.weight ?? 0}
               disabled={!editMode}
               input
@@ -169,7 +179,11 @@ const ProfileContent: React.FC = () => {
         </div>
         <span className={styles.profileContent_inputText}>Дата рождения</span>
         <Input
-          onChange={() => {}}
+          onChange={() => {
+            (value: Date) => {
+              profileContentStore.setTempBirthdate(value);
+            };
+          }}
           placeholder="18.12.2023"
           className={styles.profileContent_input}
           containerClassName={styles.profileContent_inputContainer}
@@ -250,23 +264,35 @@ const ProfileContent: React.FC = () => {
         </FormControl> */}
       </div>
       {editMode ? (
-        <Button
-          onClick={() => {
-            handleEdit();
-          }}
-          className={styles.profileContent_edit}
-        >
-          Отредактировать
-        </Button>
+        <div className={styles.profileContent_edit}>
+          <Button
+            onClick={() => {
+              setEditMode(false);
+            }}
+            className={styles.profileContent_edit_btn}
+          >
+            Отменить
+          </Button>
+          <Button
+            onClick={() => {
+              handleEdit();
+            }}
+            className={styles.profileContent_edit_btn}
+          >
+            Отредактировать
+          </Button>
+        </div>
       ) : (
-        <Button
-          onClick={() => {
-            setEditMode(true);
-          }}
-          className={styles.profileContent_edit}
-        >
-          Редактировать
-        </Button>
+        <div className={styles.profileContent_edit}>
+          <Button
+            onClick={() => {
+              setEditMode(true);
+            }}
+            className={styles.profileContent_edit_btn}
+          >
+            Редактировать
+          </Button>
+        </div>
       )}
 
       <p>

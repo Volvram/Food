@@ -38,6 +38,7 @@
                 }
 
                 &_text {
+                    text-align: center;
                     color: $gray;
                     font-size: $p1;
                     font-style: normal;
@@ -126,9 +127,14 @@
             justify-content: space-between;
 
             &_index {
-                &_input {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                &_counter {
                     margin-top: 12px;
-                    border: 1px solid #EDF2F7;
+                    width: 50%;
+                    border: 1px solid $light-gray;
                 }
             }
         }
@@ -144,6 +150,9 @@
 
     &_edit {
         margin-bottom: 40px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
 
     &_delete {

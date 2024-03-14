@@ -10,7 +10,9 @@ const Dish: React.FC = () => {
   const router = useRouter();
 
   React.useLayoutEffect(() => {
-    rootStore.user.checkAuthorization();
+    rootStore.user.checkAuthorization().catch((e) => {
+      console.log(e);
+    });
   }, []);
 
   return <DishPage id={router.query.id} />;

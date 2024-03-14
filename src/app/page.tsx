@@ -12,7 +12,9 @@ import rootStore from "@/store/RootStore/instance";
 
 export default function Home() {
   React.useEffect(() => {
-    rootStore.user.checkAuthorization();
+    rootStore.user.checkAuthorization().catch((e) => {
+      console.log(e);
+    });
   }, []);
 
   return (
