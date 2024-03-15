@@ -13,6 +13,10 @@
     }
 
     &_commonSearch {
+        height: 75vh;
+        min-height: 450px;
+        display: flex;
+        flex-direction: column;
 
         &_items {
             display: flex;
@@ -22,7 +26,7 @@
 
         &_pagination {
             width: fit-content;
-            margin-top: 20px;
+            margin-top: auto;
             margin-left: auto;
             margin-right: auto;
         }

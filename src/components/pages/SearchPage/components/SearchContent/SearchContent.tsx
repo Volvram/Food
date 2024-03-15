@@ -759,29 +759,35 @@ const SearchContent: React.FC<SearchContentProps> = ({
       ) : (
         <div className={styles.searchContent_commonSearch}>
           <div className={styles.searchContent_commonSearch_items}>
-            {filters?.searchType == "Блюда" || filters == null
-              ? searchContentStore.currentPageDishes.map((item) => {
-                  return (
-                    <Link
-                      key={item.id}
-                      href={`dishes/${item.id}`}
-                      className={styles.searchContent_item}
-                    >
-                      <FoodCard item={item} />
-                    </Link>
-                  );
-                })
-              : searchContentStore.currentPageProducts.map((item) => {
-                  return (
-                    <Link
-                      key={item.id}
-                      href={`dishes/${item.id}`}
-                      className={styles.searchContent_item}
-                    >
-                      <FoodCard item={item} />
-                    </Link>
-                  );
-                })}
+            {(filters?.searchType == "Блюда" || filters == null) &&
+            Boolean(searchContentStore.currentPageDishes.length) ? (
+              searchContentStore.currentPageDishes.map((item) => {
+                return (
+                  <Link
+                    key={item.id}
+                    href={`dishes/${item.id}`}
+                    className={styles.searchContent_item}
+                  >
+                    <FoodCard item={item} />
+                  </Link>
+                );
+              })
+            ) : !searchContentStore.currentPageDishes.length ||
+              !searchContentStore.currentPageProducts.length ? (
+              <div>Данные не найдены</div>
+            ) : (
+              searchContentStore.currentPageProducts.map((item) => {
+                return (
+                  <Link
+                    key={item.id}
+                    href={`dishes/${item.id}`}
+                    className={styles.searchContent_item}
+                  >
+                    <FoodCard item={item} />
+                  </Link>
+                );
+              })
+            )}
           </div>
           <Pagination
             className={styles.searchContent_commonSearch_pagination}
