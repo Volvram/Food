@@ -275,7 +275,11 @@ export default class UserStore {
     }
   }
 
-  async checkAuthorization() {
+  async checkAuthorization(attempt: number = 1) {
+    if (attempt > 3) {
+      return Promise.reject("Превышено количество допустимых запросов");
+    }
+
     return this.sendAccessToken().then(
       (response) => {
         return Promise.resolve(response);
@@ -283,7 +287,7 @@ export default class UserStore {
       () => {
         return this.sendRefreshToken().then(
           () => {
-            this.checkAuthorization();
+            this.checkAuthorization(++attempt);
           },
           (e) => {
             return Promise.reject(e);

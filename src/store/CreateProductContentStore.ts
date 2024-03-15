@@ -219,6 +219,9 @@ class CreateProductContentStore implements ILocalStore {
 
   async sendProduct() {
     try {
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
       const product = {
         name: this.name,
         description: this.description,
@@ -238,6 +241,9 @@ class CreateProductContentStore implements ILocalStore {
         url: `${HOST}/products`,
         method: "POST",
         data: product,
+        headers: {
+          Authorization: `${tokenType} ${accessToken}`,
+        },
       });
 
       runInAction(() => {
@@ -245,6 +251,7 @@ class CreateProductContentStore implements ILocalStore {
       });
     } catch (e) {
       console.log("CreateProductContentStore: ", e);
+      alert(`Ошибка: некорректные данные`);
     }
   }
 
