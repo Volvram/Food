@@ -31,7 +31,6 @@ const LoginContent: React.FC = () => {
       },
     );
   };
-  // TODO ----------------------
 
   return (
     <div className={styles.loginContent}>

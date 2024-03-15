@@ -1,11 +1,8 @@
 import React from "react";
 
-import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import MenuItem from "@mui/material/MenuItem";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +11,7 @@ import { useRouter } from "next/navigation";
 import styles from "./styles.module.scss";
 import vkIcon from "@/assets/img/vk_icon.png";
 import { Button } from "@/components/Button";
+import { CalendarInput } from "@/components/CalendarInput";
 import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
 import RegisterContentStore from "@/store/RegisterContentStore";
@@ -24,44 +22,38 @@ const RegisterContent: React.FC = () => {
 
   const registerContentStore = useLocalStore(() => new RegisterContentStore());
 
-  // TODO Заменить временную заглушку
   const onRegister = () => {
-    const usersBase = JSON.parse(localStorage.getItem("users") ?? "");
-
-    const newUser = registerContentStore.registerMock();
-
-    if (newUser) {
-      usersBase.push(newUser);
-
-      localStorage.setItem("users", JSON.stringify(usersBase));
-
-      localStorage.setItem("user", JSON.stringify(newUser));
-
-      router.push("/profile");
-    }
+    registerContentStore.requestRegister().then(
+      (response: string) => {
+        alert(response);
+        router.push("/login");
+      },
+      (error: Error) => {
+        alert(`Ошбика: ${error}`);
+      },
+    );
   };
-  // TODO ---------------------------
 
   return (
     <div className={styles.registerContent}>
-      <div className={styles.registerContent_block}>
-        <h1 className={styles.registerContent_block_h}>Присоединяйся</h1>
-        <div className={styles.registerContent_block_alternative}>
+      <div className={styles.registerContent_window}>
+        <h1 className={styles.registerContent_window_h}>Присоединяйся</h1>
+        <div className={styles.registerContent_window_alternative}>
           <Image
             src={vkIcon}
-            className={styles.registerContent_block_alternative_icon}
+            className={styles.registerContent_window_alternative_icon}
             alt="vk"
           />
-          <span className={styles.registerContent_block_alternative_text}>
+          <span className={styles.registerContent_window_alternative_text}>
             Зарегистрироваться через VK
           </span>
         </div>
-        <div className={styles.registerContent_block_or}>
-          <div className={styles.registerContent_block_or_hr} />
-          <span className={styles.registerContent_block_or_text}>ИЛИ</span>
-          <div className={styles.registerContent_block_or_hr} />
+        <div className={styles.registerContent_window_or}>
+          <div className={styles.registerContent_window_or_hr} />
+          <span className={styles.registerContent_window_or_text}>ИЛИ</span>
+          <div className={styles.registerContent_window_or_hr} />
         </div>
-        <span className={styles.registerContent_block_text}>
+        <span className={styles.registerContent_window_text}>
           Электронная почта
         </span>
         <Input
@@ -69,20 +61,20 @@ const RegisterContent: React.FC = () => {
             registerContentStore.setEmail(value);
           }}
           placeholder="example@mail.com"
-          className={styles.registerContent_block_input}
-          containerClassName={styles.registerContent_block_inputContainer}
+          className={styles.registerContent_window_input}
+          containerClassName={styles.registerContent_window_inputContainer}
         />
-        <span className={styles.registerContent_block_text}>Пароль</span>
+        <span className={styles.registerContent_window_text}>Пароль</span>
         <Input
           onChange={(value: string) => {
             registerContentStore.setPassword(value);
           }}
           placeholder="Пароль"
           type="password"
-          className={styles.registerContent_block_input}
-          containerClassName={styles.registerContent_block_inputContainer}
+          className={styles.registerContent_window_input}
+          containerClassName={styles.registerContent_window_inputContainer}
         />
-        <span className={styles.registerContent_block_text}>
+        <span className={styles.registerContent_window_text}>
           Повторите пароль
         </span>
         <Input
@@ -91,25 +83,35 @@ const RegisterContent: React.FC = () => {
           }}
           placeholder="Повторите пароль"
           type="password"
-          className={styles.registerContent_block_input}
-          containerClassName={styles.registerContent_block_inputContainer}
+          className={styles.registerContent_window_input}
+          containerClassName={styles.registerContent_window_inputContainer}
         />
-        <div className={styles.registerContent_block_hr} />
-        <div className={styles.registerContent_block_personal}>
-          <div className={styles.registerContent_block_personal_indexes}>
+        <span className={styles.registerContent_window_text}>Имя</span>
+        <Input
+          onChange={(value: string) => {
+            registerContentStore.setName(value);
+          }}
+          placeholder="Имя"
+          type="text"
+          className={styles.registerContent_window_input}
+          containerClassName={styles.registerContent_window_inputContainer}
+        />
+        <div className={styles.registerContent_window_hr} />
+        <div className={styles.registerContent_window_personal}>
+          <div className={styles.registerContent_window_personal_indexes}>
             <div
-              className={styles.registerContent_block_personal_indexes_index}
+              className={styles.registerContent_window_personal_indexes_index}
             >
               <span
                 className={
-                  styles.registerContent_block_personal_indexes_index_text
+                  styles.registerContent_window_personal_indexes_index_text
                 }
               >
                 Рост
               </span>
               <Counter
                 className={
-                  styles.registerContent_block_personal_indexes_index_input
+                  styles.registerContent_window_personal_indexes_index_counter
                 }
                 onChange={(value) => {
                   registerContentStore.setHeight(value);
@@ -118,18 +120,18 @@ const RegisterContent: React.FC = () => {
               />
             </div>
             <div
-              className={styles.registerContent_block_personal_indexes_index}
+              className={styles.registerContent_window_personal_indexes_index}
             >
               <span
                 className={
-                  styles.registerContent_block_personal_indexes_index_text
+                  styles.registerContent_window_personal_indexes_index_text
                 }
               >
                 Вес
               </span>
               <Counter
                 className={
-                  styles.registerContent_block_personal_indexes_index_input
+                  styles.registerContent_window_personal_indexes_index_counter
                 }
                 onChange={(value) => {
                   registerContentStore.setWeight(value);
@@ -139,37 +141,35 @@ const RegisterContent: React.FC = () => {
             </div>
           </div>
         </div>
-        <span className={styles.registerContent_block_text}>Дата рождения</span>
-        <Input
-          onChange={(value: string) => {
-            registerContentStore.setBirthDate(value);
-          }}
-          placeholder="2023-12-18"
-          className={styles.registerContent_block_input}
-          containerClassName={styles.registerContent_block_inputContainer}
-        />
-        <span className={styles.registerContent_block_text}>Пол</span>
+        <span className={styles.registerContent_window_text}>
+          Дата рождения
+        </span>
+        <div className={styles.registerContent_window_block}>
+          <CalendarInput
+            onChange={(value) => {
+              registerContentStore.setBirthdate(value);
+            }}
+            value={new Date()}
+          />
+        </div>
+        <span className={styles.registerContent_window_text}>Пол</span>
         <RadioGroup
-          className={styles.registerContent_block_check}
+          className={styles.registerContent_window_check}
           aria-labelledby="demo-radio-buttons-group-label"
-          value={registerContentStore.gender}
-          name="gender"
+          value={registerContentStore.sex}
+          name="sex"
           onChange={(event: React.ChangeEvent, value: string) => {
-            registerContentStore.setGender(value);
+            registerContentStore.setSex(value);
           }}
         >
+          <FormControlLabel value="MALE" control={<Radio />} label="Мужчина" />
           <FormControlLabel
-            value="Мужчина"
-            control={<Radio />}
-            label="Мужчина"
-          />
-          <FormControlLabel
-            value="Женщина"
+            value="FEMALE"
             control={<Radio />}
             label="Женщина"
           />
         </RadioGroup>
-        <span className={styles.registerContent_block_text}>
+        {/* <span className={styles.registerContent_block_text}>
           Какова ваша цель?
         </span>
         <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
@@ -211,17 +211,17 @@ const RegisterContent: React.FC = () => {
             <MenuItem value="Среднеподвижный">Среднеподвижный</MenuItem>
             <MenuItem value="Активный">Активный</MenuItem>
           </Select>
-        </FormControl>
+        </FormControl> */}
         <Button
           onClick={onRegister}
-          className={styles.registerContent_block_button}
+          className={styles.registerContent_window_button}
         >
           Зарегистрироваться
         </Button>
-        <div className={styles.registerContent_block_links}>
+        <div className={styles.registerContent_window_links}>
           <Link
             href="/login"
-            className={styles.registerContent_block_links_link}
+            className={styles.registerContent_window_links_link}
           >
             Войти
           </Link>

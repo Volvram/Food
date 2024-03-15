@@ -1,15 +1,19 @@
+import axios from "axios";
+import { Dayjs } from "dayjs";
 import { makeObservable, observable, action, computed } from "mobx";
 
+import { HOST } from "@/config/host";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 type PrivateFields =
   | "_email"
   | "_password"
   | "_repeatPassword"
+  | "_name"
   | "_height"
   | "_weight"
   | "_birthdate"
-  | "_gender"
+  | "_sex"
   | "_dietPoint"
   | "_activityLevel";
 
@@ -17,10 +21,11 @@ class RegisterContentStore implements ILocalStore {
   private _email: string | null = null;
   private _password: string | null = null;
   private _repeatPassword: string | null = null;
+  private _name: string | null = null;
   private _height: number | null = null;
   private _weight: number | null = null;
-  private _birthdate: string | null = null;
-  private _gender: string = "Мужчина";
+  private _birthdate: Dayjs | null = null;
+  private _sex: string = "MALE";
   private _dietPoint: string = "Сбросить вес";
   private _activityLevel: string = "Малоподвижный";
 
@@ -35,6 +40,9 @@ class RegisterContentStore implements ILocalStore {
       _repeatPassword: observable,
       setRepeatPassword: action,
       repeatPassword: computed,
+      _name: observable,
+      setName: action,
+      name: computed,
       _height: observable,
       setHeight: action,
       height: computed,
@@ -42,11 +50,11 @@ class RegisterContentStore implements ILocalStore {
       setWeight: action,
       weight: computed,
       _birthdate: observable,
-      setBirthDate: action,
-      birthDate: computed,
-      _gender: observable,
-      setGender: action,
-      gender: computed,
+      setBirthdate: action,
+      birthdate: computed,
+      _sex: observable,
+      setSex: action,
+      sex: computed,
       _dietPoint: observable,
       setDietPoint: action,
       dietPoint: computed,
@@ -80,6 +88,14 @@ class RegisterContentStore implements ILocalStore {
     return this._repeatPassword;
   }
 
+  setName(name: string) {
+    this._name = name;
+  }
+
+  get name() {
+    return this._name;
+  }
+
   setHeight(height: number) {
     this._height = height;
   }
@@ -96,20 +112,20 @@ class RegisterContentStore implements ILocalStore {
     return this._weight;
   }
 
-  setBirthDate(birthDate: string) {
-    this._birthdate = birthDate;
+  setBirthdate(birthdate: Dayjs | null) {
+    this._birthdate = birthdate;
   }
 
-  get birthDate() {
+  get birthdate() {
     return this._birthdate;
   }
 
-  setGender(gender: string) {
-    this._gender = gender;
+  setSex(sex: string) {
+    this._sex = sex;
   }
 
-  get gender() {
-    return this._gender;
+  get sex() {
+    return this._sex;
   }
 
   setDietPoint(dietPoint: string) {
@@ -128,34 +144,37 @@ class RegisterContentStore implements ILocalStore {
     return this._activityLevel;
   }
 
-  registerMock = () => {
-    if (this._password != this._repeatPassword) {
-      alert("Повторный пароль не совпадает");
-    } else if (!this._email || !this._password) {
-      alert("Почта и пароль не могут быть пустыми");
-    } else if (
-      !this._birthdate ||
-      String(new Date(this._birthdate)) == "Invalid Date"
-    ) {
-      alert("Неверный формат даты");
-    } else {
-      const newUser = {
-        email: this._email,
-        password: this._password,
-        avatar: "",
-        height: this._height,
-        weight: this._weight,
-        gender: this._gender,
-        birthdate: this._birthdate,
-        diet_point: this._dietPoint,
-        activity_level: this._activityLevel,
-      };
+  async requestRegister() {
+    try {
+      if (this._password != this._repeatPassword) {
+        throw new Error("Повторный пароль не совпадает");
+      } else if (!this._email || !this._password) {
+        throw new Error("Почта и пароль не могут быть пустыми");
+      } else {
+        const body = {
+          email: this.email,
+          password: this.password,
+          name: this.name,
+          height: this.height,
+          weight: this.weight,
+          sex: this.sex,
+          birthdate: this.birthdate?.format("YYYY-MM-DD"),
+        };
 
-      return newUser;
+        await axios({
+          url: `${HOST}/users`,
+          method: "post",
+          data: body,
+        });
+
+        return Promise.resolve("Аккаунт успешно зарегистрирован!");
+      }
+    } catch (e) {
+      console.log("RegisterContentStore ", e);
+
+      return Promise.reject(e);
     }
-
-    return;
-  };
+  }
 
   destroy() {}
 }
