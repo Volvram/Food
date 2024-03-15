@@ -273,8 +273,6 @@ class ProfileContentStore implements ILocalStore {
         birthdate: this.tempBirthdate?.format("YYYY-MM-DD"),
         height: this.tempHeight,
         weight: this.tempWeight,
-        // diet_point: this._dietPoint,
-        // activity_level: this._activityLevel,
       };
 
       await axios({
@@ -289,6 +287,27 @@ class ProfileContentStore implements ILocalStore {
       return Promise.resolve("Профиль успешно отредактирован!");
     } catch (e) {
       console.log("ProfileContentStore: ", e);
+      return Promise.reject(e);
+    }
+  }
+
+  async deleteUser() {
+    try {
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      await axios({
+        url: `${HOST}/users/${rootStore.user.id}`,
+        method: "delete",
+        headers: {
+          Authorization: `${tokenType} ${accessToken}`,
+        },
+      });
+
+      return Promise.resolve("Профиль удален");
+    } catch (e) {
+      console.log("ProfileContentStore: ", e);
+      return Promise.reject(e);
     }
   }
 

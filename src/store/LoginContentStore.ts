@@ -66,9 +66,12 @@ class LoginContentStore implements ILocalStore {
         localStorage.setItem("token_type", result.data.token_type);
       });
       return Promise.resolve("Авторизация успешно пройдена!");
-    } catch (e) {
+    } catch (e: any) {
       console.log("LoginContentStore ", e);
 
+      if (e.code == "ERR_BAD_REQUEST") {
+        return Promise.reject("Неверная почта или пароль");
+      }
       return Promise.reject(e);
     }
   }

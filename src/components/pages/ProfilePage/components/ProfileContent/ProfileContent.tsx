@@ -50,9 +50,16 @@ const ProfileContent: React.FC = () => {
   ]);
 
   const handleEdit = () => {
-    profileContentStore.editUser().then((response) => {
-      alert(response);
-    });
+    profileContentStore.editUser().then(
+      (response) => {
+        alert(response);
+      },
+      (error) => {
+        alert(`Ошибка: ${error}`);
+        // @TODO заменить на сброс значений полей к неизмененным
+        window.location.reload();
+      },
+    );
 
     setEditMode(false);
   };
@@ -63,11 +70,16 @@ const ProfileContent: React.FC = () => {
     );
 
     if (answer) {
-      // ЗАПРОС НА УДАЛЕНИЕ
-
-      rootStore.user.logOut();
-      rootStore.user.checkAuthorization();
-      router.push("/");
+      profileContentStore.deleteUser().then(
+        (response) => {
+          alert(response);
+          rootStore.user.logOut();
+          router.push("/");
+        },
+        (error) => {
+          alert(`Ошибка: ${error}`);
+        },
+      );
     }
   };
 

@@ -29,7 +29,7 @@ const RegisterContent: React.FC = () => {
         router.push("/login");
       },
       (error: Error) => {
-        alert(`Ошбика: ${error}`);
+        alert(`Ошибка: ${error}`);
       },
     );
   };

@@ -27,7 +27,7 @@ const LoginContent: React.FC = () => {
         router.push("/");
       },
       (error: Error) => {
-        alert(`Возникла непредвиденная ошибка: ${error}`);
+        alert(`Ошибка: ${error}`);
       },
     );
   };
