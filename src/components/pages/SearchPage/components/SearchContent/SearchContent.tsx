@@ -772,10 +772,7 @@ const SearchContent: React.FC<SearchContentProps> = ({
                   </Link>
                 );
               })
-            ) : !searchContentStore.currentPageDishes.length ||
-              !searchContentStore.currentPageProducts.length ? (
-              <div>Данные не найдены</div>
-            ) : (
+            ) : searchContentStore.currentPageProducts.length ? (
               searchContentStore.currentPageProducts.map((item) => {
                 return (
                   <Link
@@ -787,6 +784,8 @@ const SearchContent: React.FC<SearchContentProps> = ({
                   </Link>
                 );
               })
+            ) : (
+              <div>Данные не найдены</div>
             )}
           </div>
           <Pagination

@@ -6,6 +6,7 @@ import Select from "@mui/material/Select";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
 
+import { nutrients } from "../nutrients";
 import styles from "./styles.module.scss";
 import noImage from "@/assets/img/noImage.jpg";
 import { Button } from "@/components/Button";
@@ -94,6 +95,12 @@ const CreateDishContent: React.FC = () => {
         <Counter
           onChange={(value: number) => {
             createDishContentStore.setEnergy(value);
+            const newNutrients = {
+              ...createDishContentStore.nutrients,
+            };
+            newNutrients.energy = value;
+            newNutrients.calories = value;
+            createDishContentStore.setNutrients(newNutrients);
           }}
           input={true}
           className={styles.createDishContent_counter}
@@ -104,6 +111,11 @@ const CreateDishContent: React.FC = () => {
         <Counter
           onChange={(value: number) => {
             createDishContentStore.setProtein(value);
+            const newNutrients = {
+              ...createDishContentStore.nutrients,
+            };
+            newNutrients.protein = value;
+            createDishContentStore.setNutrients(newNutrients);
           }}
           input={true}
           className={styles.createDishContent_counter}
@@ -114,6 +126,11 @@ const CreateDishContent: React.FC = () => {
         <Counter
           onChange={(value: number) => {
             createDishContentStore.setFat(value);
+            const newNutrients = {
+              ...createDishContentStore.nutrients,
+            };
+            newNutrients.fats.total = value;
+            createDishContentStore.setNutrients(newNutrients);
           }}
           input={true}
           className={styles.createDishContent_counter}
@@ -124,6 +141,11 @@ const CreateDishContent: React.FC = () => {
         <Counter
           onChange={(value: number) => {
             createDishContentStore.setCarbs(value);
+            const newNutrients = {
+              ...createDishContentStore.nutrients,
+            };
+            newNutrients.carbohydrates.total = value;
+            createDishContentStore.setNutrients(newNutrients);
           }}
           input={true}
           className={styles.createDishContent_counter}
@@ -358,7 +380,88 @@ const CreateDishContent: React.FC = () => {
           </div>
         )}
       </CommonAccordion>
+      <table className={styles.createDishContent_nutrients}>
+        <thead className={styles.createDishContent_nutrients_head}>
+          <tr>
+            <td>
+              <strong>Наименование</strong>
+            </td>
+            <td>
+              <strong>Значение</strong>
+            </td>
+          </tr>
+        </thead>
+        <tbody className={styles.createDishContent_nutrients_body}>
+          {Object.keys(nutrients).map((key: any) => {
+            if (typeof nutrients[key as keyof typeof nutrients] == "object") {
+              return (
+                <tr key={key}>
+                  <td>{nutrients[key as keyof typeof nutrients]["title"]}</td>
+                  <td
+                    className={
+                      styles.createDishContent_nutrients_body_complextd
+                    }
+                  >
+                    {Object.keys(nutrients[key as keyof typeof nutrients]).map(
+                      (subKey) => {
+                        if (subKey != "title") {
+                          return (
+                            <React.Fragment key={subKey}>
+                              <div
+                                className={
+                                  styles.createDishContent_nutrients_body_complextd_subtr
+                                }
+                              >
+                                {`${nutrients[key][subKey]} (мг/100 г.): `}
+                                <Input
+                                  onChange={(value: string) => {
+                                    const newNutrients = {
+                                      ...createDishContentStore.nutrients,
+                                    };
+                                    newNutrients[key][subKey] = Number(value);
 
+                                    createDishContentStore.setNutrients(
+                                      newNutrients,
+                                    );
+                                  }}
+                                  className={
+                                    styles.createDishContent_nutrients_body_input
+                                  }
+                                />
+                              </div>
+                            </React.Fragment>
+                          );
+                        }
+                      },
+                    )}
+                  </td>
+                </tr>
+              );
+            } else {
+              return (
+                <tr key={key}>
+                  <td>{`${
+                    nutrients[key as keyof typeof nutrients]
+                  } (мг/100 г.):`}</td>
+                  <td>
+                    <Input
+                      onChange={(value: string) => {
+                        const newNutrients = {
+                          ...createDishContentStore.nutrients,
+                        };
+                        newNutrients[key] = Number(value);
+
+                        createDishContentStore.setNutrients(newNutrients);
+                      }}
+                      className={styles.createDishContent_nutrients_body_input}
+                    />
+                  </td>
+                </tr>
+              );
+            }
+          })}
+        </tbody>
+      </table>
       <Button
         onClick={() => {
           createDishContentStore.sendDish();

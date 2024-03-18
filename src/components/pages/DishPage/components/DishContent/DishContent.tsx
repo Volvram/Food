@@ -3,7 +3,7 @@ import React from "react";
 import Additional from "./components/Additional/Additional";
 import General from "./components/General/General";
 import Ingredients from "./components/Ingredients/Ingredients";
-import Nutrition from "./components/Nutricion/Nutricion";
+import Nutrition from "./components/Nutrition/Nutrition";
 import Other from "./components/Other/Other";
 import styles from "./styles.module.scss";
 import { DishType } from "@/store/SearchContentStore";
