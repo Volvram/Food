@@ -9,7 +9,7 @@ import magnifier from "@/assets/img/magnifier.png";
 import noImage from "@/assets/img/noImage.jpg";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
-import { debounce } from "@/config/debounce";
+import { debounce } from "@/shared/debounce";
 import AddMealStore from "@/store/AddMealStore";
 import { DayOfTheWeekType } from "@/store/CalendarContentStore";
 import { useLocalStore } from "@/utils/useLocalStore";

@@ -13,7 +13,7 @@ import Header from "@/components/Header/Header";
 import { Input } from "@/components/Input";
 import Meta from "@/components/Meta/Meta";
 import WithModal from "@/components/WithModal/WithModal";
-import { debounce } from "@/config/debounce";
+import { debounce } from "@/shared/debounce";
 import { FiltersType } from "@/store/SearchFiltersStore";
 import SearchPageStore from "@/store/SearchPageStore";
 import { useLocalStore } from "@/utils/useLocalStore";

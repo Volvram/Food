@@ -2,7 +2,7 @@ import axios from "axios";
 import { Dayjs } from "dayjs";
 import { makeObservable, observable, action, computed } from "mobx";
 
-import { HOST } from "@/config/host";
+import { HOST } from "@/shared/host";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 type PrivateFields =

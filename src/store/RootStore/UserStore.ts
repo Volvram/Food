@@ -7,8 +7,8 @@ import {
   runInAction,
 } from "mobx";
 
-import { decodeToken } from "@/config/decodeToken";
-import { HOST, KeyCloakHost } from "@/config/host";
+import { decodeToken } from "@/shared/decodeToken";
+import { HOST, KeyCloakHost } from "@/shared/host";
 
 export type UserType = {
   id: number;

@@ -13,7 +13,7 @@ import { Button } from "@/components/Button";
 import { CommonAccordion } from "@/components/CommonAccordion";
 import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
-import { debounce } from "@/config/debounce";
+import { debounce } from "@/shared/debounce";
 import CreateDishContentStore, {
   CurrentProductType,
   DishProductLinkType,

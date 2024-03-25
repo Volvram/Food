@@ -7,7 +7,7 @@ import {
   runInAction,
 } from "mobx";
 
-import { KeyCloakHost } from "@/config/host";
+import { KeyCloakHost } from "@/shared/host";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 type PrivateFields = "_email" | "_password";

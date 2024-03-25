@@ -11,8 +11,8 @@ import "react-multi-carousel/lib/styles.css";
 
 import FoodCard from "./components/FoodCard/FoodCard";
 import styles from "./styles.module.scss";
-import { responsiveCarousel } from "@/config/responsiveCarousel";
-import { shuffle } from "@/config/shuffle";
+import { responsiveCarousel } from "@/shared/responsiveCarousel";
+import { shuffle } from "@/shared/shuffle";
 import { CategoryType } from "@/store/CreateDishContentStore";
 import SearchContentStore, {
   CategoriesType,

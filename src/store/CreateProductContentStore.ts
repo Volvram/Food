@@ -8,7 +8,7 @@ import {
 } from "mobx";
 
 import { NutrientsType, ServingSizeType } from "./CreateDishContentStore";
-import { HOST } from "@/config/host";
+import { HOST } from "@/shared/host";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 export type ServingSizeWithGramsType = ServingSizeType & {

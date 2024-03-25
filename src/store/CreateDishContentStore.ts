@@ -10,7 +10,7 @@ import {
   reaction,
 } from "mobx";
 
-import { HOST } from "@/config/host";
+import { HOST } from "@/shared/host";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 export type CategoryType = {

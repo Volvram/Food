@@ -15,7 +15,7 @@ import {
   TagType,
 } from "./CreateDishContentStore";
 import { FiltersType } from "./SearchFiltersStore";
-import { HOST } from "@/config/host";
+import { HOST } from "@/shared/host";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 type Dish = {
