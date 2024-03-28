@@ -19,7 +19,6 @@ import { HOST } from "@/shared/host";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 export type FiltersType = {
-  searchType: string;
   energy: {
     from: number;
     to: number;
@@ -38,7 +37,6 @@ export type FiltersType = {
 };
 
 type PrivateFields =
-  | "_searchType"
   | "_energy"
   | "_allKitchen"
   | "_kitchen"
@@ -56,7 +54,6 @@ type PrivateFields =
   | "_productInput";
 
 class SearchFiltersStore implements ILocalStore {
-  private _searchType: string = "Блюда";
   private _energy = {
     from: 0,
     to: Infinity,
@@ -96,9 +93,6 @@ class SearchFiltersStore implements ILocalStore {
 
   constructor(filters: FiltersType | null) {
     makeObservable<SearchFiltersStore, PrivateFields>(this, {
-      _searchType: observable,
-      setSearchType: action,
-      searchType: computed,
       _energy: observable,
       setEnergy: action,
       energy: computed,
@@ -152,14 +146,6 @@ class SearchFiltersStore implements ILocalStore {
     if (filters) {
       this.setAll(filters);
     }
-  }
-
-  setSearchType(searchType: string) {
-    this._searchType = searchType;
-  }
-
-  get searchType() {
-    return this._searchType;
   }
 
   setEnergy(energy: { from: number; to: number }) {
@@ -372,7 +358,6 @@ class SearchFiltersStore implements ILocalStore {
   }
 
   setAll(filters: FiltersType) {
-    this.setSearchType(filters.searchType);
     this.setEnergy(filters.energy);
     this.setKitchen(filters.kitchen);
     this.setDietaryNeeds(filters.dietaryNeeds);

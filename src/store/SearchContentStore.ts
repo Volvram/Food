@@ -18,7 +18,7 @@ import { FiltersType } from "./SearchFiltersStore";
 import { HOST } from "@/shared/host";
 import { ILocalStore } from "@/utils/useLocalStore";
 
-type Dish = {
+export type DishType = {
   id: number;
   name: string;
   image?: string | null;
@@ -37,49 +37,21 @@ type Dish = {
   nutrients: any[] | null;
 };
 
-// @TODO Убрать заглушку
-export type DishType = {
-  id: string | number;
-  name: string;
-  image?: string | null;
-  description: string | null;
-  energy: number;
-  protein: number;
-  carbs: number;
-  fat: number;
-};
-// -------------------
-
-export type CategoriesType = {
-  category: string;
-  dishes: DishType[];
-};
-
 type PrivateFields =
-  | "_categories"
-  | "_categoriesDishes"
   | "_dishes"
   | "_currentPageDishes"
   | "_products"
   | "_countPerPage";
 
 class SearchContentStore implements ILocalStore {
-  private _categories: CategoryType[] = [];
-  private _categoriesDishes: CategoriesType[] = [];
-  private _dishes: DishType[] | Dish[] = [];
-  private _currentPageDishes: DishType[] | Dish[] = [];
+  private _dishes: DishType[] = [];
+  private _currentPageDishes: DishType[] = [];
   private _products: ProductType[] = [];
   private _currentPageProducts: ProductType[] = [];
   private _countPerPage = 12;
 
   constructor() {
     makeObservable<SearchContentStore, PrivateFields>(this, {
-      _categories: observable,
-      setCategories: action,
-      categories: computed,
-      _categoriesDishes: observable,
-      setCategoriesDishes: action,
-      categoriesDishes: computed,
       _dishes: observable,
       setDishes: action,
       dishes: computed,
@@ -95,23 +67,7 @@ class SearchContentStore implements ILocalStore {
     });
   }
 
-  setCategories(categories: CategoryType[]) {
-    this._categories = categories;
-  }
-
-  get categories() {
-    return this._categories;
-  }
-
-  setCategoriesDishes(categoriesDishes: CategoriesType[]) {
-    this._categoriesDishes = categoriesDishes;
-  }
-
-  get categoriesDishes() {
-    return this._categoriesDishes;
-  }
-
-  setDishes(dishes: DishType[] | Dish[]) {
+  setDishes(dishes: DishType[]) {
     this._dishes = dishes;
   }
 
@@ -119,7 +75,12 @@ class SearchContentStore implements ILocalStore {
     return this._dishes;
   }
 
-  async requestDishes(filters: FiltersType | null, search?: string | string[]) {
+  async requestObjects(
+    filters: FiltersType | null,
+    objectType?: "Блюда" | "Продукты",
+    createdByUser?: boolean,
+    search?: string | string[],
+  ) {
     let body: any = {};
     if (filters) {
       body = {
@@ -149,7 +110,7 @@ class SearchContentStore implements ILocalStore {
 
     try {
       const result =
-        filters?.searchType == "Продукты"
+        objectType == "Продукты"
           ? await axios({
               url: `${HOST}/products`,
               method: "GET",
@@ -164,7 +125,7 @@ class SearchContentStore implements ILocalStore {
             });
 
       runInAction(async () => {
-        filters?.searchType == "Продукты"
+        objectType == "Продукты"
           ? this.setProducts(result.data)
           : this.setDishes(result.data);
       });

@@ -6,25 +6,6 @@
         margin: 0 auto;
         max-width: $fullhd;
 
-        &_beforeContent {
-            margin-left: 50px;
-            margin-top: 20px;
-            display: flex;
-            gap: 8px;
-
-            &_btn {
-                padding: 7px 23px 8px 24px;
-                background-color: $white;
-                border-radius: 20px;
-                border: 1px solid $gray;
-                color: $dark-gray;
-
-                &:hover {
-                    background-color: $light-gray;
-                }
-            }
-        }
-
         &_search{
             display: flex;
             justify-content: center;
@@ -46,8 +27,56 @@
                 }
             }
 
-            &_filters {
+            &_filtersIcon {
                 cursor: pointer;
+
+                &__disabled {
+                    opacity: 0.5;
+                    cursor: default;
+                }
+            }
+        }
+
+        &_options {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10%;
+
+            &_type {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+            }
+
+            &_switch{
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+            }
+        }
+
+        &_beforeContent {
+            margin-left: 50px;
+            margin-top: 20px;
+            display: flex;
+            gap: 8px;
+
+            &_btn {
+                padding: 7px 23px 8px 24px;
+                background-color: $white;
+                border-radius: 20px;
+                border: 1px solid $gray;
+                color: $dark-gray;
+
+                &:hover {
+                    background-color: $light-gray;
+                }
             }
         }
 
@@ -62,4 +91,33 @@
     }    
 }
 
+@media screen and (max-width: $tablet) {
+    .searchPage {
+        &_body {
+            &_options {
+    
+                &_type {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+            }
+        }
+    }
+}
 
+@media screen and (max-width: $phone) {
+    .searchPage {
+        &_body {
+            &_options {
+                flex-direction: column;
+                gap: 0px;
+    
+                &_type {
+                    width: 85%;
+                    border-bottom: 1px solid $light-gray;
+                    flex-direction: row;
+                }
+            }
+        }
+    }
+}

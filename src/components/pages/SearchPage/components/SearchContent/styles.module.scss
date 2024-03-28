@@ -1,19 +1,10 @@
 @import "@/styles/variables.scss";
 
 .searchContent{
-    padding: 20px;
-
-    &_categories {
-
-
-        &_carousel {
-            padding-top: 10px;
-            padding-bottom: 10px;
-        }
-    }
+    padding: 10px;
 
     &_commonSearch {
-        height: 75vh;
+        height: 60vh;
         min-height: 450px;
         display: flex;
         flex-direction: column;

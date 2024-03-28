@@ -24,15 +24,17 @@ const WithModal: React.FC<WithModalProps> = ({
     <Modal disableScrollLock onClose={onClose} open={open}>
       <Fade in={open}>
         <Box className={cn(styles.modal, className)}>
-          {children}
           {withCross && (
-            <CloseIcon
-              onClick={() => {
-                onClose();
-              }}
-              className={styles.modal_close}
-            />
+            <div className={styles.modal_close}>
+              <CloseIcon
+                onClick={() => {
+                  onClose();
+                }}
+                className={styles.modal_close_icon}
+              />
+            </div>
           )}
+          {children}
         </Box>
       </Fade>
     </Modal>

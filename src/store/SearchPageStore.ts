@@ -3,12 +3,16 @@ import { makeObservable, observable, action, computed } from "mobx";
 import { FiltersType } from "./SearchFiltersStore";
 import { ILocalStore } from "@/utils/useLocalStore";
 
-type PrivateFields = "_isOpenFilters" | "_searchMode" | "_seeMore" | "_filters";
+type PrivateFields =
+  | "_isOpenFilters"
+  | "_objectType"
+  | "_createdByUser"
+  | "_filters";
 
 class SearchPageStore implements ILocalStore {
   private _isOpenFilters = false;
-  private _searchMode: "categories" | "commonSearch" = "categories";
-  private _seeMore = false;
+  private _objectType: "Блюда" | "Продукты" = "Блюда";
+  private _createdByUser = false;
   private _filters: FiltersType | null = null;
 
   constructor() {
@@ -16,17 +20,15 @@ class SearchPageStore implements ILocalStore {
       _isOpenFilters: observable,
       setIsOpenFilters: action,
       isOpenFilters: computed,
-      toggleIsOpenFilters: action.bound,
-      _searchMode: observable,
-      setSearchMode: action,
-      searchMode: computed,
-      _seeMore: observable,
-      setSeeMore: action,
-      seeMore: computed,
+      _objectType: observable,
+      setObjectType: action,
+      objectType: computed,
+      _createdByUser: observable,
+      setCreatedByUser: action,
+      createdByUser: computed,
       _filters: observable,
       setFilters: action,
       filters: computed,
-      toggleSeeMore: action,
     });
   }
 
@@ -38,25 +40,29 @@ class SearchPageStore implements ILocalStore {
     return this._isOpenFilters;
   }
 
-  toggleIsOpenFilters() {
-    this._isOpenFilters = !this._isOpenFilters;
+  toggleIsOpenFilters = () => {
+    this.setIsOpenFilters(!this._isOpenFilters);
+  };
+
+  setObjectType(objectType: "Блюда" | "Продукты") {
+    this._objectType = objectType;
   }
 
-  setSearchMode(searchMode: "categories" | "commonSearch") {
-    this._searchMode = searchMode;
+  get objectType() {
+    return this._objectType;
   }
 
-  get searchMode() {
-    return this._searchMode;
+  setCreatedByUser(createdByUser: boolean) {
+    this._createdByUser = createdByUser;
   }
 
-  setSeeMore(seeMore: boolean) {
-    this._seeMore = seeMore;
+  get createdByUser() {
+    return this._createdByUser;
   }
 
-  get seeMore() {
-    return this._seeMore;
-  }
+  toggleCreatedByUser = () => {
+    this.setCreatedByUser(!this._createdByUser);
+  };
 
   setFilters(filters: FiltersType | null) {
     this._filters = filters;
@@ -64,10 +70,6 @@ class SearchPageStore implements ILocalStore {
 
   get filters() {
     return this._filters;
-  }
-
-  toggleSeeMore() {
-    this._seeMore = !this._seeMore;
   }
 
   destroy() {}

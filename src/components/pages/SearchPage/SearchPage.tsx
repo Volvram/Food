@@ -1,6 +1,12 @@
 import React from "react";
 
 import TuneIcon from "@mui/icons-material/Tune";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import Switch from "@mui/material/Switch";
+import Typography from "@mui/material/Typography";
+import cn from "classnames";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 
@@ -24,43 +30,12 @@ const SearchPage: React.FC = () => {
 
   const searchPageStore = useLocalStore(() => new SearchPageStore());
 
-  React.useEffect(() => {
-    if (
-      router.query.search ||
-      router.query.seeMore ||
-      searchPageStore.filters
-    ) {
-      searchPageStore.setSearchMode("commonSearch");
-    } else {
-      searchPageStore.setSearchMode("categories");
-    }
-  }, [router.query.search, router.query.seeMore, searchPageStore.filters]);
-
-  React.useEffect(() => {
-    searchPageStore.setSeeMore(Boolean(router.query.seeMore));
-  }, [router.query.seeMore]);
-
   const handleSearchChange = React.useCallback(
     debounce((value: string | string[]) => {
       router.push({ query: { ...router.query, search: value } });
     }),
-    [router],
+    [router.query.search],
   );
-
-  const handleSeeMoreChange = React.useCallback(() => {
-    searchPageStore.toggleSeeMore();
-    searchPageStore.seeMore
-      ? router.push({
-          query: {
-            ...router.query,
-            seeMore: searchPageStore.seeMore,
-            search: "",
-          },
-        })
-      : router.push({
-          query: { ...router.query, seeMore: null, search: "" },
-        });
-  }, [router]);
 
   return (
     <div className={styles.searchPage_body}>
@@ -96,21 +71,47 @@ const SearchPage: React.FC = () => {
             icon={magnifier}
           />
           <TuneIcon
-            className={styles.searchPage_body_search_filters}
-            onClick={searchPageStore.toggleIsOpenFilters}
+            className={cn(
+              styles.searchPage_body_search_filtersIcon,
+              searchPageStore.objectType == "Продукты" &&
+                styles.searchPage_body_search_filtersIcon__disabled,
+            )}
+            onClick={() => {
+              searchPageStore.objectType != "Продукты" &&
+                searchPageStore.toggleIsOpenFilters();
+            }}
           />
         </div>
-        <div className={styles.searchPage_body_beforeContent}>
-          {searchPageStore.seeMore && !searchPageStore.filters && (
-            <Button
-              onClick={() => {
-                handleSeeMoreChange();
+        <div className={styles.searchPage_body_options}>
+          <RadioGroup
+            className={styles.searchPage_body_options_type}
+            aria-labelledby="demo-radio-buttons-group-label"
+            value={searchPageStore.objectType}
+            name="search-type"
+            onChange={(event: React.ChangeEvent, value: string) => {
+              if (value == "Блюда" || value == "Продукты") {
+                searchPageStore.setObjectType(value);
+              }
+            }}
+          >
+            <FormControlLabel value="Блюда" control={<Radio />} label="Блюда" />
+            <FormControlLabel
+              value="Продукты"
+              control={<Radio />}
+              label="Продукты"
+            />
+          </RadioGroup>
+          <div className={styles.searchPage_body_options_switch}>
+            <Typography>От пользователей</Typography>
+            <Switch
+              checked={searchPageStore.createdByUser}
+              onChange={() => {
+                searchPageStore.toggleCreatedByUser();
               }}
-              className={styles.searchPage_body_beforeContent_btn}
-            >
-              Категории
-            </Button>
-          )}
+            />
+          </div>
+        </div>
+        <div className={styles.searchPage_body_beforeContent}>
           {searchPageStore.filters != null && (
             <Button
               onClick={() => {
@@ -124,22 +125,10 @@ const SearchPage: React.FC = () => {
         </div>
 
         <SearchContent
-          searchMode={searchPageStore.searchMode}
+          objectType={searchPageStore.objectType}
+          createdByUser={searchPageStore.createdByUser}
           filters={searchPageStore.filters}
         />
-
-        {searchPageStore.searchMode == "categories" && (
-          <div className={styles.searchPage_body_afterContent}>
-            <Button
-              onClick={() => {
-                handleSeeMoreChange();
-              }}
-              className={styles.searchPage_body_afterContent_seeMore}
-            >
-              Увидеть больше
-            </Button>
-          </div>
-        )}
       </main>
     </div>
   );
