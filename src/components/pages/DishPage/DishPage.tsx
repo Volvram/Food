@@ -1,19 +1,25 @@
 import React from "react";
 
-import { dishes } from "../SearchPage/components/SearchContent/SearchContent";
+import { observer } from "mobx-react-lite";
+
 import DishContent from "./components/DishContent/DishContent";
 import styles from "./styles.module.scss";
+import "react-multi-carousel/lib/styles.css";
 import Header from "@/components/Header/Header";
 import Meta from "@/components/Meta/Meta";
+import DishPageStore from "@/store/DishPageStore";
+import { useLocalStore } from "@/utils/useLocalStore";
 
 type DishPageType = {
   id: string | string[] | undefined;
 };
 
 const DishPage: React.FC<DishPageType> = ({ id }) => {
-  // TODO Заменить временную заглушку
-  const tempDish = dishes.find((item) => item.id == id);
-  // TODO ----------------------
+  const dishPageStore = useLocalStore(() => new DishPageStore());
+
+  React.useEffect(() => {
+    id && dishPageStore.requestDish(id);
+  }, [id]);
 
   return (
     <div className={styles.dishPage}>
@@ -24,8 +30,8 @@ const DishPage: React.FC<DishPageType> = ({ id }) => {
       />
       <main>
         <Header />
-        {tempDish ? (
-          <DishContent dish={tempDish} />
+        {dishPageStore.dish ? (
+          <DishContent dish={dishPageStore.dish} />
         ) : (
           <h1>Данные не найдены</h1>
         )}
@@ -34,4 +40,4 @@ const DishPage: React.FC<DishPageType> = ({ id }) => {
   );
 };
 
-export default DishPage;
+export default observer(DishPage);

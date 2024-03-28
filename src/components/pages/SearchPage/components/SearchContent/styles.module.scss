@@ -4,8 +4,7 @@
     padding: 10px;
 
     &_commonSearch {
-        height: 60vh;
-        min-height: 450px;
+        min-height: 70vh;
         display: flex;
         flex-direction: column;
 
@@ -26,5 +25,13 @@
     &_item {
         text-decoration: none;
         color: $black;
+    }
+}
+
+@media screen and (max-width: $tablet) {
+    .searchContent {
+        &_commonSearch {
+            min-height: 60vh;
+        }
     }
 }

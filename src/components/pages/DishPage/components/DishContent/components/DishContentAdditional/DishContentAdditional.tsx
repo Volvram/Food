@@ -8,7 +8,7 @@ import dishIcon from "@/assets/img/dish.png";
 import locationIcon from "@/assets/img/location.png";
 import timerIcon from "@/assets/img/timer.png";
 
-const Additional: React.FC = () => {
+const DishContentAdditional: React.FC = () => {
   return (
     <div className={styles.additional}>
       <div className={styles.additional_card}>
@@ -49,4 +49,4 @@ const Additional: React.FC = () => {
   );
 };
 
-export default Additional;
+export default DishContentAdditional;

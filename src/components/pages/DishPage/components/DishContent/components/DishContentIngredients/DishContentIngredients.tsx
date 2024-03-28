@@ -25,7 +25,7 @@ const ingredients = [
   },
 ];
 
-const Ingredients: React.FC = () => {
+const DishContentIngredients: React.FC = () => {
   return (
     <div className={styles.ingredients}>
       <h2 className={styles.ingredients_h}>Ингредиенты</h2>
@@ -51,4 +51,4 @@ const Ingredients: React.FC = () => {
   );
 };
 
-export default Ingredients;
+export default DishContentIngredients;

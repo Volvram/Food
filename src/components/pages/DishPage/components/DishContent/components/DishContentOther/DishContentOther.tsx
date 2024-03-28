@@ -1,16 +1,32 @@
 import React from "react";
 
+import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import Carousel from "react-multi-carousel";
 
 import styles from "./styles.module.scss";
 import FoodCard from "@/components/pages/SearchPage/components/SearchContent/components/FoodCard/FoodCard";
-import { dishes } from "@/components/pages/SearchPage/components/SearchContent/SearchContent";
 import { responsiveCarousel } from "@/shared/responsiveCarousel";
 import { shuffle } from "@/shared/shuffle";
+import DishContentOtherStore from "@/store/DishContentOtherStore";
+import { useLocalStore } from "@/utils/useLocalStore";
 
-const Other: React.FC = () => {
-  const randomizedCurrentDishes = shuffle(dishes?.slice(0));
+const DishContentOther: React.FC = () => {
+  const dishContentOtherStore = useLocalStore(
+    () => new DishContentOtherStore(),
+  );
+
+  React.useEffect(() => {
+    dishContentOtherStore.requestOtherDishes();
+  }, []);
+
+  const randomizedCurrentDishes = React.useMemo(() => {
+    return shuffle([
+      ...dishContentOtherStore.otherDishes.slice(0),
+      ...dishContentOtherStore.otherDishes.slice(0),
+      ...dishContentOtherStore.otherDishes.slice(0),
+    ]);
+  }, [dishContentOtherStore.otherDishes]);
 
   return (
     <div className={styles.other}>
@@ -29,4 +45,4 @@ const Other: React.FC = () => {
   );
 };
 
-export default Other;
+export default observer(DishContentOther);

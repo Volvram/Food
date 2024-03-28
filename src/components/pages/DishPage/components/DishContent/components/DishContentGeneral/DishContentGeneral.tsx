@@ -42,7 +42,7 @@ const general = [
 ];
 // @TODO ------------------------------------
 
-const General: React.FC = () => {
+const DishContentGeneral: React.FC = () => {
   return (
     <div className={styles.general}>
       <span className={styles.general_note}>
@@ -78,4 +78,4 @@ const General: React.FC = () => {
   );
 };
 
-export default General;
+export default DishContentGeneral;

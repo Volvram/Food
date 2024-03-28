@@ -6,12 +6,12 @@ import { Doughnut } from "react-chartjs-2";
 import { roundedDoughnutPlugin } from "./roundedDoughnutPlugin";
 import styles from "./styles.module.scss";
 import { Counter } from "@/components/Counter";
-import { DishType } from "@/store/SearchContentStore";
+import { FullDishType } from "@/store/DishPageStore";
 
 Chart.register(ArcElement);
 
 type NutritionProps = {
-  dish: DishType;
+  dish: FullDishType;
 };
 
 const Nutrition: React.FC<NutritionProps> = ({ dish }) => {

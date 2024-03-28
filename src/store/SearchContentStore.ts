@@ -113,14 +113,14 @@ class SearchContentStore implements ILocalStore {
         objectType == "Продукты"
           ? await axios({
               url: `${HOST}/products`,
-              method: "GET",
+              method: "get",
               params: {
                 search: search ?? "",
               },
             })
           : await axios({
               url: `${HOST}/dishes/search`,
-              method: "POST",
+              method: "post",
               data: body,
             });
 
