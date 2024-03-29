@@ -9,11 +9,12 @@ import securityIcon from "@/assets/img/security.png";
 import supportIcon from "@/assets/img/support.png";
 import Header from "@/components/Header/Header";
 import rootStore from "@/store/RootStore/instance";
+import { log } from "@/utils/log";
 
 export default function Home() {
   React.useEffect(() => {
     rootStore.user.checkAuthorization().catch((e) => {
-      console.log(e);
+      log(e);
     });
   }, []);
 

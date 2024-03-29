@@ -11,6 +11,7 @@ import {
 
 import rootStore from "./RootStore/instance";
 import { HOST } from "@/shared/host";
+import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 type PrivateFields =
@@ -256,9 +257,9 @@ class ProfileContentStore implements ILocalStore {
         },
       });
 
-      console.log(result);
+      log(result);
     } catch (e) {
-      console.log("ProfileContentStore: ", e);
+      log("ProfileContentStore: ", e);
     }
   }
 
@@ -286,7 +287,7 @@ class ProfileContentStore implements ILocalStore {
 
       return Promise.resolve("Профиль успешно отредактирован!");
     } catch (e) {
-      console.log("ProfileContentStore: ", e);
+      log("ProfileContentStore: ", e);
       return Promise.reject(e);
     }
   }
@@ -306,7 +307,7 @@ class ProfileContentStore implements ILocalStore {
 
       return Promise.resolve("Профиль удален");
     } catch (e) {
-      console.log("ProfileContentStore: ", e);
+      log("ProfileContentStore: ", e);
       return Promise.reject(e);
     }
   }

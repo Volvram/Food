@@ -9,10 +9,10 @@ import DishContentNutrition from "./components/DishContentNutrition/DishContentN
 import DishContentOther from "./components/DishContentOther/DishContentOther";
 import styles from "./styles.module.scss";
 import noImage from "@/assets/img/noImage.jpg";
-import { FullDishType } from "@/store/DishPageStore";
+import { FullDishModel } from "@/store/models/FullDish/FullDish";
 
 type DishContentProps = {
-  dish: FullDishType;
+  dish: FullDishModel;
 };
 
 const DishPage: React.FC<DishContentProps> = ({ dish }) => {
@@ -39,10 +39,10 @@ const DishPage: React.FC<DishContentProps> = ({ dish }) => {
           {dish.description}
         </p>
       </div>
-      <DishContentAdditional />
+      <DishContentAdditional dish={dish} />
       <DishContentNutrition dish={dish} />
-      <DishContentGeneral />
-      <DishContentIngredients />
+      <DishContentGeneral dish={dish} />
+      <DishContentIngredients dish={dish} />
       <DishContentOther />
     </div>
   );

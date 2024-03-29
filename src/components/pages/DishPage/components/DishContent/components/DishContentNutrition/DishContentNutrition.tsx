@@ -6,12 +6,12 @@ import { Doughnut } from "react-chartjs-2";
 import { roundedDoughnutPlugin } from "./roundedDoughnutPlugin";
 import styles from "./styles.module.scss";
 import { Counter } from "@/components/Counter";
-import { FullDishType } from "@/store/DishPageStore";
+import { FullDishModel } from "@/store/models/FullDish/FullDish";
 
 Chart.register(ArcElement);
 
 type NutritionProps = {
-  dish: FullDishType;
+  dish: FullDishModel;
 };
 
 const Nutrition: React.FC<NutritionProps> = ({ dish }) => {
@@ -84,7 +84,9 @@ const Nutrition: React.FC<NutritionProps> = ({ dish }) => {
       <h3 className={styles.nutrition_macro}>Макронутриенты</h3>
       <div className={styles.nutrition_charts}>
         <div className={styles.nutrition_charts_energy}>
-          <h2 className={styles.nutrition_charts_energy_num}>{dish.energy}</h2>
+          <h2 className={styles.nutrition_charts_energy_num}>
+            {dish.energy} Ккал
+          </h2>
           <span className={styles.nutrition_charts_energy_text}>
             Энергетическая ценность
           </span>
@@ -102,7 +104,7 @@ const Nutrition: React.FC<NutritionProps> = ({ dish }) => {
             height={120}
             plugins={[roundedDoughnutPlugin]}
           />
-          <h2 className={styles.nutrition_charts_index_num}>{dish.carbs}</h2>
+          <h2 className={styles.nutrition_charts_index_num}>{dish.carbs} мг</h2>
           <span className={styles.nutrition_charts_index_text}>Углеводы</span>
         </div>
         <div className={styles.nutrition_charts_index}>
@@ -116,7 +118,9 @@ const Nutrition: React.FC<NutritionProps> = ({ dish }) => {
             width={120}
             height={120}
           />
-          <h2 className={styles.nutrition_charts_index_num}>{dish.protein}</h2>
+          <h2 className={styles.nutrition_charts_index_num}>
+            {dish.protein} мг
+          </h2>
           <span className={styles.nutrition_charts_index_text}>Белки</span>
         </div>
         <div className={styles.nutrition_charts_index}>
@@ -130,7 +134,7 @@ const Nutrition: React.FC<NutritionProps> = ({ dish }) => {
             width={120}
             height={120}
           />
-          <h2 className={styles.nutrition_charts_index_num}>{dish.fat}</h2>
+          <h2 className={styles.nutrition_charts_index_num}>{dish.fat} мг</h2>
           <span className={styles.nutrition_charts_index_text}>Жиры</span>
         </div>
       </div>

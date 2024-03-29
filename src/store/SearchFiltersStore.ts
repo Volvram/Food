@@ -16,6 +16,7 @@ import {
   TagType,
 } from "./CreateDishContentStore";
 import { HOST } from "@/shared/host";
+import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 export type FiltersType = {
@@ -404,7 +405,7 @@ class SearchFiltersStore implements ILocalStore {
         this.setAllTags(tags.data);
       });
     } catch (e) {
-      console.log("SearchFiltersStore ", e);
+      log("SearchFiltersStore ", e);
     }
   }
 

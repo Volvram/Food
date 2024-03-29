@@ -65,7 +65,7 @@ const Header: React.FC = () => {
             />
           </svg>
         </div>
-        Nutrition
+        Foodify
       </div>
       <div className={styles.header_sections}>
         {width <= 768 ? (

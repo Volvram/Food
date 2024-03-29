@@ -9,6 +9,7 @@ import {
 
 import { NutrientsType, ServingSizeType } from "./CreateDishContentStore";
 import { HOST } from "@/shared/host";
+import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 export type ServingSizeWithGramsType = ServingSizeType & {
@@ -187,7 +188,7 @@ class CreateProductContentStore implements ILocalStore {
         this.setServingSizes(result.data);
       });
     } catch (e) {
-      console.log("CreateProductContentStore: ", e);
+      log("CreateProductContentStore: ", e);
     }
   }
 
@@ -250,7 +251,7 @@ class CreateProductContentStore implements ILocalStore {
         alert(`Продукт ${this.name} успешно создан!`);
       });
     } catch (e) {
-      console.log("CreateProductContentStore: ", e);
+      log("CreateProductContentStore: ", e);
       alert(`Ошибка: некорректные данные`);
     }
   }

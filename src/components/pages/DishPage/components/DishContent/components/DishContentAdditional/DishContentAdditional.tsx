@@ -7,8 +7,15 @@ import cookingIcon from "@/assets/img/cooking.png";
 import dishIcon from "@/assets/img/dish.png";
 import locationIcon from "@/assets/img/location.png";
 import timerIcon from "@/assets/img/timer.png";
+import { FullDishModel } from "@/store/models/FullDish/FullDish";
 
-const DishContentAdditional: React.FC = () => {
+type DishContentAdditionalProps = {
+  dish: FullDishModel;
+};
+
+const DishContentAdditional: React.FC<DishContentAdditionalProps> = ({
+  dish,
+}) => {
   return (
     <div className={styles.additional}>
       <div className={styles.additional_card}>
@@ -18,7 +25,7 @@ const DishContentAdditional: React.FC = () => {
           alt="Категория"
         />
         <span className={styles.additional_card_text}>
-          Новогоднее настроение
+          {dish?.category?.name}
         </span>
       </div>
       <div className={styles.additional_card}>
@@ -27,7 +34,9 @@ const DishContentAdditional: React.FC = () => {
           src={timerIcon}
           alt="Время приготовления"
         />
-        <span className={styles.additional_card_text}>10 минут</span>
+        <span className={styles.additional_card_text}>
+          {dish?.cookingTime} минут
+        </span>
       </div>
       <div className={styles.additional_card}>
         <Image
@@ -35,15 +44,19 @@ const DishContentAdditional: React.FC = () => {
           src={locationIcon}
           alt="Место"
         />
-        <span className={styles.additional_card_text}>Великобритания</span>
+        <span className={styles.additional_card_text}>
+          {dish?.kitchenType?.name}
+        </span>
       </div>
       <div className={styles.additional_card}>
         <Image
           className={styles.additional_card_icon}
           src={cookingIcon}
-          alt="Тип приготовления"
+          alt="Метод приготовления"
         />
-        <span className={styles.additional_card_text}>Жарить / гриль</span>
+        <span className={styles.additional_card_text}>
+          {dish?.cookingMethod?.name}
+        </span>
       </div>
     </div>
   );

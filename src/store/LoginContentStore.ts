@@ -8,6 +8,7 @@ import {
 } from "mobx";
 
 import { KeyCloakHost } from "@/shared/host";
+import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 type PrivateFields = "_email" | "_password";
@@ -67,7 +68,7 @@ class LoginContentStore implements ILocalStore {
       });
       return Promise.resolve("Авторизация успешно пройдена!");
     } catch (e: any) {
-      console.log("LoginContentStore ", e);
+      log("LoginContentStore ", e);
 
       if (e.code == "ERR_BAD_REQUEST") {
         return Promise.reject("Неверная почта или пароль");

@@ -16,6 +16,7 @@ import {
 } from "./CreateDishContentStore";
 import { FiltersType } from "./SearchFiltersStore";
 import { HOST } from "@/shared/host";
+import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 export type DishType = {
@@ -130,7 +131,7 @@ class SearchContentStore implements ILocalStore {
           : this.setDishes(result.data);
       });
     } catch (e) {
-      console.log("SearchContentStore ", e);
+      log("SearchContentStore ", e);
     }
   }
 

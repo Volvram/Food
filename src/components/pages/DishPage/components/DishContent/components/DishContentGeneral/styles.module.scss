@@ -10,7 +10,7 @@
         color: $dark-gray;
     }
 
-    &_table {
+    &_nutrients {
         margin-top: 13px;
         margin-bottom: 13px;
         width: 100%;
@@ -28,6 +28,23 @@
             // *table* border-radius: 10px;
             tr:last-child td:first-child { border-bottom-left-radius: 10px; }
             tr:last-child td:last-child { border-bottom-right-radius: 10px; }
+
+            &_complextd {
+                border: solid 1px $light-gray;
+                border-style: none none solid none;
+                padding: 10px;
+    
+                &_subtr {
+                    padding: 10px;
+                    display: flex;
+                    justify-content: space-between;
+                }
+            }
+
+            &_value {
+                width: 50px;
+                text-align: right;
+            }
         }
 
         td {
@@ -44,7 +61,7 @@
             font-size: $p2;
         }
 
-        &_table {
+        &_nutrients {
             font-size: $p2;
         }
     }

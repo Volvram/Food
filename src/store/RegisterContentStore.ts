@@ -3,6 +3,7 @@ import { Dayjs } from "dayjs";
 import { makeObservable, observable, action, computed } from "mobx";
 
 import { HOST } from "@/shared/host";
+import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 type PrivateFields =
@@ -170,7 +171,7 @@ class RegisterContentStore implements ILocalStore {
         return Promise.resolve("Аккаунт успешно зарегистрирован!");
       }
     } catch (e) {
-      console.log("RegisterContentStore ", e);
+      log("RegisterContentStore ", e);
 
       return Promise.reject(e);
     }

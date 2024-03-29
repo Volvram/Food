@@ -412,7 +412,7 @@ const CreateDishContent: React.FC = () => {
                                   styles.createDishContent_nutrients_body_complextd_subtr
                                 }
                               >
-                                {`${nutrients[key][subKey]} (мг/100 г.): `}
+                                {`${nutrients[key][subKey]} (мг): `}
                                 <Input
                                   onChange={(value: string) => {
                                     const newNutrients = {
@@ -440,9 +440,7 @@ const CreateDishContent: React.FC = () => {
             } else {
               return (
                 <tr key={key}>
-                  <td>{`${
-                    nutrients[key as keyof typeof nutrients]
-                  } (мг/100 г.):`}</td>
+                  <td>{`${nutrients[key as keyof typeof nutrients]} (мг):`}</td>
                   <td>
                     <Input
                       onChange={(value: string) => {

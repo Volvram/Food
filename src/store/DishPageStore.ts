@@ -7,41 +7,15 @@ import {
   runInAction,
 } from "mobx";
 
-import {
-  CategoryType,
-  CookingMethodType,
-  DietaryNeedsType,
-  DishProductLinkType,
-  KitchenType,
-  NutrientsType,
-  TagType,
-} from "./CreateDishContentStore";
+import { FullDishModel, normalizeFullDish } from "./models/FullDish/FullDish";
 import { HOST } from "@/shared/host";
+import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
-
-export type FullDishType = {
-  id: number;
-  name: string;
-  description: null | string;
-  image: null | string;
-  cooking_time: number;
-  energy: number;
-  protein: number;
-  carbs: number;
-  fat: number;
-  category: CategoryType;
-  kitchenType: KitchenType;
-  cookingMethod: CookingMethodType;
-  dietaryNeeds: DietaryNeedsType[];
-  dishProductLinks: DishProductLinkType[];
-  tags: TagType[];
-  nutrients: NutrientsType;
-};
 
 type PrivateFields = "_dish";
 
 class DishPageStore implements ILocalStore {
-  private _dish: FullDishType | null = null;
+  private _dish: FullDishModel | null = null;
 
   constructor() {
     makeObservable<DishPageStore, PrivateFields>(this, {
@@ -51,7 +25,7 @@ class DishPageStore implements ILocalStore {
     });
   }
 
-  setDish(dish: FullDishType) {
+  setDish(dish: FullDishModel) {
     this._dish = dish;
   }
 
@@ -67,10 +41,10 @@ class DishPageStore implements ILocalStore {
       });
 
       runInAction(() => {
-        this.setDish(result.data);
+        this.setDish(normalizeFullDish(result.data));
       });
     } catch (e) {
-      console.log("DishPageStore: ", e);
+      log("DishPageStore: ", e);
     }
   };
 

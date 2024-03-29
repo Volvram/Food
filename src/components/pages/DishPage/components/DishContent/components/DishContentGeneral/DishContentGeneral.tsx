@@ -1,76 +1,76 @@
 import React from "react";
 
 import styles from "./styles.module.scss";
+import { nutrients } from "@/components/pages/MyDishesPage/components/CreateDishPage/components/nutrients";
+import { FullDishModel } from "@/store/models/FullDish/FullDish";
 
-// @TODO Убрать заглушку
-const general = [
-  {
-    title: "Energy",
-    amount: "333.94 kcal",
-    dv: "16.6%",
-  },
-  {
-    title: "",
-    amount: "1393.93 kJ",
-    dv: "",
-  },
-  {
-    title: "Alcohol",
-    amount: "0.00 g",
-    dv: "",
-  },
-  {
-    title: "Beta-Hydroxybutyrate",
-    amount: "- g",
-    dv: "",
-  },
-  {
-    title: "Caffeine",
-    amount: "4.62 mg",
-    dv: "",
-  },
-  {
-    title: "Oxalate",
-    amount: "20.59 mg",
-    dv: "",
-  },
-  {
-    title: "Water",
-    amount: "84.66 g",
-    dv: "5.6%",
-  },
-];
-// @TODO ------------------------------------
+type DishContentGeneralProps = {
+  dish: FullDishModel;
+};
 
-const DishContentGeneral: React.FC = () => {
+const DishContentGeneral: React.FC<DishContentGeneralProps> = ({ dish }) => {
   return (
     <div className={styles.general}>
       <span className={styles.general_note}>
         <i>* Калорийность рассчитана для сырых продуктов</i>
       </span>
-      <table className={styles.general_table}>
-        <thead className={styles.general_table_head}>
+      <table className={styles.general_nutrients}>
+        <thead className={styles.general_nutrients_head}>
           <tr>
             <td>
-              <strong>General</strong>
+              <strong>Наименование</strong>
             </td>
             <td>
-              <strong>Amount</strong>
-            </td>
-            <td>
-              <strong>% DV</strong>
+              <strong>Значение</strong>
             </td>
           </tr>
         </thead>
-        <tbody className={styles.general_table_body}>
-          {general.map((elem) => {
-            return (
-              <tr key={elem.title}>
-                <td>{elem.title}</td>
-                <td>{elem.amount}</td>
-                <td>{elem.dv}</td>
-              </tr>
-            );
+        <tbody className={styles.general_nutrients_body}>
+          {Object.keys(nutrients).map((key: any) => {
+            if (typeof nutrients[key as keyof typeof nutrients] == "object") {
+              return (
+                <tr key={key}>
+                  <td>{nutrients[key as keyof typeof nutrients]["title"]}</td>
+                  <td className={styles.general_nutrients_body_complextd}>
+                    {Object.keys(nutrients[key as keyof typeof nutrients]).map(
+                      (subKey) => {
+                        if (subKey != "title") {
+                          return (
+                            <React.Fragment key={subKey}>
+                              <div
+                                className={
+                                  styles.general_nutrients_body_complextd_subtr
+                                }
+                              >
+                                {`${nutrients[key][subKey]}: `}
+                                <div
+                                  className={
+                                    styles.general_nutrients_body_value
+                                  }
+                                >
+                                  {dish.nutrients[key][subKey]} мг
+                                </div>
+                              </div>
+                            </React.Fragment>
+                          );
+                        }
+                      },
+                    )}
+                  </td>
+                </tr>
+              );
+            } else {
+              return (
+                <tr key={key}>
+                  <td>{`${nutrients[key as keyof typeof nutrients]}:`}</td>
+                  <td>
+                    <div className={styles.general_nutrients_body_value}>
+                      {dish.nutrients[key]} мг
+                    </div>
+                  </td>
+                </tr>
+              );
+            }
           })}
         </tbody>
       </table>

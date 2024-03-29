@@ -11,6 +11,7 @@ import {
 } from "mobx";
 
 import { HOST } from "@/shared/host";
+import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 export type CategoryType = {
@@ -534,7 +535,7 @@ class CreateDishContentStore implements ILocalStore {
         this.setTags(tags.data[0]);
       });
     } catch (e) {
-      console.log("CreateDishContentStore ", e);
+      log("CreateDishContentStore ", e);
     }
   }
 
@@ -654,7 +655,7 @@ class CreateDishContentStore implements ILocalStore {
     });
 
     runInAction(() => {
-      console.log(result);
+      log(result);
     });
   }
 

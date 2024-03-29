@@ -9,6 +9,7 @@ import {
 
 import { DishType } from "./SearchContentStore";
 import { HOST } from "@/shared/host";
+import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 type PrivateFields = "_otherDishes";
@@ -48,7 +49,7 @@ class DishContentOtherStore implements ILocalStore {
         this.setOtherDishes(result.data);
       });
     } catch (e) {
-      console.log("DishContentOtherStore: ", e);
+      log("DishContentOtherStore: ", e);
     }
   };
 
