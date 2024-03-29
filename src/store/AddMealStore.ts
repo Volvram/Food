@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   makeObservable,
   observable,
@@ -5,21 +6,28 @@ import {
   computed,
   IReactionDisposer,
   reaction,
+  runInAction,
 } from "mobx";
 
+import { ProductType } from "./CreateDishContentStore";
 import { DishType } from "./SearchContentStore";
-import { dishes } from "@/components/pages/SearchPage/components/SearchContent/SearchContent";
+import { HOST } from "@/shared/host";
+import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
-type PrivateFields = "_search" | "_searchList" | "_addedList";
+type PrivateFields = "_objectType" | "_search" | "_searchList" | "_addedList";
 
 class AddMealStore implements ILocalStore {
+  private _objectType: "Блюда" | "Продукты" = "Блюда";
   private _search = "";
-  private _searchList: DishType[] = [];
-  private _addedList: DishType[] = [];
+  private _searchList: DishType[] | ProductType[] = [];
+  private _addedList: (DishType | ProductType)[] = [];
 
   constructor() {
     makeObservable<AddMealStore, PrivateFields>(this, {
+      _objectType: observable,
+      setObjectType: action,
+      objectType: computed,
       _search: observable,
       setSearch: action,
       search: computed,
@@ -29,7 +37,16 @@ class AddMealStore implements ILocalStore {
       _addedList: observable,
       setAddedList: action,
       addedList: computed,
+      addToAddedList: action,
     });
+  }
+
+  setObjectType(objectType: "Блюда" | "Продукты") {
+    this._objectType = objectType;
+  }
+
+  get objectType() {
+    return this._objectType;
   }
 
   setSearch(search: string) {
@@ -40,7 +57,7 @@ class AddMealStore implements ILocalStore {
     return this._search;
   }
 
-  setSearchList(searchList: DishType[]) {
+  setSearchList(searchList: DishType[] | ProductType[]) {
     this._searchList = searchList;
   }
 
@@ -48,7 +65,36 @@ class AddMealStore implements ILocalStore {
     return this._searchList;
   }
 
-  setAddedList(addedList: DishType[]) {
+  requestSearchList = async () => {
+    try {
+      const body: any = {};
+
+      body.name_search = this.search ?? "";
+
+      const result =
+        this.objectType == "Продукты"
+          ? await axios({
+              url: `${HOST}/products`,
+              method: "get",
+              params: {
+                search: this.search ?? "",
+              },
+            })
+          : await axios({
+              url: `${HOST}/dishes/search`,
+              method: "post",
+              data: body,
+            });
+
+      runInAction(async () => {
+        this.setSearchList(result.data);
+      });
+    } catch (e) {
+      log("AddMealStore: ", e);
+    }
+  };
+
+  setAddedList(addedList: (DishType | ProductType)[]) {
     this._addedList = addedList;
   }
 
@@ -56,20 +102,26 @@ class AddMealStore implements ILocalStore {
     return this._addedList;
   }
 
+  addToAddedList(object: DishType | ProductType) {
+    this._addedList.push(object);
+  }
+
+  removeFromAddedList(object: DishType | ProductType) {
+    this.setAddedList(
+      this._addedList.filter(
+        (obj) => !(obj.id == object.id && obj.name == object.name),
+      ),
+    );
+  }
+
   destroy() {
     this._handleSearchChange();
   }
 
   readonly _handleSearchChange: IReactionDisposer = reaction(
-    () => this._search,
+    () => [this._search, this._objectType],
     () => {
-      this.setSearchList(
-        dishes.filter((dish) => {
-          return dish.name
-            .toLowerCase()
-            .includes(String(this.search).toLowerCase());
-        }),
-      );
+      this.requestSearchList();
     },
   );
 }

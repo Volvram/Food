@@ -1,13 +1,23 @@
 @import "@/styles/variables.scss";
 
 .addMeal {
-    padding: 20px 20px;
+    padding: 10px 30px;
     display: flex;
     flex-direction: column;
 
     &_h {
-        font-size: $h2;
-        margin: 0 auto;
+        font-size: $h3;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 30px;
+    }
+
+    &_type {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
     }
 
     &_search{
@@ -67,6 +77,27 @@
                 object-fit: cover;
             }
         }
+    }
+
+    &_addedList {
+        margin-top: 20px;
+        padding: 5px;
+        max-width: 410px;
+        width: 100%;
+        min-height: 100px; 
+        border-radius: 16px;
+        box-shadow: 1px 2px 1px rgb(245, 240, 240),-1px -2px 1px rgb(245, 240, 240);
+
+        &_object {
+            padding: 5px;
+            display: flex;
+            align-items: center;
+
+            &_remove {
+                cursor: pointer;
+            }
+        }
+        
     }
 
     &_btn {

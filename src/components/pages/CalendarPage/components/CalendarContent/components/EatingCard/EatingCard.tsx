@@ -25,8 +25,8 @@ const EatingCard: React.FC<EatingCardProps> = ({ weekDay, meal }) => {
           {eaten ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="25"
-              height="25"
+              width="18"
+              height="18"
               viewBox="0 0 25 25"
               fill="none"
             >
@@ -43,8 +43,8 @@ const EatingCard: React.FC<EatingCardProps> = ({ weekDay, meal }) => {
           ) : (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="25"
-              height="25"
+              width="18"
+              height="18"
               viewBox="0 0 25 25"
               fill="none"
             >

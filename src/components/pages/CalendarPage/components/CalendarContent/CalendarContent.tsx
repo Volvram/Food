@@ -156,7 +156,9 @@ const CalendarContent: React.FC = () => {
                     {weekDay.month.toLowerCase().slice(0, 3)} ·{" "}
                     {weekDay.dayOfTheWeek}
                   </div>
-                  <div className={s.calendar_card_week_count}>0</div>
+                  <div className={s.calendar_card_week_count}>
+                    {weekDay.meals.length}
+                  </div>
                 </div>
                 <div className={s.calendar_card_meals}>
                   {weekDay.meals.map((meal) => {
