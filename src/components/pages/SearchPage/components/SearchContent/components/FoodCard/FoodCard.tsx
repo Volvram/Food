@@ -28,15 +28,15 @@ const FoodCard: React.FC<FoodCardType> = ({ item }) => {
         </div>
         <div className={style.food_card_info_about}>
           {item.description
-            ? item.description.length > 40
-              ? `${item.description.slice(0, 40)}...`
+            ? item.description.length > 55
+              ? `${item.description.slice(0, 55)}...`
               : item.description
             : "-"}
         </div>
         <div className={style.food_card_info_icons}>
           <div className={style.food_card_info_icons_time}>
             <Image src={clockIcon} alt="" />
-            {item.cookingTime}
+            {item.cooking_time}
           </div>
           <div className={style.food_card_info_icons_save}>
             <Image src={favoritesIcon} alt="" />

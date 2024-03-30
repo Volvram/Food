@@ -24,9 +24,9 @@ const DishPage: React.FC<DishPageType> = ({ id }) => {
   return (
     <div className={styles.dishPage}>
       <Meta
-        title="Блюдо"
-        description="Пищевая ценность"
-        keywords="поиск, еда, блюдо, питание, диета, продукт, ингредиент"
+        title={`${dishPageStore?.dish?.name}`}
+        description={`${dishPageStore?.dish?.description}`}
+        keywords={`поиск, еда, блюдо, питание, диета, продукт, ингредиент, ${dishPageStore?.dish?.name}`}
       />
       <main>
         <Header />

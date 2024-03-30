@@ -84,7 +84,7 @@ const SearchContent: React.FC<SearchContentProps> = ({
               return (
                 <Link
                   key={item.id}
-                  href={`dishes/${item.id}`}
+                  href={`products/${item.id}`}
                   className={styles.searchContent_item}
                 >
                   <FoodCard item={item} />

@@ -6,23 +6,23 @@ import { Doughnut } from "react-chartjs-2";
 import styles from "./styles.module.scss";
 import { Counter } from "@/components/Counter";
 import { roundedDoughnutPlugin } from "@/shared/roundedDoughnutPlugin";
-import { FullDishModel } from "@/store/models/FullDish/FullDish";
+import { FullProductModel } from "@/store/models/FullProduct/FullProduct";
 
 Chart.register(ArcElement);
 
-type DishContentNutritionProps = {
-  dish: FullDishModel;
+type ProductContentNutritionProps = {
+  product: FullProductModel;
 };
 
-const DishContentNutrition: React.FC<DishContentNutritionProps> = ({
-  dish,
+const ProductContentNutrition: React.FC<ProductContentNutritionProps> = ({
+  product,
 }) => {
   const carbs = {
     labels: [],
     datasets: [
       {
         label: "Углеводы",
-        data: [dish.carbs, dish.protein + dish.fat],
+        data: [product.carbs, product.protein + product.fat],
         backgroundColor: ["#455AFF", "#F5F5F5"],
         borderColor: ["#455AFF", "#F5F5F5"],
         borderWidth: 0,
@@ -35,7 +35,7 @@ const DishContentNutrition: React.FC<DishContentNutritionProps> = ({
     datasets: [
       {
         label: "Белки",
-        data: [dish.protein, dish.carbs + dish.fat],
+        data: [product.protein, product.carbs + product.fat],
         backgroundColor: ["#455AFF", "#F5F5F5"],
         borderColor: ["#455AFF", "#F5F5F5"],
         // borderWidth: 1,
@@ -53,7 +53,7 @@ const DishContentNutrition: React.FC<DishContentNutritionProps> = ({
     datasets: [
       {
         label: "Жиры",
-        data: [dish.fat, dish.carbs + dish.protein],
+        data: [product.fat, product.carbs + product.protein],
         backgroundColor: ["#455AFF", "#F5F5F5"],
         borderColor: ["#455AFF", "#F5F5F5"],
         // borderWidth: 1,
@@ -89,7 +89,7 @@ const DishContentNutrition: React.FC<DishContentNutritionProps> = ({
       <div className={styles.nutrition_charts}>
         <div className={styles.nutrition_charts_energy}>
           <h2 className={styles.nutrition_charts_energy_num}>
-            {dish.energy} Ккал
+            {product.energy} Ккал
           </h2>
           <span className={styles.nutrition_charts_energy_text}>
             Энергетическая ценность
@@ -108,7 +108,9 @@ const DishContentNutrition: React.FC<DishContentNutritionProps> = ({
             height={120}
             plugins={[roundedDoughnutPlugin]}
           />
-          <h2 className={styles.nutrition_charts_index_num}>{dish.carbs} г</h2>
+          <h2 className={styles.nutrition_charts_index_num}>
+            {product.carbs} г
+          </h2>
           <span className={styles.nutrition_charts_index_text}>Углеводы</span>
         </div>
         <div className={styles.nutrition_charts_index}>
@@ -134,7 +136,7 @@ const DishContentNutrition: React.FC<DishContentNutritionProps> = ({
             plugins={[roundedDoughnutPlugin]}
           />
           <h2 className={styles.nutrition_charts_index_num}>
-            {dish.protein} г
+            {product.protein} г
           </h2>
           <span className={styles.nutrition_charts_index_text}>Белки</span>
         </div>
@@ -160,7 +162,7 @@ const DishContentNutrition: React.FC<DishContentNutritionProps> = ({
             height={120}
             plugins={[roundedDoughnutPlugin]}
           />
-          <h2 className={styles.nutrition_charts_index_num}>{dish.fat} г</h2>
+          <h2 className={styles.nutrition_charts_index_num}>{product.fat} г</h2>
           <span className={styles.nutrition_charts_index_text}>Жиры</span>
         </div>
       </div>
@@ -168,4 +170,4 @@ const DishContentNutrition: React.FC<DishContentNutritionProps> = ({
   );
 };
 
-export default DishContentNutrition;
+export default ProductContentNutrition;

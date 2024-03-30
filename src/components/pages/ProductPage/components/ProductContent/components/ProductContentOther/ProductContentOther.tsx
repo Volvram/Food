@@ -8,21 +8,21 @@ import styles from "./styles.module.scss";
 import FoodCard from "@/components/pages/SearchPage/components/SearchContent/components/FoodCard/FoodCard";
 import { responsiveCarousel } from "@/shared/responsiveCarousel";
 import { shuffle } from "@/shared/shuffle";
-import DishContentOtherStore from "@/store/DishContentOtherStore";
+import ProductContentOtherStore from "@/store/ProductContentOtherStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 
-const DishContentOther: React.FC = () => {
-  const dishContentOtherStore = useLocalStore(
-    () => new DishContentOtherStore(),
+const ProductContentOther: React.FC = () => {
+  const productContentOtherStore = useLocalStore(
+    () => new ProductContentOtherStore(),
   );
 
   React.useEffect(() => {
-    dishContentOtherStore.requestOtherDishes();
+    productContentOtherStore.requestOtherProducts();
   }, []);
 
-  const randomizedCurrentDishes = React.useMemo(() => {
-    return shuffle(dishContentOtherStore.otherDishes.slice(0));
-  }, [dishContentOtherStore.otherDishes]);
+  const randomizedCurrentProducts = React.useMemo(() => {
+    return shuffle(productContentOtherStore.otherProducts.slice(0));
+  }, [productContentOtherStore.otherProducts]);
 
   return (
     <div className={styles.other}>
@@ -31,7 +31,7 @@ const DishContentOther: React.FC = () => {
         className={styles.other_carousel}
         responsive={responsiveCarousel}
       >
-        {randomizedCurrentDishes?.map((item) => (
+        {randomizedCurrentProducts?.map((item) => (
           <Link key={item.id} href={`${item.id}`} className={styles.other_item}>
             <FoodCard item={item} />
           </Link>
@@ -41,4 +41,4 @@ const DishContentOther: React.FC = () => {
   );
 };
 
-export default observer(DishContentOther);
+export default observer(ProductContentOther);

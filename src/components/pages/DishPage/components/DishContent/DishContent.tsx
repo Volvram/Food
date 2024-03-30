@@ -15,7 +15,7 @@ type DishContentProps = {
   dish: FullDishModel;
 };
 
-const DishPage: React.FC<DishContentProps> = ({ dish }) => {
+const DishContent: React.FC<DishContentProps> = ({ dish }) => {
   return (
     <div className={styles.dishContent}>
       {dish.image ? (
@@ -48,4 +48,4 @@ const DishPage: React.FC<DishContentProps> = ({ dish }) => {
   );
 };
 
-export default DishPage;
+export default DishContent;
