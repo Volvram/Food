@@ -36,7 +36,7 @@ const FoodCard: React.FC<FoodCardType> = ({ item }) => {
         <div className={style.food_card_info_icons}>
           <div className={style.food_card_info_icons_time}>
             <Image src={clockIcon} alt="" />
-            {item.cooking_time}
+            {item.cooking_time} мин.
           </div>
           <div className={style.food_card_info_icons_save}>
             <Image src={favoritesIcon} alt="" />

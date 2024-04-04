@@ -79,7 +79,8 @@ const SearchContent: React.FC<SearchContentProps> = ({
                 </Link>
               );
             })
-          ) : searchContentStore.currentPageProducts.length ? (
+          ) : objectType == "Продукты" &&
+            Boolean(searchContentStore.currentPageProducts.length) ? (
             searchContentStore.currentPageProducts.map((item) => {
               return (
                 <Link

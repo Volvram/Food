@@ -85,3 +85,19 @@
         }
     }
 }
+
+@media screen and (max-width: $tablet) {
+    .dishContent {
+        &_img {
+            height: 375px;
+        }
+    }
+}
+
+@media screen and (max-width: $phone) {
+    .dishContent {
+        &_img {
+            height: 250px;
+        }
+    }
+}

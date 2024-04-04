@@ -5,7 +5,7 @@ import { Doughnut } from "react-chartjs-2";
 
 import styles from "./styles.module.scss";
 import { Counter } from "@/components/Counter";
-import { roundedDoughnutPlugin } from "@/shared/roundedDoughnutPlugin";
+import { roundedDoughnutPlugin } from "@/shared/doughnutPlugins";
 import { FullDishModel } from "@/store/models/FullDish/FullDish";
 
 Chart.register(ArcElement);
@@ -86,82 +86,94 @@ const DishContentNutrition: React.FC<DishContentNutritionProps> = ({
         </div>
       </div>
       <h3 className={styles.nutrition_macro}>Макронутриенты</h3>
-      <div className={styles.nutrition_charts}>
-        <div className={styles.nutrition_charts_energy}>
-          <h2 className={styles.nutrition_charts_energy_num}>
+      <div className={styles.nutrition_indexes}>
+        <div className={styles.nutrition_indexes_energy}>
+          <h2 className={styles.nutrition_indexes_energy_num}>
             {dish.energy} Ккал
           </h2>
-          <span className={styles.nutrition_charts_energy_text}>
+          <span className={styles.nutrition_indexes_energy_text}>
             Энергетическая ценность
           </span>
         </div>
-        <div className={styles.nutrition_charts_vr} />
-        <div className={styles.nutrition_charts_index}>
-          <Doughnut
-            data={carbs}
-            options={{
-              responsive: true,
-              maintainAspectRatio: true,
-              cutout: 45,
-            }}
-            width={120}
-            height={120}
-            plugins={[roundedDoughnutPlugin]}
-          />
-          <h2 className={styles.nutrition_charts_index_num}>{dish.carbs} г</h2>
-          <span className={styles.nutrition_charts_index_text}>Углеводы</span>
-        </div>
-        <div className={styles.nutrition_charts_index}>
-          {/* <Doughnut
+        <div className={styles.nutrition_indexes_vr} />
+        <div className={styles.nutrition_indexes_charts}>
+          <div className={styles.nutrition_indexes_charts_chart}>
+            <Doughnut
+              data={carbs}
+              options={{
+                responsive: true,
+                maintainAspectRatio: true,
+                cutout: 50,
+              }}
+              width={100}
+              height={100}
+              plugins={[roundedDoughnutPlugin]}
+            />
+            <h2 className={styles.nutrition_indexes_charts_chart_num}>
+              {dish.carbs.toFixed(1)} г.
+            </h2>
+            <span className={styles.nutrition_indexes_charts_chart_text}>
+              Углеводы
+            </span>
+          </div>
+          <div className={styles.nutrition_indexes_charts_chart}>
+            {/* <Doughnut
             data={protein}
             options={{
               responsive: true,
               maintainAspectRatio: true,
-              cutout: 45,
-            }}
-            width={120}
-            height={120}
+              cutout: 50,
+              }}
+              width={100}
+              height={100}
           /> */}
-          <Doughnut
-            data={protein}
-            options={{
-              responsive: true,
-              maintainAspectRatio: true,
-              cutout: 45,
-            }}
-            width={120}
-            height={120}
-            plugins={[roundedDoughnutPlugin]}
-          />
-          <h2 className={styles.nutrition_charts_index_num}>
-            {dish.protein} г
-          </h2>
-          <span className={styles.nutrition_charts_index_text}>Белки</span>
-        </div>
-        <div className={styles.nutrition_charts_index}>
-          {/* <Doughnut
+            <Doughnut
+              data={protein}
+              options={{
+                responsive: true,
+                maintainAspectRatio: true,
+                cutout: 50,
+              }}
+              width={100}
+              height={100}
+              plugins={[roundedDoughnutPlugin]}
+            />
+            <h2 className={styles.nutrition_indexes_charts_chart_num}>
+              {dish.protein.toFixed(1)} г.
+            </h2>
+            <span className={styles.nutrition_indexes_charts_chart_text}>
+              Белки
+            </span>
+          </div>
+          <div className={styles.nutrition_indexes_charts_chart}>
+            {/* <Doughnut
             data={fat}
             options={{
               responsive: true,
               maintainAspectRatio: true,
-              cutout: 45,
-            }}
-            width={120}
-            height={120}
+              cutout: 50,
+              }}
+              width={100}
+              height={100}
           /> */}
-          <Doughnut
-            data={fat}
-            options={{
-              responsive: true,
-              maintainAspectRatio: true,
-              cutout: 45,
-            }}
-            width={120}
-            height={120}
-            plugins={[roundedDoughnutPlugin]}
-          />
-          <h2 className={styles.nutrition_charts_index_num}>{dish.fat} г</h2>
-          <span className={styles.nutrition_charts_index_text}>Жиры</span>
+            <Doughnut
+              data={fat}
+              options={{
+                responsive: true,
+                maintainAspectRatio: true,
+                cutout: 50,
+              }}
+              width={100}
+              height={100}
+              plugins={[roundedDoughnutPlugin]}
+            />
+            <h2 className={styles.nutrition_indexes_charts_chart_num}>
+              {dish.fat.toFixed(1)} г.
+            </h2>
+            <span className={styles.nutrition_indexes_charts_chart_text}>
+              Жиры
+            </span>
+          </div>
         </div>
       </div>
     </div>

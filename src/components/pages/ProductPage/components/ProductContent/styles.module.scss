@@ -85,3 +85,19 @@
         }
     }
 }
+
+@media screen and (max-width: $tablet) {
+    .productContent {
+        &_img {
+            height: 375px;
+        }
+    }
+}
+
+@media screen and (max-width: $phone) {
+    .productContent {
+        &_img {
+            height: 250px;
+        }
+    }
+}
