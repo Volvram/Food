@@ -114,6 +114,7 @@ class SearchContentStore implements ILocalStore {
       filters.tags.id != 0 && (body.tag_ids = [filters.tags.id]);
     }
     body.name_search = search ?? "";
+    body.creator_type_filter = createdByUser ? "CUSTOM" : "SYSTEM_CREATED";
 
     try {
       const result =
@@ -123,6 +124,9 @@ class SearchContentStore implements ILocalStore {
               method: "get",
               params: {
                 search: search ?? "",
+                creator_type_filter: createdByUser
+                  ? "CUSTOM"
+                  : "SYSTEM_CREATED",
               },
             })
           : await axios({
@@ -132,13 +136,9 @@ class SearchContentStore implements ILocalStore {
             });
 
       runInAction(async () => {
-        const data = result.data.filter((obj: DishType | ProductType) => {
-          return obj.custom == createdByUser;
-        });
-
         objectType == "Продукты"
-          ? this.setProducts(data)
-          : this.setDishes(data);
+          ? this.setProducts(result.data)
+          : this.setDishes(result.data);
       });
     } catch (e) {
       log("SearchContentStore ", e);
