@@ -244,10 +244,12 @@ class ProfileContentStore implements ILocalStore {
       const formData = new FormData();
       formData.append("file", image);
 
-      const result = await axios({
-        url: `${HOST}/users/file`,
+      await axios({
+        url: `${HOST}/files`,
         method: "post",
         params: {
+          entity_id: rootStore.user.id,
+          file_entity_marker: "USER",
           user_id: rootStore.user.id,
         },
         data: formData,
@@ -257,9 +259,10 @@ class ProfileContentStore implements ILocalStore {
         },
       });
 
-      log(result);
+      return Promise.resolve("Аватар успешно обновлен!");
     } catch (e) {
       log("ProfileContentStore: ", e);
+      return Promise.reject(e);
     }
   }
 

@@ -144,8 +144,15 @@ const ProfileContent: React.FC = () => {
             name="avatar"
             onChange={(event) => {
               if (event.target.files) {
-                console.log(event.target.files[0]);
-                profileContentStore.loadImage(event.target.files[0]);
+                profileContentStore.loadImage(event.target.files[0]).then(
+                  (response) => {
+                    alert(response);
+                    window.location.reload();
+                  },
+                  (error) => {
+                    alert(`Ошибка: ${error}`);
+                  },
+                );
               }
             }}
             className={styles.profileContent_main_avatar_load}
