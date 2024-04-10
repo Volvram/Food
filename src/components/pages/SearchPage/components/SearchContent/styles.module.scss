@@ -9,9 +9,11 @@
         flex-direction: column;
 
         &_items {
+            margin-bottom: 20px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
+            gap: 10px;
         }
 
         &_pagination {

@@ -4,5 +4,19 @@
     &_body {
         margin: 0 auto;
         max-width: $fullhd;
+
+        &_items {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+
+            &_item {
+                text-decoration: none;
+                color: $black;
+            }
+        }
     }
 }

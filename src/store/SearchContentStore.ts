@@ -11,9 +11,11 @@ import {
   CategoryType,
   CookingMethodType,
   KitchenType,
+  NutrientsType,
   ProductType,
   TagType,
 } from "./CreateDishContentStore";
+import { UserType } from "./RootStore/UserStore";
 import { FiltersType } from "./SearchFiltersStore";
 import { HOST } from "@/shared/host";
 import { log } from "@/utils/log";
@@ -29,13 +31,17 @@ export type DishType = {
   protein: number;
   carbs: number;
   fat: number;
+  custom: boolean;
+  visible: boolean;
+  created_at: string;
+  user: UserType | null;
   category: CategoryType;
   kitchen_type: KitchenType;
   cooking_method: CookingMethodType;
   dietary_needs: string | null;
   dish_product_links: any[] | null;
   tags: TagType[] | null;
-  nutrients: any[] | null;
+  nutrients: NutrientsType[] | null;
 };
 
 type PrivateFields =
@@ -113,7 +119,7 @@ class SearchContentStore implements ILocalStore {
       const result =
         objectType == "Продукты"
           ? await axios({
-              url: `${HOST}/products`,
+              url: `${HOST}/products/search`,
               method: "get",
               params: {
                 search: search ?? "",
@@ -126,9 +132,13 @@ class SearchContentStore implements ILocalStore {
             });
 
       runInAction(async () => {
+        const data = result.data.filter((obj: DishType | ProductType) => {
+          return obj.custom == createdByUser;
+        });
+
         objectType == "Продукты"
-          ? this.setProducts(result.data)
-          : this.setDishes(result.data);
+          ? this.setProducts(data)
+          : this.setDishes(data);
       });
     } catch (e) {
       log("SearchContentStore ", e);

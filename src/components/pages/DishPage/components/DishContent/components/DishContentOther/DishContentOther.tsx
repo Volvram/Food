@@ -5,7 +5,7 @@ import Link from "next/link";
 import Carousel from "react-multi-carousel";
 
 import styles from "./styles.module.scss";
-import FoodCard from "@/components/pages/SearchPage/components/SearchContent/components/FoodCard/FoodCard";
+import { FoodCard } from "@/components/FoodCard";
 import { cardCarousel } from "@/shared/carouselDimensions";
 import { shuffle } from "@/shared/shuffle";
 import DishContentOtherStore from "@/store/DishContentOtherStore";

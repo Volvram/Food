@@ -1,0 +1,31 @@
+@import "@/styles/variables.scss";
+
+.foodCard{
+    &_icons{
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 20px;
+        &_time{
+            display: flex;
+            align-items: center;
+        }
+        &_save{
+            display: flex;
+            align-items: center; 
+        }
+        &_time img{
+            width:20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        &_save img{
+            width:20px;
+            height: 20px; 
+        }
+    }
+}
+

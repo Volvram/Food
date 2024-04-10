@@ -7,8 +7,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import "react-multi-carousel/lib/styles.css";
 
-import FoodCard from "./components/FoodCard/FoodCard";
 import styles from "./styles.module.scss";
+import { FoodCard } from "@/components/FoodCard";
 import SearchContentStore from "@/store/SearchContentStore";
 import { FiltersType } from "@/store/SearchFiltersStore";
 import { useLocalStore } from "@/utils/useLocalStore";

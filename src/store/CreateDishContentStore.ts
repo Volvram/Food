@@ -10,6 +10,7 @@ import {
   reaction,
 } from "mobx";
 
+import { UserType } from "./RootStore/UserStore";
 import { HOST } from "@/shared/host";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
@@ -85,7 +86,11 @@ export type ProductType = {
   protein: number;
   carbs: number;
   fat: number;
-  nutrients: any[] | null;
+  custom?: boolean;
+  visible?: boolean;
+  created_at: string;
+  user: UserType | null;
+  nutrients: NutrientsType[] | null;
   serving_sizes: ServingSizeType[] | null;
 };
 

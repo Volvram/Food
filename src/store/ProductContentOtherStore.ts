@@ -36,7 +36,7 @@ class ProductContentOtherStore implements ILocalStore {
   requestOtherProducts = async () => {
     try {
       const result = await axios({
-        url: `${HOST}/products`,
+        url: `${HOST}/products/search`,
         method: "get",
       });
 
