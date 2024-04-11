@@ -22,7 +22,7 @@ type InputProps = Omit<
   icon?: StaticImageData | string;
   iconAlt?: string;
   onIconClick?: () => void;
-} & React.InputHTMLAttributes<HTMLInputElement>;
+};
 
 export const Input: React.FC<InputProps> = ({
   value = "",

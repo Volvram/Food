@@ -18,6 +18,7 @@
 
     &_description {
         margin-top: 20px;
+        margin-bottom: 20px;
         padding: 10px 20px;
         min-width: 200px;
         width: 80%;
@@ -28,6 +29,23 @@
         &:focus {
             outline-width: 0;
         }
+    }
+
+    &_label {
+        padding: 5px 10px;
+        cursor: pointer;
+        border: 1px solid $gray;
+        border-radius: 20px;
+        color: $blue;
+
+        &:hover {
+            color: $light-blue;
+        }
+    }
+
+    &_load {
+        width: fit-content;
+        display: none;
     }
 
     &_block {

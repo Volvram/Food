@@ -31,7 +31,7 @@ const CreateDishPage: React.FC = () => {
           className={styles.createDishPage_body_radio}
           aria-labelledby="demo-radio-buttons-group-label"
           value={createDishPageStore.objectType}
-          name="search-type"
+          name="object-type"
           onChange={(event: React.ChangeEvent, value: string) => {
             createDishPageStore.setObjectType(value);
           }}

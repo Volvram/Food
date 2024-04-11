@@ -5,9 +5,11 @@ import {
   makeObservable,
   observable,
   runInAction,
+  toJS,
 } from "mobx";
 
 import { NutrientsType, ServingSizeType } from "./CreateDishContentStore";
+import rootStore from "./RootStore/instance";
 import { HOST } from "@/shared/host";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
@@ -31,7 +33,7 @@ type PrivateFields =
 class CreateProductContentStore implements ILocalStore {
   private _name: string = "";
   private _description: string = "";
-  private _image: string | ImageData = "";
+  private _image: File | null = null;
   private _energy: number | null = null;
   private _protein: number | null = null;
   private _fat: number | null = null;
@@ -121,7 +123,7 @@ class CreateProductContentStore implements ILocalStore {
     return this._description;
   }
 
-  setImage(image: string | ImageData) {
+  setImage(image: File | null) {
     this._image = image;
   }
 
@@ -218,43 +220,98 @@ class CreateProductContentStore implements ILocalStore {
     );
   }
 
-  async sendProduct() {
+  sendProduct = async () => {
     try {
       const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
 
+      if (!this.energy || !this.protein || !this.carbs || !this.fat) {
+        throw new Error(
+          "Поля 'Энергия', 'Белки', 'Жиры', 'Углеводы' не могут быть пустыми",
+        );
+      }
+
       const product = {
         name: this.name,
         description: this.description,
-        image: this.image,
         energy: this.energy,
         protein: this.protein,
         carbs: this.carbs,
         fat: this.fat,
-        nutrients: this.nutrients,
+        nutrients: toJS(this.nutrients),
         serving_sizes: this.selectedServingSizes.map((size) => ({
-          id: size.id,
+          serving_size_id: size.id,
           grams: size.grams,
         })),
       };
 
-      await axios({
+      const result = await axios({
         url: `${HOST}/products`,
-        method: "POST",
+        method: "post",
+        params: {
+          user_id: rootStore.user.id,
+        },
         data: product,
         headers: {
           Authorization: `${tokenType} ${accessToken}`,
         },
       });
 
-      runInAction(() => {
-        alert(`Продукт ${this.name} успешно создан!`);
-      });
+      if (this.image) {
+        this.loadImage(result.data.id, this.image).catch((error) => {
+          alert(`При загрузке изображения возникла ошибка, попробуйте снова.`);
+          axios({
+            url: `${HOST}/products`,
+            method: "delete",
+            params: {
+              user_id: rootStore.user.id,
+              id: result.data.id,
+            },
+            headers: {
+              Authorization: `${tokenType} ${accessToken}`,
+            },
+          });
+
+          throw new Error(error);
+        });
+      }
+
+      return Promise.resolve(`Продукт '${this.name}' успешно создан!`);
     } catch (e) {
       log("CreateProductContentStore: ", e);
-      alert(`Ошибка: некорректные данные`);
+      return Promise.reject(e);
     }
-  }
+  };
+
+  loadImage = async (productId: number, image: File) => {
+    try {
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const formData = new FormData();
+      formData.append("file", image);
+
+      await axios({
+        url: `${HOST}/files`,
+        method: "post",
+        params: {
+          entity_id: productId,
+          file_entity_marker: "PRODUCT",
+          user_id: rootStore.user.id,
+        },
+        data: formData,
+        headers: {
+          Authorization: `${tokenType} ${accessToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      return Promise.resolve("Изображение успешно обновлено!");
+    } catch (e) {
+      log("CreateProductContentStore: ", e);
+      return Promise.reject(e);
+    }
+  };
 
   destroy() {}
 }

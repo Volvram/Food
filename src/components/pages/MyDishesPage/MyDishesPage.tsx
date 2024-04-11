@@ -1,5 +1,8 @@
 import React from "react";
 
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 
@@ -17,7 +20,7 @@ const MyDishesPage: React.FC = () => {
 
   React.useEffect(() => {
     rootStore.user.id && myDishesPageStore.requestObjects(rootStore.user.id);
-  }, [rootStore.user.id]);
+  }, [rootStore.user.id, myDishesPageStore.objectType]);
 
   return (
     <div className={styles.myDishesPage_body}>
@@ -29,6 +32,24 @@ const MyDishesPage: React.FC = () => {
       <main>
         <Header />
         <MyDishesMenu />
+        <RadioGroup
+          className={styles.myDishesPage_body_radio}
+          aria-labelledby="demo-radio-buttons-group-label"
+          value={myDishesPageStore.objectType}
+          name="object-type"
+          onChange={(event: React.ChangeEvent, value: string) => {
+            if (value == "Блюда" || value == "Продукты") {
+              myDishesPageStore.setObjectType(value);
+            }
+          }}
+        >
+          <FormControlLabel value="Блюда" control={<Radio />} label="Блюда" />
+          <FormControlLabel
+            value="Продукты"
+            control={<Radio />}
+            label="Продукты"
+          />
+        </RadioGroup>
         <div className={styles.myDishesPage_body_items}>
           {myDishesPageStore.objectType == "Блюда" &&
           Boolean(myDishesPageStore.dishes.length) ? (

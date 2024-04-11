@@ -11,6 +11,7 @@ import { CommonAccordion } from "@/components/CommonAccordion";
 import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
 import CreateProductContentStore from "@/store/CreateProductContentStore";
+import rootStore from "@/store/RootStore/instance";
 import { useLocalStore } from "@/utils/useLocalStore";
 
 const CreateProductContent: React.FC = () => {
@@ -21,6 +22,19 @@ const CreateProductContent: React.FC = () => {
   React.useEffect(() => {
     createProductContentStore.requestServingSizes();
   }, []);
+
+  const createProduct = () => {
+    rootStore.user.checkAuthorization().then(() => {
+      createProductContentStore.sendProduct().then(
+        (response) => {
+          alert(response);
+        },
+        (error) => {
+          alert(`Ошибка: ${error}`);
+        },
+      );
+    });
+  };
 
   return (
     <div className={styles.createProductContent}>
@@ -39,14 +53,25 @@ const CreateProductContent: React.FC = () => {
         className={styles.createProductContent_description}
         placeholder="Описание"
       />
-      <Input
-        onChange={(value: string) => {
-          createProductContentStore.setImage(value);
-        }}
-        placeholder="Изображение"
-        className={styles.createProductContent_input}
-        containerClassName={styles.createProductContent_input_container}
-      />
+      <div>
+        <label htmlFor="img" className={styles.createProductContent_label}>
+          Выбрать изображение
+        </label>
+        <span>{createProductContentStore.image?.name}</span>
+        <input
+          type="file"
+          id="img"
+          name="img"
+          onChange={(event) => {
+            if (event.target.files) {
+              createProductContentStore.setImage(event.target.files[0]);
+            }
+          }}
+          className={styles.createProductContent_load}
+          accept="image/png, image/jpeg, image/jpg"
+        />
+      </div>
+
       <div className={styles.createProductContent_block}>
         <span className={styles.createProductContent_text}>
           Энергия (Ккал):
@@ -312,9 +337,7 @@ const CreateProductContent: React.FC = () => {
         </tbody>
       </table>
       <Button
-        onClick={() => {
-          createProductContentStore.sendProduct();
-        }}
+        onClick={createProduct}
         className={styles.createProductContent_btn}
       >
         Создать
