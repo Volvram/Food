@@ -1,6 +1,7 @@
 import React from "react";
 
 import { observer } from "mobx-react-lite";
+import { useRouter } from "next/navigation";
 
 import DishContent from "./components/DishContent/DishContent";
 import styles from "./styles.module.scss";
@@ -15,10 +16,16 @@ type DishPageType = {
 };
 
 const DishPage: React.FC<DishPageType> = ({ id }) => {
+  const router = useRouter();
   const dishPageStore = useLocalStore(() => new DishPageStore());
 
   React.useEffect(() => {
-    id && dishPageStore.requestDish(id);
+    if (id) {
+      dishPageStore.requestDish(id).catch(() => {
+        alert("Доступ к блюду отсутствует");
+        router.back();
+      });
+    }
   }, [id]);
 
   return (

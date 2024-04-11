@@ -1,6 +1,7 @@
 import React from "react";
 
 import { observer } from "mobx-react-lite";
+import { useRouter } from "next/navigation";
 
 import ProductContent from "./components/ProductContent/ProductContent";
 import styles from "./styles.module.scss";
@@ -15,10 +16,16 @@ type ProductPageType = {
 };
 
 const ProductPage: React.FC<ProductPageType> = ({ id }) => {
+  const router = useRouter();
   const productPageStore = useLocalStore(() => new ProductPageStore());
 
   React.useEffect(() => {
-    id && productPageStore.requestProduct(id);
+    if (id) {
+      productPageStore.requestProduct(id).catch(() => {
+        alert("Доступ к продукту отсутствует");
+        router.back();
+      });
+    }
   }, [id]);
 
   return (

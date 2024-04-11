@@ -36,6 +36,8 @@ class DishPageStore implements ILocalStore {
 
   requestDish = async (id: string | string[] | number) => {
     try {
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
       const params: any = {};
       rootStore.user.id && (params.user_id = rootStore.user.id);
 
@@ -43,13 +45,19 @@ class DishPageStore implements ILocalStore {
         url: `${HOST}/dishes/${id}`,
         method: "get",
         params,
+        headers: {
+          Authorization: `${tokenType} ${accessToken}`,
+        },
       });
 
       runInAction(() => {
         this.setDish(normalizeFullDish(result.data));
       });
+
+      return Promise.resolve("");
     } catch (e) {
       log("DishPageStore: ", e);
+      return Promise.reject(e);
     }
   };
 
