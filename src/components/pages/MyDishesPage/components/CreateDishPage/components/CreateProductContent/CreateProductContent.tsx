@@ -53,6 +53,7 @@ const CreateProductContent: React.FC = () => {
         className={styles.createProductContent_description}
         placeholder="Описание"
       />
+
       <div>
         <label htmlFor="img" className={styles.createProductContent_label}>
           Выбрать изображение

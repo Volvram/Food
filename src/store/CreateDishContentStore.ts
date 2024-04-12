@@ -8,8 +8,10 @@ import {
   runInAction,
   IReactionDisposer,
   reaction,
+  toJS,
 } from "mobx";
 
+import rootStore from "./RootStore/instance";
 import { UserType } from "./RootStore/UserStore";
 import { HOST } from "@/shared/host";
 import { log } from "@/utils/log";
@@ -140,7 +142,7 @@ type PrivateFields =
 class CreateDishContentStore implements ILocalStore {
   private _name: string = "";
   private _description: string = "";
-  private _image: string | ImageData = "";
+  private _image: File | null = null;
   private _cookingTime: number | null = null;
   private _energy: number | null = null;
   private _protein: number | null = null;
@@ -302,7 +304,7 @@ class CreateDishContentStore implements ILocalStore {
     return this._description;
   }
 
-  setImage(image: string | ImageData) {
+  setImage(image: File | null) {
     this._image = image;
   }
 
@@ -570,8 +572,8 @@ class CreateDishContentStore implements ILocalStore {
 
   async requestProducts() {
     const result = await axios({
-      url: `${HOST}/products`,
-      method: "GET",
+      url: `${HOST}/products/search`,
+      method: "get",
       params: {
         search: this._productSearch ? this._productSearch : "null",
       },
@@ -634,35 +636,107 @@ class CreateDishContentStore implements ILocalStore {
     );
   }
 
-  async sendDish() {
-    const dish = {
-      name: this.name,
-      description: this.description,
-      image: this.image,
-      cooking_time: this.cookingTime,
-      energy: this.energy,
-      protein: this.protein,
-      carbs: this.carbs,
-      fat: this.fat,
-      category: this.category,
-      kitchen_type: this.kitchen,
-      cooking_method: this.cookingMethod,
-      dietary_needs: [this.dietaryNeeds],
-      dish_product_links: this.dishProductLinks,
-      tags: [this.tags],
-      nutrients: this.nutrients,
-    };
+  sendDish = async () => {
+    try {
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
 
-    const result = await axios({
-      url: `${HOST}/dishes`,
-      method: "POST",
-      data: dish,
-    });
+      if (
+        !this.cookingTime ||
+        !this.energy ||
+        !this.protein ||
+        !this.carbs ||
+        !this.fat
+      ) {
+        throw new Error(
+          "Поля 'Время приготовления', 'Энергия', 'Белки', 'Жиры', 'Углеводы' не могут быть пустыми",
+        );
+      }
 
-    runInAction(() => {
-      log(result);
-    });
-  }
+      const dish = {
+        name: this.name,
+        description: this.description,
+        cooking_time: this.cookingTime,
+        energy: this.energy,
+        protein: this.protein,
+        carbs: this.carbs,
+        fat: this.fat,
+        category: toJS(this.category),
+        kitchen_type: toJS(this.kitchen),
+        cooking_method: toJS(this.cookingMethod),
+        dietary_needs: [toJS(this.dietaryNeeds)],
+        dish_product_links: toJS(this.dishProductLinks),
+        tags: [toJS(this.tags)],
+        nutrients: toJS(this.nutrients),
+      };
+
+      const result = await axios({
+        url: `${HOST}/dishes`,
+        method: "post",
+        data: dish,
+        params: {
+          user_id: rootStore.user.id,
+        },
+        headers: {
+          Authorization: `${tokenType} ${accessToken}`,
+        },
+      });
+
+      if (this.image) {
+        this.loadImage(result.data.id, this.image).catch((error) => {
+          alert(`При загрузке изображения возникла ошибка, попробуйте снова.`);
+          axios({
+            url: `${HOST}/dishes`,
+            method: "delete",
+            params: {
+              user_id: rootStore.user.id,
+              id: result.data.id,
+            },
+            headers: {
+              Authorization: `${tokenType} ${accessToken}`,
+            },
+          });
+
+          throw new Error(error);
+        });
+      }
+
+      return Promise.resolve(`Блюдо '${this.name}' успешно создано!`);
+    } catch (e) {
+      log("CreateDishContentStore: ", e);
+      return Promise.reject(e);
+    }
+  };
+
+  loadImage = async (dishId: number, image: File) => {
+    try {
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const formData = new FormData();
+      formData.append("file", image);
+
+      await axios({
+        url: `${HOST}/files`,
+        method: "post",
+        params: {
+          entity_id: dishId,
+          file_entity_marker: "DISH",
+          user_id: rootStore.user.id,
+        },
+        data: formData,
+        headers: {
+          Authorization: `${tokenType} ${accessToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      return Promise.resolve("Изображение успешно обновлено!");
+    } catch (e) {
+      log("CreateProductContentStore: ", e);
+      return Promise.reject(e);
+    }
+  };
 
   destroy() {
     this._handleSearchChange();

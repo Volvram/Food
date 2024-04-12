@@ -18,6 +18,7 @@ import CreateDishContentStore, {
   CurrentProductType,
   DishProductLinkType,
 } from "@/store/CreateDishContentStore";
+import rootStore from "@/store/RootStore/instance";
 import { useLocalStore } from "@/utils/useLocalStore";
 
 const CreateDishContent: React.FC = () => {
@@ -53,6 +54,19 @@ const CreateDishContent: React.FC = () => {
     createDishContentStore.setCurrentProduct(null);
   }, []);
 
+  const createDish = () => {
+    rootStore.user.checkAuthorization().then(() => {
+      createDishContentStore.sendDish().then(
+        (response) => {
+          alert(response);
+        },
+        (error) => {
+          alert(`Ошибка: ${error}`);
+        },
+      );
+    });
+  };
+
   return (
     <div className={styles.createDishContent}>
       <Input
@@ -70,14 +84,26 @@ const CreateDishContent: React.FC = () => {
         className={styles.createDishContent_description}
         placeholder="Описание"
       />
-      <Input
-        onChange={(value: string) => {
-          createDishContentStore.setImage(value);
-        }}
-        placeholder="Изображение"
-        className={styles.createDishContent_input}
-        containerClassName={styles.createDishContent_input_container}
-      />
+
+      <div>
+        <label htmlFor="img" className={styles.createDishContent_label}>
+          Выбрать изображение
+        </label>
+        <span>{createDishContentStore.image?.name}</span>
+        <input
+          type="file"
+          id="img"
+          name="img"
+          onChange={(event) => {
+            if (event.target.files) {
+              createDishContentStore.setImage(event.target.files[0]);
+            }
+          }}
+          className={styles.createDishContent_load}
+          accept="image/png, image/jpeg, image/jpg"
+        />
+      </div>
+
       <div className={styles.createDishContent_block}>
         <span className={styles.createDishContent_text}>
           Время приготовления (минут):
@@ -460,12 +486,7 @@ const CreateDishContent: React.FC = () => {
           })}
         </tbody>
       </table>
-      <Button
-        onClick={() => {
-          createDishContentStore.sendDish();
-        }}
-        className={styles.createDishContent_btn}
-      >
+      <Button onClick={createDish} className={styles.createDishContent_btn}>
         Создать
       </Button>
     </div>
