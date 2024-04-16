@@ -22,14 +22,32 @@ const ProductPage: React.FC<ProductPageType> = ({ id }) => {
   React.useEffect(() => {
     if (id) {
       productPageStore.requestProduct(id).catch(() => {
-        alert("Доступ к продукту отсутствует");
+        alert("Доступ к продукту отсутствует.");
         router.back();
       });
     }
   }, [id]);
 
+  const handleDelete = () => {
+    const answer = confirm(
+      "Вы уверены, что хотите удалить продукт? это действие необратимо.",
+    );
+
+    if (answer) {
+      productPageStore.deleteProduct().then(
+        (response) => {
+          alert(response);
+          router.back();
+        },
+        (error) => {
+          alert(`Ошибка: ${error}`);
+        },
+      );
+    }
+  };
+
   return (
-    <div className={styles.dishPage}>
+    <div className={styles.productPage}>
       <Meta
         title={`${productPageStore?.product?.name}`}
         description={`${productPageStore?.product?.description}`}
@@ -41,6 +59,16 @@ const ProductPage: React.FC<ProductPageType> = ({ id }) => {
           <ProductContent product={productPageStore.product} />
         ) : (
           <h1>Данные не найдены</h1>
+        )}
+        {productPageStore.own && (
+          <div className={styles.productPage_control}>
+            <div
+              className={styles.productPage_control_delete}
+              onClick={handleDelete}
+            >
+              Удалить продукт
+            </div>
+          </div>
         )}
       </main>
     </div>

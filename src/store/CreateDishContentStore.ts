@@ -638,6 +638,8 @@ class CreateDishContentStore implements ILocalStore {
 
   sendDish = async () => {
     try {
+      await rootStore.user.checkAuthorization();
+
       const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
 

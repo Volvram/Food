@@ -28,6 +28,24 @@ const DishPage: React.FC<DishPageType> = ({ id }) => {
     }
   }, [id]);
 
+  const handleDelete = () => {
+    const answer = confirm(
+      "Вы уверены, что хотите удалить блюдо? это действие необратимо.",
+    );
+
+    if (answer) {
+      dishPageStore.deleteDish().then(
+        (response) => {
+          alert(response);
+          router.back();
+        },
+        (error) => {
+          alert(`Ошибка: ${error}`);
+        },
+      );
+    }
+  };
+
   return (
     <div className={styles.dishPage}>
       <Meta
@@ -41,6 +59,16 @@ const DishPage: React.FC<DishPageType> = ({ id }) => {
           <DishContent dish={dishPageStore.dish} />
         ) : (
           <h1>Данные не найдены</h1>
+        )}
+        {dishPageStore.own && (
+          <div className={styles.dishPage_control}>
+            <div
+              className={styles.dishPage_control_delete}
+              onClick={handleDelete}
+            >
+              Удалить блюдо
+            </div>
+          </div>
         )}
       </main>
     </div>

@@ -5,8 +5,11 @@ import {
   action,
   computed,
   runInAction,
+  IReactionDisposer,
+  reaction,
 } from "mobx";
 
+import { ProductType } from "./CreateDishContentStore";
 import {
   FullProductModel,
   normalizeFullProduct,
@@ -16,16 +19,20 @@ import { HOST } from "@/shared/host";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
-type PrivateFields = "_product";
+type PrivateFields = "_product" | "_own";
 
 class ProductPageStore implements ILocalStore {
   private _product: FullProductModel | null = null;
+  private _own: boolean = false;
 
   constructor() {
     makeObservable<ProductPageStore, PrivateFields>(this, {
       _product: observable,
       setProduct: action,
       product: computed,
+      _own: observable,
+      setOwn: action,
+      own: computed,
     });
   }
 
@@ -37,8 +44,18 @@ class ProductPageStore implements ILocalStore {
     return this._product;
   }
 
+  setOwn(own: boolean) {
+    this._own = own;
+  }
+
+  get own() {
+    return this._own;
+  }
+
   requestProduct = async (id: string | string[] | number) => {
     try {
+      await rootStore.user.checkAuthorization();
+
       const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
       const params: any = {};
@@ -64,7 +81,82 @@ class ProductPageStore implements ILocalStore {
     }
   };
 
-  destroy() {}
+  deleteProduct = async () => {
+    try {
+      await rootStore.user.checkAuthorization();
+
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+      const params: any = {
+        id: this.product?.id,
+      };
+      rootStore.user.id && (params.user_id = rootStore.user.id);
+
+      await axios({
+        url: `${HOST}/products/${this.product?.id}`,
+        method: "delete",
+        params,
+        headers: {
+          Authorization: `${tokenType} ${accessToken}`,
+        },
+      });
+
+      return Promise.resolve("Продукт удален.");
+    } catch (e) {
+      log("DishPageStore: ", e);
+      return Promise.reject(e);
+    }
+  };
+
+  checkOwn = async () => {
+    try {
+      await rootStore.user.checkAuthorization();
+
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+      const params: any = {};
+      rootStore.user.id && (params.user_id = rootStore.user.id);
+
+      const result = await axios({
+        url: `${HOST}/products/custom`,
+        method: "get",
+        params,
+        headers: {
+          Authorization: `${tokenType} ${accessToken}`,
+        },
+      });
+
+      runInAction(() => {
+        const custom = result.data.find(
+          (customProduct: ProductType) => customProduct.id === this.product?.id,
+        );
+
+        if (custom) {
+          this.setOwn(true);
+        } else {
+          this.setOwn(false);
+        }
+      });
+
+      return Promise.resolve("");
+    } catch (e) {
+      log("DishPageStore: ", e);
+      return Promise.reject(e);
+    }
+  };
+
+  destroy() {
+    this._handleProductChange();
+  }
+
+  readonly _handleProductChange: IReactionDisposer = reaction(
+    () => this.product,
+    () => {
+      if (this.product) {
+        this.checkOwn();
+      }
+    },
+  );
 }
 
 export default ProductPageStore;

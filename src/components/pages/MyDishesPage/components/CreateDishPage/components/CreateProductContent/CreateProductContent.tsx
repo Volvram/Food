@@ -3,6 +3,7 @@ import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import cn from "classnames";
 import { observer } from "mobx-react-lite";
+import { useRouter } from "next/navigation";
 
 import { nutrients } from "../nutrients";
 import styles from "./styles.module.scss";
@@ -11,10 +12,11 @@ import { CommonAccordion } from "@/components/CommonAccordion";
 import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
 import CreateProductContentStore from "@/store/CreateProductContentStore";
-import rootStore from "@/store/RootStore/instance";
 import { useLocalStore } from "@/utils/useLocalStore";
 
 const CreateProductContent: React.FC = () => {
+  const router = useRouter();
+
   const createProductContentStore = useLocalStore(
     () => new CreateProductContentStore(),
   );
@@ -24,16 +26,15 @@ const CreateProductContent: React.FC = () => {
   }, []);
 
   const createProduct = () => {
-    rootStore.user.checkAuthorization().then(() => {
-      createProductContentStore.sendProduct().then(
-        (response) => {
-          alert(response);
-        },
-        (error) => {
-          alert(`Ошибка: ${error}`);
-        },
-      );
-    });
+    createProductContentStore.sendProduct().then(
+      (response) => {
+        alert(response);
+        router.push("/mydishes");
+      },
+      (error) => {
+        alert(`Ошибка: ${error}`);
+      },
+    );
   };
 
   return (

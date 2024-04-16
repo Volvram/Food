@@ -222,6 +222,8 @@ class CreateProductContentStore implements ILocalStore {
 
   sendProduct = async () => {
     try {
+      await rootStore.user.checkAuthorization();
+
       const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
 

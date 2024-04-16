@@ -5,6 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import { nutrients } from "../nutrients";
 import styles from "./styles.module.scss";
@@ -18,10 +19,11 @@ import CreateDishContentStore, {
   CurrentProductType,
   DishProductLinkType,
 } from "@/store/CreateDishContentStore";
-import rootStore from "@/store/RootStore/instance";
 import { useLocalStore } from "@/utils/useLocalStore";
 
 const CreateDishContent: React.FC = () => {
+  const router = useRouter();
+
   const createDishContentStore = useLocalStore(
     () => new CreateDishContentStore(),
   );
@@ -34,9 +36,6 @@ const CreateDishContent: React.FC = () => {
     debounce((value: string) => {
       createDishContentStore.setProductSearch(value);
     }),
-    // (value: string) => {
-    //   setSearch(value);
-    // },
     [],
   );
 
@@ -55,16 +54,15 @@ const CreateDishContent: React.FC = () => {
   }, []);
 
   const createDish = () => {
-    rootStore.user.checkAuthorization().then(() => {
-      createDishContentStore.sendDish().then(
-        (response) => {
-          alert(response);
-        },
-        (error) => {
-          alert(`Ошибка: ${error}`);
-        },
-      );
-    });
+    createDishContentStore.sendDish().then(
+      (response) => {
+        alert(response);
+        router.push("/mydishes");
+      },
+      (error) => {
+        alert(`Ошибка: ${error}`);
+      },
+    );
   };
 
   return (
