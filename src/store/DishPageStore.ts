@@ -16,11 +16,12 @@ import { HOST } from "@/shared/host";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
-type PrivateFields = "_dish" | "_own";
+type PrivateFields = "_dish" | "_own" | "_visible";
 
 class DishPageStore implements ILocalStore {
   private _dish: FullDishModel | null = null;
   private _own: boolean = false;
+  private _visible: boolean = false;
 
   constructor() {
     makeObservable<DishPageStore, PrivateFields>(this, {
@@ -30,6 +31,9 @@ class DishPageStore implements ILocalStore {
       _own: observable,
       setOwn: action,
       own: computed,
+      _visible: observable,
+      setVisible: action,
+      visible: computed,
     });
   }
 
@@ -48,6 +52,18 @@ class DishPageStore implements ILocalStore {
   get own() {
     return this._own;
   }
+
+  setVisible(visible: boolean) {
+    this._visible = visible;
+  }
+
+  get visible() {
+    return this._visible;
+  }
+
+  toggleVisible = () => {
+    this.setVisible(!this.visible);
+  };
 
   requestDish = async (id: string | string[] | number) => {
     try {
@@ -77,6 +93,38 @@ class DishPageStore implements ILocalStore {
       });
 
       return Promise.resolve("");
+    } catch (e) {
+      log("DishPageStore: ", e);
+      return Promise.reject(e);
+    }
+  };
+
+  sendVisibility = async (visible: boolean) => {
+    try {
+      await rootStore.user.checkAuthorization();
+
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const params: any = {
+        dish_id: this.dish?.id,
+        visible,
+      };
+
+      if (rootStore.user.id) {
+        params.user_id = rootStore.user.id;
+      }
+
+      await axios({
+        url: `${HOST}/dishes/visibility`,
+        method: "get",
+        params,
+        headers: {
+          Authorization: `${tokenType} ${accessToken}`,
+        },
+      });
+
+      return Promise.resolve("Видимость изменена.");
     } catch (e) {
       log("DishPageStore: ", e);
       return Promise.reject(e);
@@ -163,6 +211,7 @@ class DishPageStore implements ILocalStore {
     () => this.dish,
     () => {
       if (this.dish) {
+        this.setVisible(this.dish.visible);
         this.checkOwn().catch(() => {});
       }
     },

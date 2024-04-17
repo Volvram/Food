@@ -1,5 +1,7 @@
 import React from "react";
 
+import Switch from "@mui/material/Switch";
+import Typography from "@mui/material/Typography";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
 
@@ -27,6 +29,24 @@ const ProductPage: React.FC<ProductPageType> = ({ id }) => {
       });
     }
   }, [id]);
+
+  const handleVisibility = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    visibility: boolean,
+  ) => {
+    const answer = confirm("Вы уверены, что хотите изменить видимость блюда?");
+
+    if (answer) {
+      productPageStore.sendVisibility(visibility).then(
+        () => {
+          productPageStore.toggleVisible();
+        },
+        (error) => {
+          alert(`Ошибка: ${error}`);
+        },
+      );
+    }
+  };
 
   const handleDelete = () => {
     const answer = confirm(
@@ -62,6 +82,13 @@ const ProductPage: React.FC<ProductPageType> = ({ id }) => {
         )}
         {productPageStore.own && (
           <div className={styles.productPage_control}>
+            <div className={styles.productPage_control_switch}>
+              <Typography>Видимое другим пользователям</Typography>
+              <Switch
+                checked={productPageStore.visible}
+                onChange={handleVisibility}
+              />
+            </div>
             <div
               className={styles.productPage_control_delete}
               onClick={handleDelete}

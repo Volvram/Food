@@ -19,11 +19,12 @@ import { HOST } from "@/shared/host";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
-type PrivateFields = "_product" | "_own";
+type PrivateFields = "_product" | "_own" | "_visible";
 
 class ProductPageStore implements ILocalStore {
   private _product: FullProductModel | null = null;
   private _own: boolean = false;
+  private _visible: boolean = false;
 
   constructor() {
     makeObservable<ProductPageStore, PrivateFields>(this, {
@@ -33,6 +34,9 @@ class ProductPageStore implements ILocalStore {
       _own: observable,
       setOwn: action,
       own: computed,
+      _visible: observable,
+      setVisible: action,
+      visible: computed,
     });
   }
 
@@ -51,6 +55,18 @@ class ProductPageStore implements ILocalStore {
   get own() {
     return this._own;
   }
+
+  setVisible(visible: boolean) {
+    this._visible = visible;
+  }
+
+  get visible() {
+    return this._visible;
+  }
+
+  toggleVisible = () => {
+    this.setVisible(!this.visible);
+  };
 
   requestProduct = async (id: string | string[] | number) => {
     try {
@@ -86,6 +102,38 @@ class ProductPageStore implements ILocalStore {
     }
   };
 
+  sendVisibility = async (visible: boolean) => {
+    try {
+      await rootStore.user.checkAuthorization();
+
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const params: any = {
+        product_id: this.product?.id,
+        visible,
+      };
+
+      if (rootStore.user.id) {
+        params.user_id = rootStore.user.id;
+      }
+
+      await axios({
+        url: `${HOST}/products/visibility`,
+        method: "get",
+        params,
+        headers: {
+          Authorization: `${tokenType} ${accessToken}`,
+        },
+      });
+
+      return Promise.resolve("Видимость изменена.");
+    } catch (e) {
+      log("ProductPageStore: ", e);
+      return Promise.reject(e);
+    }
+  };
+
   deleteProduct = async () => {
     try {
       await rootStore.user.checkAuthorization();
@@ -111,7 +159,7 @@ class ProductPageStore implements ILocalStore {
 
       return Promise.resolve("Продукт удален.");
     } catch (e) {
-      log("DishPageStore: ", e);
+      log("ProductPageStore: ", e);
       return Promise.reject(e);
     }
   };
@@ -166,6 +214,7 @@ class ProductPageStore implements ILocalStore {
     () => this.product,
     () => {
       if (this.product) {
+        this.setVisible(this.product.visible);
         this.checkOwn().catch(() => {});
       }
     },

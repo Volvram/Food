@@ -5,17 +5,24 @@
     max-width: $fullhd;
 
     &_control {
+        margin-left: 10%;
+        margin-right: 10%;
         margin-bottom: 20px;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 20px;
+
+        &_switch{
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
 
         &_delete {
             margin-left: auto;
-            margin-right: 10%;
             cursor: pointer;
-            margin-top: 8px;
-            margin-bottom: 20px;
             background-color: $white;
             text-decoration: underline;
             color: $red;
