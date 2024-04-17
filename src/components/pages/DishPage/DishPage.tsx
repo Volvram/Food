@@ -22,7 +22,7 @@ const DishPage: React.FC<DishPageType> = ({ id }) => {
   React.useEffect(() => {
     if (id) {
       dishPageStore.requestDish(id).catch(() => {
-        alert("Доступ к блюду отсутствует");
+        alert("Доступ к блюду отсутствует.");
         router.back();
       });
     }

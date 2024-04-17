@@ -51,20 +51,25 @@ class DishPageStore implements ILocalStore {
 
   requestDish = async (id: string | string[] | number) => {
     try {
-      await rootStore.user.checkAuthorization();
-
       const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
       const params: any = {};
-      rootStore.user.id && (params.user_id = rootStore.user.id);
+
+      if (rootStore.user.id) {
+        params.user_id = rootStore.user.id;
+      }
+
+      const headers: any = {};
+
+      if (tokenType && accessToken) {
+        headers.Authorization = `${tokenType} ${accessToken}`;
+      }
 
       const result = await axios({
         url: `${HOST}/dishes/${id}`,
         method: "get",
         params,
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`,
-        },
+        headers,
       });
 
       runInAction(() => {
@@ -87,7 +92,10 @@ class DishPageStore implements ILocalStore {
       const params: any = {
         id: this.dish?.id,
       };
-      rootStore.user.id && (params.user_id = rootStore.user.id);
+
+      if (rootStore.user.id) {
+        params.user_id = rootStore.user.id;
+      }
 
       await axios({
         url: `${HOST}/dishes/${this.dish?.id}`,
@@ -107,12 +115,17 @@ class DishPageStore implements ILocalStore {
 
   checkOwn = async () => {
     try {
-      await rootStore.user.checkAuthorization();
-
       const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
       const params: any = {};
-      rootStore.user.id && (params.user_id = rootStore.user.id);
+
+      if (rootStore.user.id) {
+        params.user_id = rootStore.user.id;
+      }
+
+      if (!tokenType || !accessToken) {
+        throw new Error("Нет полного доступа к блюду.");
+      }
 
       const result = await axios({
         url: `${HOST}/dishes/custom`,
@@ -150,7 +163,7 @@ class DishPageStore implements ILocalStore {
     () => this.dish,
     () => {
       if (this.dish) {
-        this.checkOwn();
+        this.checkOwn().catch(() => {});
       }
     },
   );

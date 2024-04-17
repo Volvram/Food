@@ -54,20 +54,25 @@ class ProductPageStore implements ILocalStore {
 
   requestProduct = async (id: string | string[] | number) => {
     try {
-      await rootStore.user.checkAuthorization();
-
       const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
       const params: any = {};
-      rootStore.user.id && (params.user_id = rootStore.user.id);
+
+      if (rootStore.user.id) {
+        params.user_id = rootStore.user.id;
+      }
+
+      const headers: any = {};
+
+      if (tokenType && accessToken) {
+        headers.Authorization = `${tokenType} ${accessToken}`;
+      }
 
       const result = await axios({
         url: `${HOST}/products/${id}`,
         method: "get",
         params,
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`,
-        },
+        headers,
       });
 
       runInAction(() => {
@@ -90,7 +95,10 @@ class ProductPageStore implements ILocalStore {
       const params: any = {
         id: this.product?.id,
       };
-      rootStore.user.id && (params.user_id = rootStore.user.id);
+
+      if (rootStore.user.id) {
+        params.user_id = rootStore.user.id;
+      }
 
       await axios({
         url: `${HOST}/products/${this.product?.id}`,
@@ -110,12 +118,17 @@ class ProductPageStore implements ILocalStore {
 
   checkOwn = async () => {
     try {
-      await rootStore.user.checkAuthorization();
-
       const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
       const params: any = {};
-      rootStore.user.id && (params.user_id = rootStore.user.id);
+
+      if (rootStore.user.id) {
+        params.user_id = rootStore.user.id;
+      }
+
+      if (!tokenType || !accessToken) {
+        throw new Error("Нет полного доступа к продукту.");
+      }
 
       const result = await axios({
         url: `${HOST}/products/custom`,
@@ -140,7 +153,7 @@ class ProductPageStore implements ILocalStore {
 
       return Promise.resolve("");
     } catch (e) {
-      log("DishPageStore: ", e);
+      log("ProductPageStore: ", e);
       return Promise.reject(e);
     }
   };
@@ -153,7 +166,7 @@ class ProductPageStore implements ILocalStore {
     () => this.product,
     () => {
       if (this.product) {
-        this.checkOwn();
+        this.checkOwn().catch(() => {});
       }
     },
   );

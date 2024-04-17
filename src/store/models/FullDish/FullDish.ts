@@ -18,6 +18,8 @@ export type FullDishApi = {
   protein: number;
   carbs: number;
   fat: number;
+  custom: boolean;
+  visible: boolean;
   category: CategoryType;
   kitchen_type: KitchenType;
   cooking_method: CookingMethodType;
@@ -37,6 +39,8 @@ export type FullDishModel = {
   protein: number;
   carbs: number;
   fat: number;
+  custom: boolean;
+  visible: boolean;
   category: CategoryType;
   kitchenType: KitchenType;
   cookingMethod: CookingMethodType;
@@ -57,6 +61,8 @@ export const normalizeFullDish = (from: FullDishApi): FullDishModel => {
     protein: from.protein,
     carbs: from.carbs,
     fat: from.fat,
+    custom: from.custom,
+    visible: from.visible,
     category: from.category,
     kitchenType: from.kitchen_type,
     cookingMethod: from.cooking_method,

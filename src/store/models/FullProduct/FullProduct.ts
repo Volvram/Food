@@ -9,6 +9,8 @@ export type FullProductAPI = {
   protein: number;
   carbs: number;
   fat: number;
+  custom: boolean;
+  visible: boolean;
   nutrients: NutrientsType;
   serving_sizes: ServingSizeType[];
 };
@@ -22,6 +24,8 @@ export type FullProductModel = {
   protein: number;
   carbs: number;
   fat: number;
+  custom: boolean;
+  visible: boolean;
   nutrients: NutrientsType;
   servingSizes: ServingSizeType[];
 };
@@ -38,6 +42,8 @@ export const normalizeFullProduct = (
     protein: from.protein,
     carbs: from.carbs,
     fat: from.fat,
+    custom: from.custom,
+    visible: from.visible,
     nutrients: from.nutrients,
     servingSizes: from.serving_sizes,
   };
