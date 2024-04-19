@@ -7,7 +7,9 @@ import {
   runInAction,
 } from "mobx";
 
-import { KeyCloakHost } from "@/shared/host";
+import { CookBookType } from "./FavouritePageStore";
+import rootStore from "./RootStore/instance";
+import { HOST, KeyCloakHost } from "@/shared/host";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
@@ -52,13 +54,15 @@ class LoginContentStore implements ILocalStore {
       body.append("password", this.password);
       body.append("grant_type", "password");
 
+      const headers: any = {
+        "Content-Type": "application/x-www-form-urlencoded",
+      };
+
       const result = await axios({
         url: KeyCloakHost,
         method: "post",
         data: body,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
+        headers,
       });
 
       runInAction(() => {
@@ -76,6 +80,48 @@ class LoginContentStore implements ILocalStore {
       return Promise.reject(e);
     }
   }
+
+  checkFavouriteCookbook = async () => {
+    try {
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const params: any = {
+        user_id: rootStore.user.id,
+      };
+
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
+      const cookbooks = await axios({
+        url: `${HOST}/cookbooks`,
+        method: "get",
+        params,
+        headers,
+      });
+
+      const favourite = cookbooks.data.find(
+        (cookbook: CookBookType) => cookbook.name == "favourite",
+      );
+
+      const body: any = {
+        name: "favourite",
+      };
+
+      if (!favourite) {
+        await axios({
+          url: `${HOST}/cookbooks`,
+          method: "post",
+          params,
+          headers,
+          data: body,
+        });
+      }
+    } catch (e) {
+      log("LoginContentStore ", e);
+    }
+  };
 
   destroy() {}
 }

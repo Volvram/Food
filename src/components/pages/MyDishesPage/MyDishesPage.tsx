@@ -12,15 +12,14 @@ import { FoodCard } from "@/components/FoodCard";
 import Header from "@/components/Header/Header";
 import Meta from "@/components/Meta/Meta";
 import MyDishesPageStore from "@/store/MyDishesPageStore";
-import rootStore from "@/store/RootStore/instance";
 import { useLocalStore } from "@/utils/useLocalStore";
 
 const MyDishesPage: React.FC = () => {
   const myDishesPageStore = useLocalStore(() => new MyDishesPageStore());
 
   React.useEffect(() => {
-    rootStore.user.id && myDishesPageStore.requestObjects(rootStore.user.id);
-  }, [rootStore.user.id, myDishesPageStore.objectType]);
+    myDishesPageStore.requestObjects();
+  }, []);
 
   return (
     <div className={styles.myDishesPage_body}>

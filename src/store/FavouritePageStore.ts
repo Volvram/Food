@@ -16,15 +16,28 @@ import { HOST } from "@/shared/host";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
-type PrivateFields = "_objectType" | "_dishes" | "_products";
+export type CookBookType = {
+  id: number;
+  name: string;
+};
 
-class MyDishesPageStore implements ILocalStore {
-  private _objectType: "Блюда" | "Продукты" = "Блюда";
+type PrivateFields =
+  | "_favouriteCookbook"
+  | "_objectType"
+  | "_dishes"
+  | "_products";
+
+class FavouritePageStore implements ILocalStore {
+  private _favouriteCookbook: CookBookType | null = null;
+  private _objectType: string = "Блюда";
   private _dishes: DishType[] = [];
   private _products: ProductType[] = [];
 
   constructor() {
-    makeObservable<MyDishesPageStore, PrivateFields>(this, {
+    makeObservable<FavouritePageStore, PrivateFields>(this, {
+      _favouriteCookbook: observable,
+      setFavouriteCookbook: action,
+      favouriteCookbook: computed,
       _objectType: observable,
       setObjectType: action,
       objectType: computed,
@@ -37,7 +50,15 @@ class MyDishesPageStore implements ILocalStore {
     });
   }
 
-  setObjectType(objectType: "Блюда" | "Продукты") {
+  setFavouriteCookbook(favouriteCookbook: CookBookType | null) {
+    this._favouriteCookbook = favouriteCookbook;
+  }
+
+  get favouriteCookbook() {
+    return this._favouriteCookbook;
+  }
+
+  setObjectType(objectType: string) {
     this._objectType = objectType;
   }
 
@@ -61,7 +82,7 @@ class MyDishesPageStore implements ILocalStore {
     return this._products;
   }
 
-  requestObjects = async () => {
+  checkFavouriteCookbook = async () => {
     try {
       await rootStore.user.checkAuthorization();
 
@@ -76,16 +97,49 @@ class MyDishesPageStore implements ILocalStore {
         Authorization: `${tokenType} ${accessToken}`,
       };
 
+      const cookbooks = await axios({
+        url: `${HOST}/cookbooks`,
+        method: "get",
+        params,
+        headers,
+      });
+
+      const favourite = cookbooks.data.find(
+        (cookbook: CookBookType) => cookbook.name == "favourite",
+      );
+
+      this.setFavouriteCookbook(favourite);
+    } catch (e) {
+      log("FavouritePageStore: ", e);
+    }
+  };
+
+  requestObjects = async () => {
+    try {
+      await rootStore.user.checkAuthorization();
+
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const params: any = {
+        user_id: rootStore.user.id,
+        id: this.favouriteCookbook?.id,
+      };
+
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
       const result =
         this.objectType == "Продукты"
           ? await axios({
-              url: `${HOST}/products/custom`,
+              url: `${HOST}/cookbooks/${this.favouriteCookbook?.id}/products`,
               method: "get",
               params,
               headers,
             })
           : await axios({
-              url: `${HOST}/dishes/custom`,
+              url: `${HOST}/cookbooks/${this.favouriteCookbook?.id}/dishes`,
               method: "get",
               params,
               headers,
@@ -97,7 +151,7 @@ class MyDishesPageStore implements ILocalStore {
           : this.setDishes(result.data);
       });
     } catch (e) {
-      log("MyDishesPageStore: ", e);
+      log("FavouritePageStore: ", e);
     }
   };
 
@@ -113,4 +167,4 @@ class MyDishesPageStore implements ILocalStore {
   );
 }
 
-export default MyDishesPageStore;
+export default FavouritePageStore;

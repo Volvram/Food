@@ -23,8 +23,10 @@ const LoginContent: React.FC = () => {
     loginContentStore.requestLogin().then(
       (response: string) => {
         alert(response);
-        rootStore.user.checkAuthorization();
-        router.push("/");
+        rootStore.user.checkAuthorization().then(() => {
+          loginContentStore.checkFavouriteCookbook();
+          router.push("/");
+        });
       },
       (error: Error) => {
         alert(`Ошибка: ${error}`);

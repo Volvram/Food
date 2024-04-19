@@ -70,8 +70,8 @@ class ProductPageStore implements ILocalStore {
 
   requestProduct = async (id: string | string[] | number) => {
     try {
-      const tokenType = localStorage.getItem("token_type");
-      const accessToken = localStorage.getItem("access_token");
+      let tokenType = localStorage.getItem("token_type");
+      let accessToken = localStorage.getItem("access_token");
       const params: any = {};
 
       if (rootStore.user.id) {
@@ -81,6 +81,11 @@ class ProductPageStore implements ILocalStore {
       const headers: any = {};
 
       if (tokenType && accessToken) {
+        await rootStore.user.checkAuthorization();
+
+        tokenType = localStorage.getItem("token_type");
+        accessToken = localStorage.getItem("access_token");
+
         headers.Authorization = `${tokenType} ${accessToken}`;
       }
 
@@ -118,13 +123,15 @@ class ProductPageStore implements ILocalStore {
         params.user_id = rootStore.user.id;
       }
 
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
       await axios({
         url: `${HOST}/products/visibility`,
         method: "get",
         params,
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`,
-        },
+        headers,
       });
 
       return Promise.resolve("Видимость изменена.");
@@ -148,13 +155,15 @@ class ProductPageStore implements ILocalStore {
         params.user_id = rootStore.user.id;
       }
 
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
       await axios({
         url: `${HOST}/products/${this.product?.id}`,
         method: "delete",
         params,
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`,
-        },
+        headers,
       });
 
       return Promise.resolve("Продукт удален.");
@@ -174,6 +183,10 @@ class ProductPageStore implements ILocalStore {
         params.user_id = rootStore.user.id;
       }
 
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
       if (!tokenType || !accessToken) {
         throw new Error("Нет полного доступа к продукту.");
       }
@@ -182,9 +195,7 @@ class ProductPageStore implements ILocalStore {
         url: `${HOST}/products/custom`,
         method: "get",
         params,
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`,
-        },
+        headers,
       });
 
       runInAction(() => {

@@ -67,8 +67,8 @@ class DishPageStore implements ILocalStore {
 
   requestDish = async (id: string | string[] | number) => {
     try {
-      const tokenType = localStorage.getItem("token_type");
-      const accessToken = localStorage.getItem("access_token");
+      let tokenType = localStorage.getItem("token_type");
+      let accessToken = localStorage.getItem("access_token");
       const params: any = {};
 
       if (rootStore.user.id) {
@@ -78,6 +78,11 @@ class DishPageStore implements ILocalStore {
       const headers: any = {};
 
       if (tokenType && accessToken) {
+        await rootStore.user.checkAuthorization();
+
+        tokenType = localStorage.getItem("token_type");
+        accessToken = localStorage.getItem("access_token");
+
         headers.Authorization = `${tokenType} ${accessToken}`;
       }
 
@@ -115,13 +120,15 @@ class DishPageStore implements ILocalStore {
         params.user_id = rootStore.user.id;
       }
 
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
       await axios({
         url: `${HOST}/dishes/visibility`,
         method: "get",
         params,
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`,
-        },
+        headers,
       });
 
       return Promise.resolve("Видимость изменена.");
@@ -145,13 +152,15 @@ class DishPageStore implements ILocalStore {
         params.user_id = rootStore.user.id;
       }
 
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
       await axios({
         url: `${HOST}/dishes/${this.dish?.id}`,
         method: "delete",
         params,
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`,
-        },
+        headers,
       });
 
       return Promise.resolve("Блюдо удалено.");
@@ -171,6 +180,10 @@ class DishPageStore implements ILocalStore {
         params.user_id = rootStore.user.id;
       }
 
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
       if (!tokenType || !accessToken) {
         throw new Error("Нет полного доступа к блюду.");
       }
@@ -179,21 +192,15 @@ class DishPageStore implements ILocalStore {
         url: `${HOST}/dishes/custom`,
         method: "get",
         params,
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`,
-        },
+        headers,
       });
 
       runInAction(() => {
-        const custom = result.data.find(
+        const custom = result.data.some(
           (customDish: DishType) => customDish.id === this.dish?.id,
         );
 
-        if (custom) {
-          this.setOwn(true);
-        } else {
-          this.setOwn(false);
-        }
+        this.setOwn(custom);
       });
 
       return Promise.resolve("");
