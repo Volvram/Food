@@ -67,6 +67,10 @@ class AddMealStore implements ILocalStore {
 
   requestSearchList = async () => {
     try {
+      const params: any = {};
+
+      params.search = this.search ?? "";
+
       const body: any = {};
 
       body.name_search = this.search ?? "";
@@ -76,9 +80,7 @@ class AddMealStore implements ILocalStore {
           ? await axios({
               url: `${HOST}/products`,
               method: "get",
-              params: {
-                search: this.search ?? "",
-              },
+              params,
             })
           : await axios({
               url: `${HOST}/dishes/search`,

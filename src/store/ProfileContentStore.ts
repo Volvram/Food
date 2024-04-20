@@ -241,22 +241,26 @@ class ProfileContentStore implements ILocalStore {
       const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
 
+      const params: any = {
+        entity_id: rootStore.user.id,
+        file_entity_marker: "USER",
+        user_id: rootStore.user.id,
+      };
+
       const formData = new FormData();
       formData.append("file", image);
+
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+        "Content-Type": "multipart/form-data",
+      };
 
       await axios({
         url: `${HOST}/files`,
         method: "post",
-        params: {
-          entity_id: rootStore.user.id,
-          file_entity_marker: "USER",
-          user_id: rootStore.user.id,
-        },
+        params,
         data: formData,
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`,
-          "Content-Type": "multipart/form-data",
-        },
+        headers,
       });
 
       return Promise.resolve("Аватар успешно обновлен!");
@@ -279,13 +283,15 @@ class ProfileContentStore implements ILocalStore {
         weight: this.tempWeight,
       };
 
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
       await axios({
         url: `${HOST}/users/${rootStore.user.id}`,
         method: "put",
         data: body,
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`,
-        },
+        headers,
       });
 
       return Promise.resolve("Профиль успешно отредактирован!");
@@ -300,12 +306,14 @@ class ProfileContentStore implements ILocalStore {
       const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
 
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
       await axios({
         url: `${HOST}/users/${rootStore.user.id}`,
         method: "delete",
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`,
-        },
+        headers,
       });
 
       return Promise.resolve("Профиль удален");

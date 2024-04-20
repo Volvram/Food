@@ -183,7 +183,7 @@ class CreateProductContentStore implements ILocalStore {
     try {
       const result = await axios({
         url: `${HOST}/serving_sizes`,
-        method: "GET",
+        method: "get",
       });
 
       runInAction(() => {
@@ -233,6 +233,10 @@ class CreateProductContentStore implements ILocalStore {
         );
       }
 
+      const params: any = {
+        user_id: rootStore.user.id,
+      };
+
       const product = {
         name: this.name,
         description: this.description,
@@ -247,31 +251,28 @@ class CreateProductContentStore implements ILocalStore {
         })),
       };
 
+      const headers = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
       const result = await axios({
         url: `${HOST}/products`,
         method: "post",
-        params: {
-          user_id: rootStore.user.id,
-        },
+        params,
         data: product,
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`,
-        },
+        headers,
       });
 
       if (this.image) {
+        params.id = result.data.id;
+
         this.loadImage(result.data.id, this.image).catch((error) => {
           alert(`При загрузке изображения возникла ошибка, попробуйте снова.`);
           axios({
             url: `${HOST}/products`,
             method: "delete",
-            params: {
-              user_id: rootStore.user.id,
-              id: result.data.id,
-            },
-            headers: {
-              Authorization: `${tokenType} ${accessToken}`,
-            },
+            params,
+            headers,
           });
 
           throw new Error(error);
@@ -290,22 +291,26 @@ class CreateProductContentStore implements ILocalStore {
       const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
 
+      const params = {
+        entity_id: productId,
+        file_entity_marker: "PRODUCT",
+        user_id: rootStore.user.id,
+      };
+
       const formData = new FormData();
       formData.append("file", image);
+
+      const headers = {
+        Authorization: `${tokenType} ${accessToken}`,
+        "Content-Type": "multipart/form-data",
+      };
 
       await axios({
         url: `${HOST}/files`,
         method: "post",
-        params: {
-          entity_id: productId,
-          file_entity_marker: "PRODUCT",
-          user_id: rootStore.user.id,
-        },
+        params,
         data: formData,
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`,
-          "Content-Type": "multipart/form-data",
-        },
+        headers,
       });
 
       return Promise.resolve("Изображение успешно обновлено!");

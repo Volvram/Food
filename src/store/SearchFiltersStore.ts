@@ -374,27 +374,27 @@ class SearchFiltersStore implements ILocalStore {
     try {
       const kitchen = await axios({
         url: `${HOST}/kitchen_types`,
-        method: "GET",
+        method: "get",
       });
 
       const dietaryNeeds = await axios({
         url: `${HOST}/dietary_needs`,
-        method: "GET",
+        method: "get",
       });
 
       const categories = await axios({
         url: `${HOST}/categories`,
-        method: "GET",
+        method: "get",
       });
 
       const cookingMethods = await axios({
         url: `${HOST}/cooking_methods`,
-        method: "GET",
+        method: "get",
       });
 
       const tags = await axios({
         url: `${HOST}/tags`,
-        method: "GET",
+        method: "get",
       });
 
       runInAction(() => {

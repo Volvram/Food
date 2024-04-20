@@ -88,6 +88,11 @@ class SearchContentStore implements ILocalStore {
     createdByUser?: boolean,
     search?: string | string[],
   ) {
+    const params: any = {
+      search: search ?? "",
+      creator_type_filter: createdByUser ? "CUSTOM" : "SYSTEM_CREATED",
+    };
+
     let body: any = {};
     if (filters) {
       body = {
@@ -122,12 +127,7 @@ class SearchContentStore implements ILocalStore {
           ? await axios({
               url: `${HOST}/products/search`,
               method: "get",
-              params: {
-                search: search ?? "",
-                creator_type_filter: createdByUser
-                  ? "CUSTOM"
-                  : "SYSTEM_CREATED",
-              },
+              params,
             })
           : await axios({
               url: `${HOST}/dishes/search`,

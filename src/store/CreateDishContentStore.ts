@@ -506,27 +506,27 @@ class CreateDishContentStore implements ILocalStore {
     try {
       const kitchen = await axios({
         url: `${HOST}/kitchen_types`,
-        method: "GET",
+        method: "get",
       });
 
       const dietaryNeeds = await axios({
         url: `${HOST}/dietary_needs`,
-        method: "GET",
+        method: "get",
       });
 
       const categories = await axios({
         url: `${HOST}/categories`,
-        method: "GET",
+        method: "get",
       });
 
       const cookingMethods = await axios({
         url: `${HOST}/cooking_methods`,
-        method: "GET",
+        method: "get",
       });
 
       const tags = await axios({
         url: `${HOST}/tags`,
-        method: "GET",
+        method: "get",
       });
 
       runInAction(() => {
@@ -571,17 +571,23 @@ class CreateDishContentStore implements ILocalStore {
   }
 
   async requestProducts() {
-    const result = await axios({
-      url: `${HOST}/products/search`,
-      method: "get",
-      params: {
-        search: this._productSearch ? this._productSearch : "null",
-      },
-    });
+    try {
+      const params: any = {};
 
-    runInAction(() => {
-      this.setProductSearchList(result.data);
-    });
+      params.search = this.productSearch ? this.productSearch : "null";
+
+      const result = await axios({
+        url: `${HOST}/products/search`,
+        method: "get",
+        params,
+      });
+
+      runInAction(() => {
+        this.setProductSearchList(result.data);
+      });
+    } catch (e) {
+      log("CreateDishContentStore: ", e);
+    }
   }
 
   setCurrentProduct(currentProduct: CurrentProductType | null) {
@@ -655,6 +661,10 @@ class CreateDishContentStore implements ILocalStore {
         );
       }
 
+      const params: any = {
+        user_id: rootStore.user.id,
+      };
+
       const dish = {
         name: this.name,
         description: this.description,
@@ -672,31 +682,28 @@ class CreateDishContentStore implements ILocalStore {
         nutrients: toJS(this.nutrients),
       };
 
+      const headers = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
       const result = await axios({
         url: `${HOST}/dishes`,
         method: "post",
+        params,
         data: dish,
-        params: {
-          user_id: rootStore.user.id,
-        },
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`,
-        },
+        headers,
       });
 
       if (this.image) {
+        params.id = result.data.id;
+
         this.loadImage(result.data.id, this.image).catch((error) => {
           alert(`При загрузке изображения возникла ошибка, попробуйте снова.`);
           axios({
             url: `${HOST}/dishes`,
             method: "delete",
-            params: {
-              user_id: rootStore.user.id,
-              id: result.data.id,
-            },
-            headers: {
-              Authorization: `${tokenType} ${accessToken}`,
-            },
+            params,
+            headers,
           });
 
           throw new Error(error);
@@ -715,22 +722,26 @@ class CreateDishContentStore implements ILocalStore {
       const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
 
+      const params: any = {
+        entity_id: dishId,
+        file_entity_marker: "DISH",
+        user_id: rootStore.user.id,
+      };
+
       const formData = new FormData();
       formData.append("file", image);
+
+      const headers = {
+        Authorization: `${tokenType} ${accessToken}`,
+        "Content-Type": "multipart/form-data",
+      };
 
       await axios({
         url: `${HOST}/files`,
         method: "post",
-        params: {
-          entity_id: dishId,
-          file_entity_marker: "DISH",
-          user_id: rootStore.user.id,
-        },
+        params,
         data: formData,
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`,
-          "Content-Type": "multipart/form-data",
-        },
+        headers,
       });
 
       return Promise.resolve("Изображение успешно обновлено!");

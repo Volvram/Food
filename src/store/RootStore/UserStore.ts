@@ -208,14 +208,16 @@ export default class UserStore {
       const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
 
+      const headers = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
       if (accessToken) {
         const payload = decodeToken(accessToken);
 
         const result = await axios(`${HOST}/users/${payload.user_id}`, {
           method: "get",
-          headers: {
-            Authorization: `${tokenType} ${accessToken}`,
-          },
+          headers,
         });
 
         runInAction(() => {
@@ -247,6 +249,10 @@ export default class UserStore {
     try {
       const refreshToken = localStorage.getItem("refresh_token");
 
+      const headers = {
+        "Content-Type": "application/x-www-form-urlencoded",
+      };
+
       if (refreshToken) {
         const body = new URLSearchParams();
         body.append("client_id", "diploma-backend");
@@ -256,9 +262,7 @@ export default class UserStore {
         const result = await axios(KeyCloakHost, {
           method: "post",
           data: body,
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
+          headers,
         });
 
         runInAction(async () => {
@@ -290,6 +294,7 @@ export default class UserStore {
             this.checkAuthorization(++attempt);
           },
           (e) => {
+            this.logOut();
             return Promise.reject(e);
           },
         );
