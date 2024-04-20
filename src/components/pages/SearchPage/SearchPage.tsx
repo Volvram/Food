@@ -4,6 +4,7 @@ import TuneIcon from "@mui/icons-material/Tune";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import cn from "classnames";
@@ -18,7 +19,6 @@ import { Button } from "@/components/Button";
 import Header from "@/components/Header/Header";
 import { Input } from "@/components/Input";
 import Meta from "@/components/Meta/Meta";
-import WithModal from "@/components/WithModal/WithModal";
 import { debounce } from "@/shared/debounce";
 import { FiltersType } from "@/store/SearchFiltersStore";
 import SearchPageStore from "@/store/SearchPageStore";
@@ -46,10 +46,11 @@ const SearchPage: React.FC = () => {
       />
       <main>
         <Header />
-        <WithModal
+        <SwipeableDrawer
+          anchor="right"
           open={searchPageStore.isOpenFilters}
           onClose={searchPageStore.toggleIsOpenFilters}
-          withCross={true}
+          onOpen={searchPageStore.toggleIsOpenFilters}
         >
           <SearchFilters
             onClose={() => {
@@ -59,8 +60,9 @@ const SearchPage: React.FC = () => {
               searchPageStore.setFilters(filters);
             }}
             filters={searchPageStore.filters}
+            withCross={true}
           />
-        </WithModal>
+        </SwipeableDrawer>
         <div className={styles.searchPage_body_search}>
           <Input
             value={router.query.search}
