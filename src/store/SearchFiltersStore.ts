@@ -6,6 +6,8 @@ import {
   action,
   computed,
   runInAction,
+  IReactionDisposer,
+  reaction,
 } from "mobx";
 
 import {
@@ -13,6 +15,7 @@ import {
   CookingMethodType,
   DietaryNeedsType,
   KitchenType,
+  ProductType,
   TagType,
 } from "./CreateDishContentStore";
 import { HOST } from "@/shared/host";
@@ -21,6 +24,18 @@ import { ILocalStore } from "@/utils/useLocalStore";
 
 export type FiltersType = {
   energy: {
+    from: number;
+    to: number;
+  };
+  protein: {
+    from: number;
+    to: number;
+  };
+  fat: {
+    from: number;
+    to: number;
+  };
+  carbs: {
     from: number;
     to: number;
   };
@@ -34,11 +49,14 @@ export type FiltersType = {
   cookingMethod: CookingMethodType;
   tags: TagType;
   removeDrinks: boolean;
-  products: string[];
+  products: ProductType[];
 };
 
 type PrivateFields =
   | "_energy"
+  | "_protein"
+  | "_fat"
+  | "_carbs"
   | "_allKitchen"
   | "_kitchen"
   | "_allDietaryNeeds"
@@ -51,11 +69,24 @@ type PrivateFields =
   | "_allTags"
   | "_tags"
   | "_removeDrinks"
-  | "_products"
-  | "_productInput";
+  | "_productInput"
+  | "_productSearchList"
+  | "_products";
 
 class SearchFiltersStore implements ILocalStore {
   private _energy = {
+    from: 0,
+    to: Infinity,
+  };
+  private _protein = {
+    from: 0,
+    to: Infinity,
+  };
+  private _fat = {
+    from: 0,
+    to: Infinity,
+  };
+  private _carbs = {
     from: 0,
     to: Infinity,
   };
@@ -89,14 +120,24 @@ class SearchFiltersStore implements ILocalStore {
     name: "Любые",
   };
   private _removeDrinks: boolean = false;
-  private _productInput: string | string[] = "";
-  private _products: string[] = [];
+  private _productInput: string = "";
+  private _productSearchList: ProductType[] = [];
+  private _products: ProductType[] = [];
 
-  constructor(filters: FiltersType | null) {
+  constructor() {
     makeObservable<SearchFiltersStore, PrivateFields>(this, {
       _energy: observable,
       setEnergy: action,
       energy: computed,
+      _protein: observable,
+      setProtein: action,
+      protein: computed,
+      _fat: observable,
+      setFat: action,
+      fat: computed,
+      _carbs: observable,
+      setCarbs: action,
+      carbs: computed,
       _allKitchen: observable,
       setAllKitchen: action,
       allKitchen: computed,
@@ -137,16 +178,15 @@ class SearchFiltersStore implements ILocalStore {
       _productInput: observable,
       setProductInput: action,
       productInput: computed,
+      _productSearchList: observable,
+      setProductSearchList: action,
+      productSearchList: computed,
       _products: observable,
       setProducts: action,
       products: computed,
       addProduct: action,
       removeProduct: action,
     });
-
-    if (filters) {
-      this.setAll(filters);
-    }
   }
 
   setEnergy(energy: { from: number; to: number }) {
@@ -156,6 +196,33 @@ class SearchFiltersStore implements ILocalStore {
 
   get energy() {
     return this._energy;
+  }
+
+  setProtein(protein: { from: number; to: number }) {
+    protein.to = protein.to === 0 ? Infinity : protein.to;
+    this._protein = protein;
+  }
+
+  get protein() {
+    return this._protein;
+  }
+
+  setFat(fat: { from: number; to: number }) {
+    fat.to = fat.to === 0 ? Infinity : fat.to;
+    this._fat = fat;
+  }
+
+  get fat() {
+    return this._fat;
+  }
+
+  setCarbs(carbs: { from: number; to: number }) {
+    carbs.to = carbs.to === 0 ? Infinity : carbs.to;
+    this._carbs = carbs;
+  }
+
+  get carbs() {
+    return this._carbs;
   }
 
   setAllKitchen(allKitchen: KitchenType[]) {
@@ -329,7 +396,7 @@ class SearchFiltersStore implements ILocalStore {
     this._removeDrinks = !this.removeDrinks;
   }
 
-  setProductInput(productInput: string | string[]) {
+  setProductInput(productInput: string) {
     this._productInput = productInput;
   }
 
@@ -337,7 +404,15 @@ class SearchFiltersStore implements ILocalStore {
     return this._productInput;
   }
 
-  setProducts(products: string[]) {
+  setProductSearchList(productSearchList: ProductType[]) {
+    this._productSearchList = productSearchList;
+  }
+
+  get productSearchList() {
+    return this._productSearchList;
+  }
+
+  setProducts(products: ProductType[]) {
     this._products = products;
   }
 
@@ -345,21 +420,45 @@ class SearchFiltersStore implements ILocalStore {
     return this._products;
   }
 
-  addProduct(product: string | string[]) {
-    if (product) {
-      Array.isArray(product)
-        ? this._products.push(...product)
-        : this._products.push(product);
+  addProduct(product: ProductType) {
+    const exists = this._products.find((prod) => prod.id == product.id);
+
+    if (!exists) {
+      this._products.push(product);
     }
   }
 
-  removeProduct(product: string) {
-    const index = this._products.findIndex((prod) => product == prod);
-    this._products.splice(index, 1);
+  removeProduct(productId: number) {
+    this.setProducts(
+      this._products.filter((product) => product.id != productId),
+    );
+  }
+
+  async requestProducts() {
+    try {
+      const params: any = {};
+
+      params.search = this.productInput ? this.productInput : "null";
+
+      const result = await axios({
+        url: `${HOST}/products/search`,
+        method: "get",
+        params,
+      });
+
+      runInAction(() => {
+        this.setProductSearchList(result.data);
+      });
+    } catch (e) {
+      log("SearchFiltersStore: ", e);
+    }
   }
 
   setAll(filters: FiltersType) {
     this.setEnergy(filters.energy);
+    this.setProtein(filters.protein);
+    this.setFat(filters.fat);
+    this.setCarbs(filters.carbs);
     this.setKitchen(filters.kitchen);
     this.setDietaryNeeds(filters.dietaryNeeds);
     this.setCategory(filters.category);
@@ -368,6 +467,51 @@ class SearchFiltersStore implements ILocalStore {
     this.setTags(filters.tags);
     this.setRemoveDrinks(filters.removeDrinks);
     this.setProducts(filters.products);
+  }
+
+  resetAll() {
+    this.setEnergy({
+      from: 0,
+      to: Infinity,
+    });
+    this.setProtein({
+      from: 0,
+      to: Infinity,
+    });
+    this.setFat({
+      from: 0,
+      to: Infinity,
+    });
+    this.setCarbs({
+      from: 0,
+      to: Infinity,
+    });
+    this.setKitchen({
+      id: 0,
+      name: "Любая",
+    });
+    this.setDietaryNeeds({
+      id: 0,
+      name: "Любые",
+    });
+    this.setCategory({
+      id: 0,
+      name: "Любая",
+    });
+    this.setCookingTime({
+      from: 0,
+      to: Infinity,
+    });
+    this.setCookingMethod({
+      id: 0,
+      name: "Любой",
+    });
+    this.setTags({
+      id: 0,
+      name: "Любые",
+    });
+    this.setRemoveDrinks(false);
+    this.setProducts([]);
   }
 
   async requestFilters() {
@@ -409,7 +553,16 @@ class SearchFiltersStore implements ILocalStore {
     }
   }
 
-  destroy() {}
+  destroy() {
+    this._handleProductInputChange();
+  }
+
+  readonly _handleProductInputChange: IReactionDisposer = reaction(
+    () => this._productInput,
+    () => {
+      this.requestProducts();
+    },
+  );
 }
 
 export default SearchFiltersStore;

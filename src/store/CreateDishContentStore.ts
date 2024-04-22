@@ -106,9 +106,9 @@ export type ServingSizeType = {
 };
 
 export type DishProductLinkType = {
-  dish_id?: number;
-  product_id: number;
-  product_name: string;
+  dishId?: number;
+  productId: number;
+  productName: string;
   unit: string;
   quantity: number;
 };
@@ -626,10 +626,10 @@ class CreateDishContentStore implements ILocalStore {
 
   addDishProductLink(dishProductLink: DishProductLinkType) {
     const exists = this._dishProductLinks.find(
-      (link) => link.product_id == dishProductLink.product_id,
+      (link) => link.productId == dishProductLink.productId,
     );
     if (exists) {
-      this.removeDishProductLink(dishProductLink.product_id);
+      this.removeDishProductLink(dishProductLink.productId);
       this._dishProductLinks.push(dishProductLink);
     } else {
       this._dishProductLinks.push(dishProductLink);
@@ -638,7 +638,7 @@ class CreateDishContentStore implements ILocalStore {
 
   removeDishProductLink(productId: number) {
     this.setDishProductLinks(
-      this._dishProductLinks.filter((link) => link.product_id != productId),
+      this._dishProductLinks.filter((link) => link.productId != productId),
     );
   }
 

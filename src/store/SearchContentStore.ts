@@ -109,6 +109,21 @@ class SearchContentStore implements ILocalStore {
           value1: filters.energy.from,
           value2: filters.energy.to == Infinity ? 100000 : filters.energy.to,
         },
+        protein_filter: {
+          filterType: "BETWEEN",
+          value1: filters.protein.from,
+          value2: filters.protein.to == Infinity ? 100000 : filters.protein.to,
+        },
+        fat_filter: {
+          filterType: "BETWEEN",
+          value1: filters.fat.from,
+          value2: filters.fat.to == Infinity ? 100000 : filters.fat.to,
+        },
+        carbs_filter: {
+          filterType: "BETWEEN",
+          value1: filters.carbs.from,
+          value2: filters.carbs.to == Infinity ? 100000 : filters.carbs.to,
+        },
       };
       filters.category.id != 0 && (body.category_ids = [filters.category.id]);
       filters.kitchen.id != 0 && (body.kitchen_type_ids = [filters.kitchen.id]);
@@ -117,6 +132,9 @@ class SearchContentStore implements ILocalStore {
       filters.dietaryNeeds.id != 0 &&
         (body.dietary_needs_ids = [filters.dietaryNeeds.id]);
       filters.tags.id != 0 && (body.tag_ids = [filters.tags.id]);
+      body.product_ids = filters.products.map((product) => {
+        return product.id;
+      });
     }
     body.name_search = search ?? "";
     body.creator_type_filter = createdByUser ? "CUSTOM" : "SYSTEM_CREATED";

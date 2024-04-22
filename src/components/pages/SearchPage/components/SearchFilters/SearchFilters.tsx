@@ -7,12 +7,15 @@ import Select from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import { observer } from "mobx-react-lite";
+import Image from "next/image";
 
 import style from "./styles.module.scss";
+import noImage from "@/assets/img/noImage.jpg";
 import { Button } from "@/components/Button";
 import { CommonAccordion } from "@/components/CommonAccordion";
 import { Input } from "@/components/Input";
 import { Range } from "@/components/Range";
+import { debounce } from "@/shared/debounce";
 import SearchFiltersStore, { FiltersType } from "@/store/SearchFiltersStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 
@@ -29,13 +32,26 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
   filters,
   withCross = false,
 }) => {
-  const searchFiltersStore = useLocalStore(
-    () => new SearchFiltersStore(filters),
-  );
+  const searchFiltersStore = useLocalStore(() => new SearchFiltersStore());
 
   React.useLayoutEffect(() => {
     searchFiltersStore.requestFilters();
   }, []);
+
+  React.useEffect(() => {
+    if (filters) {
+      searchFiltersStore.setAll(filters);
+    } else {
+      searchFiltersStore.resetAll();
+    }
+  }, [filters]);
+
+  const handleProductSearch = React.useCallback(
+    debounce((value: string) => {
+      searchFiltersStore.setProductInput(value);
+    }),
+    [],
+  );
 
   return (
     <div className={style.filtersearch}>
@@ -53,7 +69,10 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
         <>
           <div className={style.filtersearch_inner_accordion}>
             {/* @TODO сделать multidropdown */}
-            <CommonAccordion title="Калорийность">
+            <CommonAccordion title="Питательная ценность">
+              <Typography className={style.filtersearch_inner_accordion_label}>
+                Калорийность:
+              </Typography>
               <Range
                 from="От (Ккал)"
                 defaultFrom={searchFiltersStore.energy.from}
@@ -68,6 +87,72 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
                 onToChange={(value) => {
                   searchFiltersStore.setEnergy({
                     ...searchFiltersStore.energy,
+                    to: value,
+                  });
+                }}
+                className={style.filtersearch_inner_accordion_range}
+              />
+              <Typography className={style.filtersearch_inner_accordion_label}>
+                Белки:
+              </Typography>
+              <Range
+                from="От (мг)"
+                defaultFrom={searchFiltersStore.protein.from}
+                to="До (мг)"
+                defaultTo={searchFiltersStore.protein.to}
+                onFromChange={(value) => {
+                  searchFiltersStore.setProtein({
+                    ...searchFiltersStore.protein,
+                    from: value,
+                  });
+                }}
+                onToChange={(value) => {
+                  searchFiltersStore.setProtein({
+                    ...searchFiltersStore.protein,
+                    to: value,
+                  });
+                }}
+                className={style.filtersearch_inner_accordion_range}
+              />
+              <Typography className={style.filtersearch_inner_accordion_label}>
+                Жиры:
+              </Typography>
+              <Range
+                from="От (мг)"
+                defaultFrom={searchFiltersStore.fat.from}
+                to="До (мг)"
+                defaultTo={searchFiltersStore.fat.to}
+                onFromChange={(value) => {
+                  searchFiltersStore.setFat({
+                    ...searchFiltersStore.fat,
+                    from: value,
+                  });
+                }}
+                onToChange={(value) => {
+                  searchFiltersStore.setFat({
+                    ...searchFiltersStore.fat,
+                    to: value,
+                  });
+                }}
+                className={style.filtersearch_inner_accordion_range}
+              />
+              <Typography className={style.filtersearch_inner_accordion_label}>
+                Углеводы:
+              </Typography>
+              <Range
+                from="От (мг)"
+                defaultFrom={searchFiltersStore.carbs.from}
+                to="До (мг)"
+                defaultTo={searchFiltersStore.carbs.to}
+                onFromChange={(value) => {
+                  searchFiltersStore.setCarbs({
+                    ...searchFiltersStore.carbs,
+                    from: value,
+                  });
+                }}
+                onToChange={(value) => {
+                  searchFiltersStore.setCarbs({
+                    ...searchFiltersStore.carbs,
                     to: value,
                   });
                 }}
@@ -211,7 +296,7 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
             {/* --------------------------------- */}
           </div>
           <div className={style.filtersearch_inner_switch}>
-            <Typography>Убрать напитки</Typography>
+            <span>Убрать напитки</span>
             <Switch
               checked={searchFiltersStore.removeDrinks}
               onChange={() => {
@@ -220,43 +305,64 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
             />
           </div>
 
-          <div className={style.filtersearch_inner_control}>
-            <Input
-              onChange={(value: string | string[]) => {
-                searchFiltersStore.setProductInput(value);
-              }}
-              onEnterClick={() => {
-                searchFiltersStore.addProduct(searchFiltersStore.productInput);
-                searchFiltersStore.setProductInput("");
-              }}
-              value={searchFiltersStore.productInput}
-              placeholder="Введите продукт"
-              className={style.filtersearch_inner_control_input}
-              containerClassName={
-                style.filtersearch_inner_control_inputContainer
-              }
-            />
-            <Button
-              onClick={() => {
-                searchFiltersStore.addProduct(searchFiltersStore.productInput);
-                searchFiltersStore.setProductInput("");
-              }}
-            >
-              Добавить
-            </Button>
+          <Input
+            onChange={handleProductSearch}
+            value={searchFiltersStore.productInput}
+            placeholder="Введите продукт"
+            className={style.filtersearch_inner_input}
+            containerClassName={style.filtersearch_inner_inputContainer}
+          />
+          <div className={style.filtersearch_inner_searchList}>
+            {searchFiltersStore.productSearchList.length ? (
+              searchFiltersStore.productSearchList.map((product) => {
+                return (
+                  <div
+                    key={product.id}
+                    onClick={() => {
+                      searchFiltersStore.addProduct(product);
+                      searchFiltersStore.setProductInput("");
+                    }}
+                    className={style.filtersearch_inner_searchList_dish}
+                  >
+                    <span
+                      className={style.filtersearch_inner_searchList_dish_title}
+                    >
+                      {product.name}
+                    </span>
+                    {product.image ? (
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className={style.filtersearch_inner_searchList_dish_img}
+                      />
+                    ) : (
+                      <Image
+                        src={noImage}
+                        alt={product.name}
+                        className={style.filtersearch_inner_searchList_dish_img}
+                      />
+                    )}
+                  </div>
+                );
+              })
+            ) : (
+              <div className={style.filtersearch_inner_searchList_empty}>
+                Продукты не найдены
+              </div>
+            )}
           </div>
 
           <div className={style.filtersearch_inner_container}>
             {searchFiltersStore.products.map((product) => {
               return (
                 <div
-                  key={product}
+                  key={product.id}
                   className={style.filtersearch_inner_container_button}
                 >
-                  {product}
+                  {product.name}
                   <CloseIcon
                     onClick={() => {
-                      searchFiltersStore.removeProduct(product);
+                      searchFiltersStore.removeProduct(product.id);
                     }}
                     className={style.filtersearch_inner_container_icon}
                   />
@@ -270,7 +376,7 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
           <Button
             onClick={() => {
               onSubmit(null);
-              onClose();
+              searchFiltersStore.resetAll();
             }}
           >
             Сбросить
@@ -279,6 +385,9 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
             onClick={() => {
               const filters = {
                 energy: searchFiltersStore.energy,
+                protein: searchFiltersStore.protein,
+                fat: searchFiltersStore.fat,
+                carbs: searchFiltersStore.carbs,
                 kitchen: searchFiltersStore.kitchen,
                 dietaryNeeds: searchFiltersStore.dietaryNeeds,
                 category: searchFiltersStore.category,

@@ -15,7 +15,10 @@
      &_inner{
         max-width: 100%;
         position: relative;
-        padding: 20px;
+        padding-top: 5px;
+        padding-bottom: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -28,39 +31,83 @@
         }
 
         &_accordion {
+            &_label {
+                margin-top: 10px;
+                margin-bottom: 5px;
+            }
+
             &_range {
+                width: 250px;
                 display: flex;
+                gap: 30px;
+                font-size: $p2;
             }
         }
 
         &_switch{
+            font-size: $p1;
             display: flex;
             justify-content: flex-start;
             align-items: center;
             gap: 50px;
         }
 
-        &_control {
+        &_input {
+            padding: 10px 40px 10px 19px;
+            width: 100%;
+            border-radius: 20px;
+            border: 1px solid $very-light-gray;
+        }
+
+        &_inputContainer {
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+
+        &_searchList {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            width: 100%;
+    
             display: flex;
-            align-items: center;
-            &_input {
-                padding: 10px 40px 10px 19px;
-                width: 100%;
-                border-radius: 20px;
-                border: 1px solid $very-light-gray;
+            flex-direction: column;
+    
+            &_dish {
+                cursor: pointer;
+                border-bottom: 1px solid $light-gray;
+                display: flex;
+                align-items: center;
+    
+                &:hover {
+                    background-color: $very-light-gray;
+                }
+    
+                &_title {
+                    padding: 5px 5px;
+                    font-size: $p2;
+                }
+    
+                &_img {
+                    margin-left: auto;
+                    width: 40px;
+                    height: 40px;
+                    object-fit: cover;
+                }
             }
     
-            &_inputContainer {
-                margin-left: auto;
-                margin-right: auto;
-                width: 100%;
+            &_empty {
+                font-size: $p2;
+                color: $gray;
+                border-bottom: 1px solid $light-gray;
             }
         }
 
         &_container{
             padding: 5px;
-            max-width: 410px;
-            width: 100%;
+            width: 50vw;
             min-height: 100px; 
             border-radius: 16px;
             -webkit-border-radius: 16px;
@@ -86,7 +133,7 @@
                 background: #6B7CFF;
                 
                 text-align: center;
-                font-size: $h3;
+                font-size: $p2;
                 font-style: normal;
                 font-weight: 400;
                 line-height: 150%;
@@ -112,12 +159,20 @@
 
 @media screen and (max-width: $tablet) {
     .filtersearch{
-        &_inner{
-           &_accordion {
-               &_range {
-                flex-direction: column;
-               }
-           }
+        &_inner {
+            &_container {
+                width: 70vw;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: $phone) {
+    .filtersearch{
+        &_inner {
+            &_container {
+                width: 80vw;
+            }
         }
     }
 }

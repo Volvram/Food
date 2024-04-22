@@ -363,9 +363,8 @@ const CreateDishContent: React.FC = () => {
                   onClick={() => {
                     if (createDishContentStore.currentProduct) {
                       const link = {
-                        product_id: createDishContentStore.currentProduct.id,
-                        product_name:
-                          createDishContentStore.currentProduct.name,
+                        productId: createDishContentStore.currentProduct.id,
+                        productName: createDishContentStore.currentProduct.name,
                         unit: "gramms",
                         quantity:
                           createDishContentStore.currentProduct.quantity,
@@ -388,12 +387,12 @@ const CreateDishContent: React.FC = () => {
                   (dishProductLink) => {
                     return (
                       <div
-                        key={dishProductLink.product_id}
+                        key={dishProductLink.productId}
                         className={
                           styles.createDishContent_products_selected_product
                         }
                       >
-                        <span>{dishProductLink.product_name}</span>
+                        <span>{dishProductLink.productName}</span>
                         <span>({dishProductLink.quantity} г.)</span>
                       </div>
                     );

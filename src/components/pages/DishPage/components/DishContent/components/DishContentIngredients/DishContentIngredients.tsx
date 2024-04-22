@@ -18,11 +18,11 @@ const DishContentIngredients: React.FC<DishContentIngredientsProps> = ({
           dish.dishProductLinks.map((ing) => {
             return (
               <div
-                key={ing.product_name}
+                key={ing.productName}
                 className={styles.ingredients_container_ingredient}
               >
                 <span className={styles.ingredients_container_ingredient_title}>
-                  {ing.product_name}
+                  {ing.productName}
                 </span>
                 <div className={styles.ingredients_container_ingredient_line} />
                 <span
