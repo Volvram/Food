@@ -9,11 +9,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import styles from "./styles.module.scss";
-import vkIcon from "@/assets/img/vk_icon.png";
+import googleIcon from "@/assets/img/google_icon.png";
+import mailruIcon from "@/assets/img/mailru_icon.png";
+import yandexIcon from "@/assets/img/yandex_icon.png";
 import { Button } from "@/components/Button";
 import { CalendarInput } from "@/components/CalendarInput";
 import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
+import { yandexAuthHost } from "@/shared/host";
 import RegisterContentStore from "@/store/RegisterContentStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 
@@ -38,14 +41,38 @@ const RegisterContent: React.FC = () => {
     <div className={styles.registerContent}>
       <div className={styles.registerContent_window}>
         <h1 className={styles.registerContent_window_h}>Присоединяйся</h1>
-        <div className={styles.registerContent_window_alternative}>
+        <Link
+          href={yandexAuthHost}
+          target="_self"
+          className={styles.registerContent_window_alternative}
+        >
           <Image
-            src={vkIcon}
+            src={yandexIcon}
             className={styles.registerContent_window_alternative_icon}
-            alt="vk"
+            alt="yandex"
           />
           <span className={styles.registerContent_window_alternative_text}>
-            Зарегистрироваться через VK
+            Зарегистрироваться через <strong>Яндекс</strong>
+          </span>
+        </Link>
+        <div className={styles.registerContent_window_alternative}>
+          <Image
+            src={mailruIcon}
+            className={styles.registerContent_window_alternative_icon}
+            alt="mailru"
+          />
+          <span className={styles.registerContent_window_alternative_text}>
+            Зарегистрироваться через <strong>Mail.ru</strong>
+          </span>
+        </div>
+        <div className={styles.registerContent_window_alternative}>
+          <Image
+            src={googleIcon}
+            className={styles.registerContent_window_alternative_icon}
+            alt="google"
+          />
+          <span className={styles.registerContent_window_alternative_text}>
+            Зарегистрироваться через <strong>Google</strong>
           </span>
         </div>
         <div className={styles.registerContent_window_or}>

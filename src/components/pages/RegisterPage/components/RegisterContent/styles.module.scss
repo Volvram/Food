@@ -4,7 +4,7 @@
     min-height: 100%;
 
     &_window {
-        margin-top: 3%;
+        margin-top: 1%;
         margin-left: auto;
         margin-right: auto;
         margin-bottom: 2%;
@@ -30,14 +30,19 @@
 
         &_alternative {
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 10px;
             padding: 20px 90px;
             border-radius: 50px;
             border: 1px solid $very-light-gray;
             box-shadow: $light-shadow;
+            text-decoration: none;
 
             display: flex;
             align-items: center;
+
+            &:hover {
+                background-color: $very-light-gray;
+            }
 
             &_icon {
                 margin-right: 8px;
@@ -54,7 +59,7 @@
         }
 
         &_or {
-            margin: 24px 0;
+            margin: 16px 0;
             display: flex;
             align-items: center;
 
@@ -100,14 +105,14 @@
         }
 
         &_inputContainer {
-            margin-top: 12px;
-            margin-bottom: 25px;
+            margin-top: 6px;
+            margin-bottom: 12px;
             width: 100%;
         }
 
         &_button {
-            margin-top: 20px;
-            margin-bottom: 20px;
+            margin-top: 12px;
+            margin-bottom: 12px;
             padding: 16px 40px;
             width: 100%;
             border-radius: 16px;
@@ -116,6 +121,41 @@
             font-style: normal;
             font-weight: 700;
             line-height: 150%;
+        }
+
+        &_hr {
+            margin-bottom: 12px;
+            width: 100%;
+            border-bottom: 1px solid $very-light-gray;
+        }
+
+        &_personal {
+            &_indexes {
+                margin-bottom: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                &_index {
+                    &_counter {
+                        margin-top: 6px;
+                        width: 50%;
+                    }
+                }
+            }
+        }
+
+        &_block {
+            margin-top: 6px;
+            margin-bottom: 12px;
+        }
+
+        &_check{
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            align-items: center;
         }
 
         &_links {
@@ -128,42 +168,6 @@
                 color: $light-blue;
                 text-decoration: underline;
             }
-        }
-
-        &_hr {
-            margin-bottom: 20px;
-            width: 100%;
-            border-bottom: 1px solid $very-light-gray;
-        }
-
-        &_personal {
-            &_indexes {
-                margin-bottom: 25px;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-
-                &_index {
-                    &_counter {
-                        margin-top: 12px;
-                        width: 50%;
-                        border: 1px solid #EDF2F7;
-                    }
-                }
-            }
-        }
-
-        &_block {
-            margin-top: 12px;
-            margin-bottom: 25px;
-        }
-
-        &_check{
-            margin-bottom: 25px;
-            display: flex;
-            flex-direction: row;
-            gap: 40px;
-            align-items: center;
         }
     }
 }

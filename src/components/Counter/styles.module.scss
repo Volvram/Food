@@ -1,27 +1,28 @@
 @import "@/styles/variables.scss";
 
 .counter {
-    padding-left: 15px;
-    padding-right: 15px;
-    border-radius: 20px;
-    background-color: $white;
-    box-shadow: $light-shadow;
+    position: relative;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     &_input {
-        min-height: 20px;
         padding-top: 10px;
         padding-bottom: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
         width: 100%;
-        background-color: inherit;
-        border: 0;
+        min-height: 20px;
+        background-color: $white;
+        border-radius: 50px;
+        border: 1px solid $very-light-gray;
+        box-shadow: $light-shadow;
         font-size: $p1;
 
         &:focus {
             outline-width: 0;
+            border: 1px solid $black-primary;
         }
 
         &::-webkit-inner-spin-button {
@@ -37,6 +38,15 @@
     }
 
     &_controller {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+
+        right: 6px;
+        // align-center
+        top: 50%;
+        transform: translateY(-50%);
+
         display: flex;
         flex-direction: column;
         gap: 10px;

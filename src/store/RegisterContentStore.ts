@@ -145,7 +145,7 @@ class RegisterContentStore implements ILocalStore {
     return this._activityLevel;
   }
 
-  async requestRegister() {
+  requestRegister = async () => {
     try {
       if (this._password != this._repeatPassword) {
         throw new Error("Повторный пароль не совпадает");
@@ -175,7 +175,7 @@ class RegisterContentStore implements ILocalStore {
 
       return Promise.reject(e);
     }
-  }
+  };
 
   destroy() {}
 }

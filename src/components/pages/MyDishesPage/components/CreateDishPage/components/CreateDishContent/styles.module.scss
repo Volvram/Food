@@ -35,6 +35,7 @@
 
         &:focus {
             outline-width: 0;
+            border: 1px solid $black-primary;
         }
     }
 
@@ -64,9 +65,8 @@
     }
 
     &_counter {
-        width: 70px;
+        width: 100px;
         margin-left: 10px;
-        border: 1px solid $gray;
     }
 
     &_options {

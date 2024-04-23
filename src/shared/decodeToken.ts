@@ -7,6 +7,7 @@ export type PayloadType = {
   sub: string;
   token_type: string;
   user_id: number;
+  email: string;
 };
 
 export const decodeToken = (accessToken: string): PayloadType => {

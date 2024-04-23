@@ -1,0 +1,1 @@
+export { CompleteAltRegister } from "./CompleteAltRegister";

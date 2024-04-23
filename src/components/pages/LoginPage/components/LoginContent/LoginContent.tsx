@@ -7,7 +7,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import styles from "./styles.module.scss";
-import vkIcon from "@/assets/img/vk_icon.png";
+import googleIcon from "@/assets/img/google_icon.png";
+import mailruIcon from "@/assets/img/mailru_icon.png";
+import yandexIcon from "@/assets/img/yandex_icon.png";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import LoginContentStore from "@/store/LoginContentStore";
@@ -40,12 +42,32 @@ const LoginContent: React.FC = () => {
         <h1 className={styles.loginContent_block_h}>Давайте начнем</h1>
         <div className={styles.loginContent_block_alternative}>
           <Image
-            src={vkIcon}
+            src={yandexIcon}
             className={styles.loginContent_block_alternative_icon}
-            alt="vk"
+            alt="yandex"
           />
           <span className={styles.loginContent_block_alternative_text}>
-            Авторизоваться через VK
+            Авторизоваться через <strong>Яндекс</strong>
+          </span>
+        </div>
+        <div className={styles.loginContent_block_alternative}>
+          <Image
+            src={mailruIcon}
+            className={styles.loginContent_block_alternative_icon}
+            alt="mailru"
+          />
+          <span className={styles.loginContent_block_alternative_text}>
+            Авторизоваться через <strong>Mail.ru</strong>
+          </span>
+        </div>
+        <div className={styles.loginContent_block_alternative}>
+          <Image
+            src={googleIcon}
+            className={styles.loginContent_block_alternative_icon}
+            alt="google"
+          />
+          <span className={styles.loginContent_block_alternative_text}>
+            Авторизоваться через <strong>Google</strong>
           </span>
         </div>
         <div className={styles.loginContent_block_or}>
