@@ -11,7 +11,7 @@ import { Button } from "../Button";
 import { CalendarInput } from "../CalendarInput";
 import { Counter } from "../Counter";
 import styles from "./styles.module.scss";
-import { HOST } from "@/shared/host";
+import { HOST } from "@/shared/hosts";
 
 type CompleteAltRegisterProps = {
   email: string | null;

@@ -8,7 +8,7 @@ import {
 } from "mobx";
 
 import { ProductType } from "./CreateDishContentStore";
-import { HOST } from "@/shared/host";
+import { HOST } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 

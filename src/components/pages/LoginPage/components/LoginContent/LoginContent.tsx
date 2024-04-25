@@ -12,6 +12,7 @@ import mailruIcon from "@/assets/img/mailru_icon.png";
 import yandexIcon from "@/assets/img/yandex_icon.png";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
+import { googleAuthHost, mailruAuthHost, yandexAuthHost } from "@/shared/hosts";
 import LoginContentStore from "@/store/LoginContentStore";
 import rootStore from "@/store/RootStore/instance";
 import { useLocalStore } from "@/utils/useLocalStore";
@@ -40,7 +41,11 @@ const LoginContent: React.FC = () => {
     <div className={styles.loginContent}>
       <div className={styles.loginContent_block}>
         <h1 className={styles.loginContent_block_h}>Давайте начнем</h1>
-        <div className={styles.loginContent_block_alternative}>
+        <Link
+          href={yandexAuthHost}
+          target="_self"
+          className={styles.loginContent_block_alternative}
+        >
           <Image
             src={yandexIcon}
             className={styles.loginContent_block_alternative_icon}
@@ -49,8 +54,12 @@ const LoginContent: React.FC = () => {
           <span className={styles.loginContent_block_alternative_text}>
             Авторизоваться через <strong>Яндекс</strong>
           </span>
-        </div>
-        <div className={styles.loginContent_block_alternative}>
+        </Link>
+        <Link
+          href={mailruAuthHost}
+          target="_self"
+          className={styles.loginContent_block_alternative}
+        >
           <Image
             src={mailruIcon}
             className={styles.loginContent_block_alternative_icon}
@@ -59,8 +68,12 @@ const LoginContent: React.FC = () => {
           <span className={styles.loginContent_block_alternative_text}>
             Авторизоваться через <strong>Mail.ru</strong>
           </span>
-        </div>
-        <div className={styles.loginContent_block_alternative}>
+        </Link>
+        <Link
+          href={googleAuthHost}
+          target="_self"
+          className={styles.loginContent_block_alternative}
+        >
           <Image
             src={googleIcon}
             className={styles.loginContent_block_alternative_icon}
@@ -69,7 +82,7 @@ const LoginContent: React.FC = () => {
           <span className={styles.loginContent_block_alternative_text}>
             Авторизоваться через <strong>Google</strong>
           </span>
-        </div>
+        </Link>
         <div className={styles.loginContent_block_or}>
           <div className={styles.loginContent_block_or_hr} />
           <span className={styles.loginContent_block_or_text}>ИЛИ</span>

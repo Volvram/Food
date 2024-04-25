@@ -12,7 +12,7 @@ import {
 import { ProductType } from "./CreateDishContentStore";
 import rootStore from "./RootStore/instance";
 import { DishType } from "./SearchContentStore";
-import { HOST } from "@/shared/host";
+import { HOST } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 

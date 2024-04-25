@@ -8,7 +8,7 @@ import {
 } from "mobx";
 
 import { decodeToken } from "@/shared/decodeToken";
-import { HOST, KeyCloakHost } from "@/shared/host";
+import { HOST, KeyCloakHost } from "@/shared/hosts";
 
 export type UserType = {
   id: number;

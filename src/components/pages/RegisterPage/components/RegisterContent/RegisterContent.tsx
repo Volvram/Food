@@ -16,7 +16,7 @@ import { Button } from "@/components/Button";
 import { CalendarInput } from "@/components/CalendarInput";
 import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
-import { yandexAuthHost } from "@/shared/host";
+import { googleAuthHost, mailruAuthHost, yandexAuthHost } from "@/shared/hosts";
 import RegisterContentStore from "@/store/RegisterContentStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 
@@ -55,7 +55,11 @@ const RegisterContent: React.FC = () => {
             Зарегистрироваться через <strong>Яндекс</strong>
           </span>
         </Link>
-        <div className={styles.registerContent_window_alternative}>
+        <Link
+          href={mailruAuthHost}
+          target="_self"
+          className={styles.registerContent_window_alternative}
+        >
           <Image
             src={mailruIcon}
             className={styles.registerContent_window_alternative_icon}
@@ -64,8 +68,12 @@ const RegisterContent: React.FC = () => {
           <span className={styles.registerContent_window_alternative_text}>
             Зарегистрироваться через <strong>Mail.ru</strong>
           </span>
-        </div>
-        <div className={styles.registerContent_window_alternative}>
+        </Link>
+        <Link
+          href={googleAuthHost}
+          target="_self"
+          className={styles.registerContent_window_alternative}
+        >
           <Image
             src={googleIcon}
             className={styles.registerContent_window_alternative_icon}
@@ -74,7 +82,7 @@ const RegisterContent: React.FC = () => {
           <span className={styles.registerContent_window_alternative_text}>
             Зарегистрироваться через <strong>Google</strong>
           </span>
-        </div>
+        </Link>
         <div className={styles.registerContent_window_or}>
           <div className={styles.registerContent_window_or_hr} />
           <span className={styles.registerContent_window_or_text}>ИЛИ</span>

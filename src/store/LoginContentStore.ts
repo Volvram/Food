@@ -9,7 +9,7 @@ import {
 
 import { CookBookType } from "./FavouritePageStore";
 import rootStore from "./RootStore/instance";
-import { HOST, KeyCloakHost } from "@/shared/host";
+import { HOST, KeyCloakHost } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 

@@ -13,7 +13,7 @@ import {
 
 import rootStore from "./RootStore/instance";
 import { UserType } from "./RootStore/UserStore";
-import { HOST } from "@/shared/host";
+import { HOST } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 

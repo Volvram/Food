@@ -5,13 +5,20 @@ import { useSearchParams } from "next/navigation";
 
 import { log } from "./log";
 import { decodeToken } from "@/shared/decodeToken";
-import { HOST, KeyCloakHost } from "@/shared/host";
+import { HOST, KeyCloakHost, localhost } from "@/shared/hosts";
+import { services } from "@/shared/services";
 
-const OAuth = async (code: string | null): Promise<string | null> => {
+const OAuth = async (
+  code: string | null,
+  service: string | null,
+): Promise<string | null> => {
   try {
-    const authToken = await requestAuthToken(code);
+    const authToken = await requestAuthToken(code, service);
 
-    const exchanged = await exchangeAuthToAccess(authToken.access_token);
+    const exchanged = await exchangeAuthToAccess(
+      authToken.access_token,
+      service,
+    );
 
     if (!exchanged) {
       throw new Error("Ошибка получения токена доступа");
@@ -33,17 +40,20 @@ const OAuth = async (code: string | null): Promise<string | null> => {
   }
 };
 
-const requestAuthToken = async (code: string | null): Promise<any> => {
+const requestAuthToken = async (
+  code: string | null,
+  service: string | null,
+): Promise<any> => {
   try {
-    if (!code) {
-      throw new Error("Нет кода");
+    if (!code || !service) {
+      throw new Error("Отсутствуют данные");
     }
     const body = {
       code: code,
-      client_id: "808964bd868e4a2d8be23d929269a011",
-      client_secret: "b4e698fc84224f43974bdd9bae81903d",
-      redirect_uri: "http://localhost:3000",
-      grant_type: "authorization_code",
+      client_id: services[service as keyof typeof services].clientId,
+      client_secret: services[service as keyof typeof services].clientSecret,
+      redirect_uri: services[service as keyof typeof services].redirectUri,
+      grant_type: services[service as keyof typeof services].grantType,
     };
 
     const headers = {
@@ -51,7 +61,7 @@ const requestAuthToken = async (code: string | null): Promise<any> => {
     };
 
     const token = await axios({
-      url: "https://oauth.yandex.ru/token",
+      url: services[service as keyof typeof services].tokenHost,
       method: "post",
       data: body,
       headers: headers,
@@ -63,7 +73,10 @@ const requestAuthToken = async (code: string | null): Promise<any> => {
   }
 };
 
-const exchangeAuthToAccess = async (authToken: string): Promise<any> => {
+const exchangeAuthToAccess = async (
+  authToken: string,
+  service: string | null,
+): Promise<any> => {
   try {
     const headers = {
       "Content-type": "application/x-www-form-urlencoded",
@@ -74,7 +87,7 @@ const exchangeAuthToAccess = async (authToken: string): Promise<any> => {
       grant_type: "urn:ietf:params:oauth:grant-type:token-exchange",
       subject_token: authToken,
       subject_token_type: "urn:ietf:params:oauth:token-type:access_token",
-      subject_issuer: "yandex",
+      subject_issuer: service,
     };
 
     const result = await axios({
@@ -126,14 +139,18 @@ export const useAuthCode = (): [
   const [userEmail, setUserEmail] = React.useState<string | null>(null);
 
   React.useEffect(() => {
-    if (searchParams && searchParams.get("code")) {
-      OAuth(searchParams.get("code")).then(
+    if (
+      searchParams &&
+      searchParams.get("code") &&
+      searchParams.get("service")
+    ) {
+      OAuth(searchParams.get("code"), searchParams.get("service")).then(
         (response) => {
           if (response) {
             setNeedsRegister(true);
             setUserEmail(response);
           } else {
-            window.location.href = "http://localhost:3000/";
+            window.location.href = localhost;
           }
         },
         (e) => {

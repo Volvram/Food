@@ -35,6 +35,7 @@
             border-radius: 50px;
             border: 1px solid $very-light-gray;
             box-shadow: $light-shadow;
+            text-decoration: none;
 
             display: flex;
             align-items: center;
@@ -50,7 +51,7 @@
             }
 
             &_text {
-                color: $gray;
+                color: $black-primary;
                 font-size: $p1;
                 font-style: normal;
                 font-weight: 300;

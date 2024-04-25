@@ -17,7 +17,7 @@ import {
 } from "./CreateDishContentStore";
 import { UserType } from "./RootStore/UserStore";
 import { FiltersType } from "./SearchFiltersStore";
-import { HOST } from "@/shared/host";
+import { HOST } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 

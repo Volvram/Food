@@ -10,7 +10,7 @@ import {
 } from "mobx";
 
 import rootStore from "./RootStore/instance";
-import { HOST } from "@/shared/host";
+import { HOST } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
