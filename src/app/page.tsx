@@ -41,20 +41,20 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <Header />
-      {needsRegister && (
-        <WithModal
-          open={needsRegister}
-          onClose={manageAltRegisterModal}
-          withCross={true}
-        >
-          <CompleteAltRegister
-            email={userEmail}
-            onClose={() => {
-              setNeedsRegister(false);
-            }}
-          />
-        </WithModal>
-      )}
+
+      <WithModal
+        open={needsRegister}
+        onClose={manageAltRegisterModal}
+        withCross={true}
+      >
+        <CompleteAltRegister
+          email={userEmail}
+          onClose={() => {
+            setNeedsRegister(false);
+          }}
+        />
+      </WithModal>
+
       <div className={styles.page}>
         <div className={styles.page_features}>
           <div className={styles.page_features_section}>

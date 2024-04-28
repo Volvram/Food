@@ -11,7 +11,9 @@ import googleIcon from "@/assets/img/google_icon.png";
 import mailruIcon from "@/assets/img/mailru_icon.png";
 import yandexIcon from "@/assets/img/yandex_icon.png";
 import { Button } from "@/components/Button";
+import ChangePassword from "@/components/ChangePassword/ChangePassword";
 import { Input } from "@/components/Input";
+import WithModal from "@/components/WithModal/WithModal";
 import { googleAuthHost, mailruAuthHost, yandexAuthHost } from "@/shared/hosts";
 import LoginContentStore from "@/store/LoginContentStore";
 import rootStore from "@/store/RootStore/instance";
@@ -39,6 +41,16 @@ const LoginContent: React.FC = () => {
 
   return (
     <div className={styles.loginContent}>
+      <WithModal
+        open={loginContentStore.forgotPassword}
+        onClose={() => {
+          loginContentStore.setForgotPassword(false);
+        }}
+        withCross={true}
+      >
+        <ChangePassword />
+      </WithModal>
+
       <div className={styles.loginContent_block}>
         <h1 className={styles.loginContent_block_h}>Давайте начнем</h1>
         <Link
@@ -118,7 +130,12 @@ const LoginContent: React.FC = () => {
           Войти
         </Button>
         <div className={styles.loginContent_block_links}>
-          <div className={styles.loginContent_block_links_link}>
+          <div
+            onClick={() => {
+              loginContentStore.setForgotPassword(true);
+            }}
+            className={styles.loginContent_block_links_link}
+          >
             Забыли пароль?
           </div>
           <Link

@@ -2,6 +2,7 @@
 
 .counter {
     position: relative;
+    min-width: 70px;
 
     display: flex;
     align-items: center;
@@ -29,6 +30,19 @@
             -webkit-appearance: none;
             margin: 0;
         }
+    }
+
+    &_count {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+        width: 100%;
+        min-height: 20px;
+        background-color: $white;
+        border-radius: 50px;
+        border: 1px solid $very-light-gray;
+        box-shadow: $light-shadow;
     }
 
     & span {

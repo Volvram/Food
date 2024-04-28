@@ -13,11 +13,12 @@ import { HOST, KeyCloakHost } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
-type PrivateFields = "_email" | "_password";
+type PrivateFields = "_email" | "_password" | "_forgotPassword";
 
 class LoginContentStore implements ILocalStore {
   private _email: string = "";
   private _password: string = "";
+  private _forgotPassword = false;
 
   constructor() {
     makeObservable<LoginContentStore, PrivateFields>(this, {
@@ -27,6 +28,9 @@ class LoginContentStore implements ILocalStore {
       _password: observable,
       setPassword: action,
       password: computed,
+      _forgotPassword: observable,
+      setForgotPassword: action,
+      forgotPassword: computed,
     });
   }
 
@@ -44,6 +48,14 @@ class LoginContentStore implements ILocalStore {
 
   get password() {
     return this._password;
+  }
+
+  setForgotPassword(forgotPassword: boolean) {
+    this._forgotPassword = forgotPassword;
+  }
+
+  get forgotPassword() {
+    return this._forgotPassword;
   }
 
   async requestLogin(): Promise<string | never> {

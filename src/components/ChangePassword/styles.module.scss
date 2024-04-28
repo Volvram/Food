@@ -1,0 +1,62 @@
+@import "@/styles/variables.scss";
+
+.root {
+    padding: 20px 10%;
+
+    &_h {
+        margin-bottom: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        width: fit-content;
+        font-size: $h2;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 130%;
+    }
+
+    &_description {
+        color: $gray;
+        font-size: $p1;
+    }
+
+    &_block {
+        margin-top: 20px;
+    }
+
+    &_text {
+        font-size: $p1;
+        font-style: normal;
+        font-weight: 400;
+    }
+
+    &_input {
+        padding-top: 22px;
+        padding-bottom: 20px;
+        padding-left: 37px;
+        width: 100%;
+        border-radius: 50px;
+        border: 1px solid $very-light-gray;
+        box-shadow: $light-shadow;
+
+        font-size: $p1;
+        font-style: normal;
+        font-weight: 400;
+
+        &::placeholder {
+            color: $light-gray;
+            font-size: $p1;
+            font-style: normal;
+            font-weight: 400;
+        }
+    }
+
+    &_inputContainer {
+        margin-top: 6px;
+        margin-bottom: 12px;
+        width: 100%;
+    }
+
+    &_button {
+        margin-top: 20px;
+    }
+}

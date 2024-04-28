@@ -83,7 +83,7 @@ export const Counter: React.FC<CounterProps> = ({
           onBlur={handleBlur}
         />
       ) : (
-        <span>{counter}</span>
+        <div className={styles.counter_count}>{counter}</div>
       )}
       <div className={styles.counter_controller}>
         <Image

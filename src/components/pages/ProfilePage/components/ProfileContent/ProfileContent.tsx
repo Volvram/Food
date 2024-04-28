@@ -5,15 +5,15 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Switch from "@mui/material/Switch";
 import { observer } from "mobx-react-lite";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import styles from "./styles.module.scss";
-import vkIcon from "@/assets/img/vk_icon.png";
 import { Button } from "@/components/Button";
 import { CalendarInput } from "@/components/CalendarInput";
+import ChangePassword from "@/components/ChangePassword/ChangePassword";
 import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
+import WithModal from "@/components/WithModal/WithModal";
 import ProfileContentStore from "@/store/ProfileContentStore";
 import rootStore from "@/store/RootStore/instance";
 import { useLocalStore } from "@/utils/useLocalStore";
@@ -85,6 +85,16 @@ const ProfileContent: React.FC = () => {
 
   return (
     <div className={styles.profileContent}>
+      <WithModal
+        open={profileContentStore.changePassword}
+        onClose={() => {
+          profileContentStore.setChangePassword(false);
+        }}
+        withCross={true}
+      >
+        <ChangePassword email={profileContentStore.email} />
+      </WithModal>
+
       <h1 className={styles.profileContent_h}>Личный кабинет</h1>
       <div className={styles.profileContent_main}>
         <div className={styles.profileContent_main_data}>
@@ -110,17 +120,13 @@ const ProfileContent: React.FC = () => {
             value={profileContentStore.name ?? ""}
             disabled={!editMode}
           />
-          <Button>Сменить пароль</Button>
-          <div className={styles.profileContent_main_data_connect}>
-            <Image
-              src={vkIcon}
-              className={styles.profileContent_main_data_connect_icon}
-              alt="vk"
-            />
-            <span className={styles.profileContent_main_data_connect_text}>
-              Подключить аккаунт VK
-            </span>
-          </div>
+          <Button
+            onClick={() => {
+              profileContentStore.setChangePassword(true);
+            }}
+          >
+            Сменить пароль
+          </Button>
         </div>
         <div className={styles.profileContent_main_vr} />
         <div className={styles.profileContent_main_avatar}>

@@ -16,8 +16,8 @@ import { ILocalStore } from "@/utils/useLocalStore";
 
 type PrivateFields =
   | "_email"
-  | "_password"
   | "_name"
+  | "_changePassword"
   | "_avatar"
   | "_height"
   | "_weight"
@@ -33,8 +33,8 @@ type PrivateFields =
 
 class ProfileContentStore implements ILocalStore {
   private _email: string | null = null;
-  private _password: string | null = null;
   private _name: string | null = null;
+  private _changePassword = false;
   private _avatar: string | null = null;
   private _height: number | null = null;
   private _weight: number | null = null;
@@ -53,9 +53,9 @@ class ProfileContentStore implements ILocalStore {
       _email: observable,
       setEmail: action,
       email: computed,
-      _password: observable,
-      setPassword: action,
-      password: computed,
+      _changePassword: observable,
+      setChangePassword: action,
+      changePassword: computed,
       _name: observable,
       setName: action,
       name: computed,
@@ -106,12 +106,12 @@ class ProfileContentStore implements ILocalStore {
     return this._email;
   }
 
-  setPassword(password: string | null) {
-    this._password = password;
+  setChangePassword(changePassword: boolean) {
+    this._changePassword = changePassword;
   }
 
-  get password() {
-    return this._password;
+  get changePassword() {
+    return this._changePassword;
   }
 
   setName(name: string | null) {
