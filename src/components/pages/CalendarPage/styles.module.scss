@@ -3,4 +3,11 @@
 .calendarPage {
     margin: 0 auto;
     max-width: $fullhd;
+
+    &_options {
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        gap: 70px;
+    }
 }
