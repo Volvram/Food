@@ -8,9 +8,16 @@ import EatingCard from "./components/EatingCard/EatingCard";
 import s from "./styles.module.scss";
 import WithModal from "@/components/WithModal/WithModal";
 import CalendarContentStore from "@/store/CalendarContentStore";
+import { CalendarType } from "@/store/CalendarPageStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 
-const CalendarContent: React.FC = () => {
+type CalendarContentProps = {
+  currentCalendar: CalendarType;
+};
+
+const CalendarContent: React.FC<CalendarContentProps> = ({
+  currentCalendar,
+}) => {
   const listRef = React.useRef<HTMLDivElement | null>(null);
   const currentDayRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -109,9 +116,15 @@ const CalendarContent: React.FC = () => {
         />
       </WithModal>
       <div className={s.calendar_panel}>
-        <div className={s.calendar_panel_month}>
-          {calendarContentStore.monthStr} {calendarContentStore.year}
+        <div className={s.calendar_panel_header}>
+          <div className={s.calendar_panel_header_month}>
+            {calendarContentStore.monthStr} {calendarContentStore.year}
+          </div>
+          <div className={s.calendar_panel_header_name}>
+            {currentCalendar.name}
+          </div>
         </div>
+
         <div className={s.calendar_panel_arrows}>
           <div
             onClick={() => {

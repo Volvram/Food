@@ -1,6 +1,7 @@
 import React from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
+import cn from "classnames";
 import { observer } from "mobx-react-lite";
 
 import styles from "./styles.module.scss";
@@ -13,6 +14,8 @@ import { useLocalStore } from "@/utils/useLocalStore";
 
 type CalendarMenuProps = {
   allCalendars: AllCaledarsType;
+  currentCalendar: CalendarType | null;
+  onChange: (value: CalendarType) => void;
   onSubmit?: () => void;
   onClose?: () => void;
   withCross?: boolean;
@@ -20,6 +23,8 @@ type CalendarMenuProps = {
 
 const CalendarMenu: React.FC<CalendarMenuProps> = ({
   allCalendars,
+  currentCalendar,
+  onChange,
   onSubmit,
   onClose,
   withCross,
@@ -45,7 +50,16 @@ const CalendarMenu: React.FC<CalendarMenuProps> = ({
         return (
           <div
             key={calendar.id}
-            className={styles.root_inner_sections_section_items_name}
+            className={cn(
+              styles.root_inner_sections_section_items_name,
+              currentCalendar &&
+                calendar.name == currentCalendar.name &&
+                styles.root_inner_sections_section_items_name__active,
+            )}
+            onClick={() => {
+              onChange(calendar);
+              onClose?.();
+            }}
           >
             {calendar.name}
           </div>
@@ -73,7 +87,7 @@ const CalendarMenu: React.FC<CalendarMenuProps> = ({
         <div className={styles.root_inner_sections}>
           <div className={styles.root_inner_sections_section}>
             <span className={styles.root_inner_sections_text}>
-              Открытые мои:
+              <strong>Публичные мои:</strong>
             </span>
             <div className={styles.root_inner_sections_section_items}>
               {renderCalendarList(allCalendars.PUBLIC_OWN)}
@@ -82,7 +96,7 @@ const CalendarMenu: React.FC<CalendarMenuProps> = ({
 
           <div className={styles.root_inner_sections_section}>
             <span className={styles.root_inner_sections_text}>
-              Открытые другие:
+              <strong>Публичные другие:</strong>
             </span>
             <div className={styles.root_inner_sections_section_items}>
               {renderCalendarList(allCalendars.PUBLIC_OTHERS)}
@@ -90,7 +104,9 @@ const CalendarMenu: React.FC<CalendarMenuProps> = ({
           </div>
 
           <div className={styles.root_inner_sections_section}>
-            <span className={styles.root_inner_sections_text}>Приватные:</span>
+            <span className={styles.root_inner_sections_text}>
+              <strong>Приватные:</strong>
+            </span>
             <div className={styles.root_inner_sections_section_items}>
               {renderCalendarList(allCalendars.PRIVATE)}
             </div>

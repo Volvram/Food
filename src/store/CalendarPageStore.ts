@@ -36,6 +36,7 @@ export type AllCaledarsType = {
 type PrivateFields =
   | "_calendarMenuOpen"
   | "_allCalendars"
+  | "_currentCalendar"
   | "_calendarSettingsOpen";
 
 class CalendarPageStore implements ILocalStore {
@@ -45,6 +46,7 @@ class CalendarPageStore implements ILocalStore {
     PUBLIC_OTHERS: [],
     PRIVATE: [],
   };
+  private _currentCalendar: CalendarType | null = null;
   private _calendarSettingsOpen = false;
 
   constructor() {
@@ -55,6 +57,9 @@ class CalendarPageStore implements ILocalStore {
       _allCalendars: observable,
       setAllCalendars: action,
       allCalendars: computed,
+      _currentCalendar: observable,
+      setCurrentCalendar: action,
+      currentCalendar: computed,
       _calendarSettingsOpen: observable,
       setCalendarSettingsOpen: action,
       calendarSettingsOpen: computed,
@@ -110,6 +115,14 @@ class CalendarPageStore implements ILocalStore {
       log("CalendarPageStore: ", e);
     }
   };
+
+  setCurrentCalendar(currentCalendar: CalendarType | null) {
+    this._currentCalendar = currentCalendar;
+  }
+
+  get currentCalendar() {
+    return this._currentCalendar;
+  }
 
   setCalendarSettingsOpen(calendarSettingsOpen: boolean) {
     this._calendarSettingsOpen = calendarSettingsOpen;

@@ -1,5 +1,49 @@
 @import "@/styles/variables.scss";
 
 .root {
-    padding: 10px 10%;
+    padding: 10px 20px;
+    width: fit-content;
+
+    &_block {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        gap: 40px;
+    }
+
+    &_input {
+        padding-top: 12px;
+        padding-bottom: 10px;
+        padding-left: 16px;
+        width: 100%;
+        border-radius: 50px;
+        border: 1px solid $very-light-gray;
+        box-shadow: $light-shadow;
+
+        font-size: $p2;
+        font-style: normal;
+        font-weight: 400;
+
+        &::placeholder {
+            color: $light-gray;
+            font-size: $p2;
+            font-style: normal;
+            font-weight: 400;
+        }
+    }
+
+    &_inputContainer {
+        margin-top: 6px;
+        margin-bottom: 12px;
+        width: 100%;
+    }
+
+    &_delete {
+        cursor: pointer;
+        margin-top: 8px;
+        margin-bottom: 20px;
+        background-color: $white;
+        text-decoration: underline;
+        color: $red;
+    }
 }

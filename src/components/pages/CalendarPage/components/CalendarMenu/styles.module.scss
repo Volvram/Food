@@ -30,6 +30,8 @@
             gap: 10px;
 
             &_section {
+                padding-top: 10px;
+                border-top: 1px solid $light-gray;
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
@@ -37,6 +39,9 @@
                 &_items {
                     margin-top: 5px;
                     margin-left: 5px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
 
                     &_name {
                         cursor: pointer;
@@ -45,12 +50,12 @@
                         &:hover {
                             color: $light-blue;
                         }
+
+                        &__active {
+                            text-decoration: underline;
+                        }
                     }
                 }
-            }
-
-            &_text {
-                text-decoration: underline;
             }
         }
 

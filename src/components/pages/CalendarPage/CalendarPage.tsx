@@ -13,14 +13,23 @@ import styles from "./styles.module.scss";
 import Header from "@/components/Header/Header";
 import Meta from "@/components/Meta/Meta";
 import WithModal from "@/components/WithModal/WithModal";
-import CalendarPageStore from "@/store/CalendarPageStore";
+import CalendarPageStore, { CalendarType } from "@/store/CalendarPageStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 
 const CalendarPage: React.FC = () => {
   const calendarPageStore = useLocalStore(() => new CalendarPageStore());
 
   React.useEffect(() => {
-    calendarPageStore.requestAllCalendars();
+    calendarPageStore.requestAllCalendars().then(() => {
+      const calendars = Object.values(calendarPageStore.allCalendars).reduce(
+        (calendars, section) => {
+          return [...calendars, ...section];
+        },
+        [],
+      );
+
+      calendarPageStore.setCurrentCalendar(calendars[0] ?? null);
+    });
   }, []);
 
   return (
@@ -40,6 +49,10 @@ const CalendarPage: React.FC = () => {
         >
           <CalendarMenu
             allCalendars={calendarPageStore.allCalendars}
+            currentCalendar={calendarPageStore.currentCalendar}
+            onChange={(value: CalendarType) => {
+              calendarPageStore.setCurrentCalendar(value);
+            }}
             onSubmit={calendarPageStore.requestAllCalendars}
             onClose={calendarPageStore.toggleCalendarMenuOpen}
             withCross={true}
@@ -51,7 +64,11 @@ const CalendarPage: React.FC = () => {
           onClose={calendarPageStore.toggleCalendarSettingsOpen}
           withCross={true}
         >
-          <CalendarSettings />
+          {calendarPageStore.currentCalendar && (
+            <CalendarSettings
+              currentCalendar={calendarPageStore.currentCalendar}
+            />
+          )}
         </WithModal>
 
         <div className={styles.calendarPage_options}>
@@ -89,7 +106,11 @@ const CalendarPage: React.FC = () => {
           </IconButton>
         </div>
 
-        <CalendarContent />
+        {calendarPageStore.currentCalendar && (
+          <CalendarContent
+            currentCalendar={calendarPageStore.currentCalendar}
+          />
+        )}
       </main>
     </div>
   );
