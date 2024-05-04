@@ -33,8 +33,8 @@ const LoginContent: React.FC = () => {
           router.push("/");
         });
       },
-      (error: Error) => {
-        alert(`Ошибка: ${error}`);
+      (error) => {
+        alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
       },
     );
   };

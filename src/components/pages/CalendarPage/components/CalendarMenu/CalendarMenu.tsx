@@ -38,8 +38,8 @@ const CalendarMenu: React.FC<CalendarMenuProps> = ({
         calendarMenuStore.toggleCalendarCreateOpen();
         onSubmit?.();
       },
-      (error: Error) => {
-        alert(`Ошибка: ${error.message}`);
+      (error) => {
+        alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
       },
     );
   };

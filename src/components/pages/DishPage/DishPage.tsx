@@ -42,7 +42,7 @@ const DishPage: React.FC<DishPageType> = ({ id }) => {
           dishPageStore.toggleVisible();
         },
         (error) => {
-          alert(`Ошибка: ${error}`);
+          alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
         },
       );
     }
@@ -60,7 +60,7 @@ const DishPage: React.FC<DishPageType> = ({ id }) => {
           router.back();
         },
         (error) => {
-          alert(`Ошибка: ${error}`);
+          alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
         },
       );
     }

@@ -12,7 +12,7 @@ import { HOST } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
-export type CalendarUserAccess =
+export type CalendarUserAccessType =
   | "Владелец"
   | "Читатель"
   | "Редактор"
@@ -22,7 +22,7 @@ export type CalendarType = {
   id: number;
   name: string;
   inPrivate: boolean;
-  userAccess: CalendarUserAccess;
+  userAccess: CalendarUserAccessType;
   createdAt: string;
   updatedAt: string;
 };

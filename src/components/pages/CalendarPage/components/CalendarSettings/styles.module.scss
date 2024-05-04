@@ -6,6 +6,7 @@
 
     &_block {
         margin-top: 10px;
+        margin-bottom: 10px;
         display: flex;
         align-items: center;
         gap: 40px;
@@ -38,9 +39,32 @@
         width: 100%;
     }
 
+    &_participants {
+        margin-top: 10px;
+
+        &_particip {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid $light-gray;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        &_empty {
+            font-size: $p2;
+            color: $gray;
+            border-bottom: 1px solid $light-gray;
+        }
+    }
+
+    &_text {
+        color: $gray;
+    }
+
     &_delete {
         cursor: pointer;
-        margin-top: 8px;
+        margin-top: 20px;
         margin-bottom: 20px;
         background-color: $white;
         text-decoration: underline;

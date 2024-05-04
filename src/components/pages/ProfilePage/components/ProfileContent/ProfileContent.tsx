@@ -55,7 +55,7 @@ const ProfileContent: React.FC = () => {
         alert(response);
       },
       (error) => {
-        alert(`Ошибка: ${error}`);
+        alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
         // @TODO заменить на сброс значений полей к неизмененным
         window.location.reload();
       },
@@ -77,7 +77,21 @@ const ProfileContent: React.FC = () => {
           router.push("/");
         },
         (error) => {
-          alert(`Ошибка: ${error}`);
+          alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
+        },
+      );
+    }
+  };
+
+  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      profileContentStore.loadImage(event.target.files[0]).then(
+        (response) => {
+          alert(response);
+          window.location.reload();
+        },
+        (error) => {
+          alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
         },
       );
     }
@@ -148,19 +162,7 @@ const ProfileContent: React.FC = () => {
             type="file"
             id="avatar"
             name="avatar"
-            onChange={(event) => {
-              if (event.target.files) {
-                profileContentStore.loadImage(event.target.files[0]).then(
-                  (response) => {
-                    alert(response);
-                    window.location.reload();
-                  },
-                  (error) => {
-                    alert(`Ошибка: ${error}`);
-                  },
-                );
-              }
-            }}
+            onChange={handleAvatarChange}
             className={styles.profileContent_main_avatar_load}
             accept="image/png, image/jpeg, image/jpg"
           />

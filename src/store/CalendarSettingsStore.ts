@@ -6,19 +6,31 @@ import {
   computed,
   IReactionDisposer,
   reaction,
+  runInAction,
 } from "mobx";
 
-import { CalendarType } from "./CalendarPageStore";
+import { CalendarType, CalendarUserAccessType } from "./CalendarPageStore";
 import rootStore from "./RootStore/instance";
+import { UserAccessType } from "@/components/pages/CalendarPage/calendarUserAccesses";
 import { HOST } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
-type PrivateFields = "_calendar" | "_newCalendarName";
+export type ParticipantType = {
+  calendarId: number;
+  userId: number;
+  userEmail: string;
+  userAccess: CalendarUserAccessType;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type PrivateFields = "_calendar" | "_newCalendarName" | "_participants";
 
 class CalendarSettingsStore implements ILocalStore {
   private _calendar: CalendarType | null = null;
   private _newCalendarName: string | null = null;
+  private _participants: ParticipantType[] = [];
 
   constructor(calendar: CalendarType) {
     makeObservable<CalendarSettingsStore, PrivateFields>(this, {
@@ -28,6 +40,9 @@ class CalendarSettingsStore implements ILocalStore {
       _newCalendarName: observable,
       setNewCalendarName: action,
       newCalendarName: computed,
+      _participants: observable,
+      setParticipants: action,
+      participants: computed,
     });
 
     this._calendar = calendar;
@@ -48,6 +63,80 @@ class CalendarSettingsStore implements ILocalStore {
   get newCalendarName() {
     return this._newCalendarName;
   }
+
+  setParticipants(participants: ParticipantType[]) {
+    this._participants = participants;
+  }
+
+  get participants() {
+    return this._participants;
+  }
+
+  requestParticipants = async () => {
+    try {
+      await rootStore.user.checkAuthorization();
+
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const params: any = {
+        user_id: rootStore.user.id,
+        calendar_id: this.calendar?.id,
+      };
+
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
+      const participants = await axios({
+        url: `${HOST}/calendars/access/${this.calendar?.id}`,
+        method: "get",
+        params,
+        headers,
+      });
+
+      runInAction(() => {
+        this.setParticipants(participants.data);
+      });
+    } catch (e) {
+      log("CalendarSettingsStore: ", e);
+    }
+  };
+
+  requestEditParticipantAccess = async (
+    participantId: number,
+    participantAccess: UserAccessType,
+  ) => {
+    try {
+      await rootStore.user.checkAuthorization();
+
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const params: any = {
+        user_id: rootStore.user.id,
+        calendar_id: this.calendar?.id,
+        invited_user_id: participantId,
+        user_access: participantAccess,
+      };
+
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
+      await axios({
+        url: `${HOST}/calendars/access/${this.calendar?.id}`,
+        method: "put",
+        params,
+        headers,
+      });
+
+      return Promise.resolve("Доступ участника изменен");
+    } catch (e) {
+      log("CalendarSettingsStore: ", e);
+      return Promise.reject(e);
+    }
+  };
 
   requestEditCalendar = async () => {
     try {

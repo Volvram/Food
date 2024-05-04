@@ -42,7 +42,7 @@ const ProductPage: React.FC<ProductPageType> = ({ id }) => {
           productPageStore.toggleVisible();
         },
         (error) => {
-          alert(`Ошибка: ${error}`);
+          alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
         },
       );
     }
@@ -60,7 +60,7 @@ const ProductPage: React.FC<ProductPageType> = ({ id }) => {
           router.back();
         },
         (error) => {
-          alert(`Ошибка: ${error}`);
+          alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
         },
       );
     }

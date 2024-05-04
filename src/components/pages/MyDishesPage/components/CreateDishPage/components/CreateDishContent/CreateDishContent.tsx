@@ -60,7 +60,7 @@ const CreateDishContent: React.FC = () => {
         router.push("/mydishes");
       },
       (error) => {
-        alert(`Ошибка: ${error}`);
+        alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
       },
     );
   };
