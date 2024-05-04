@@ -12,7 +12,6 @@ import CalendarSettings from "./components/CalendarSettings/CalendarSettings";
 import styles from "./styles.module.scss";
 import Header from "@/components/Header/Header";
 import Meta from "@/components/Meta/Meta";
-import WithModal from "@/components/WithModal/WithModal";
 import CalendarPageStore, { CalendarType } from "@/store/CalendarPageStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 
@@ -59,17 +58,20 @@ const CalendarPage: React.FC = () => {
           />
         </SwipeableDrawer>
 
-        <WithModal
-          open={calendarPageStore.calendarSettingsOpen}
-          onClose={calendarPageStore.toggleCalendarSettingsOpen}
-          withCross={true}
-        >
-          {calendarPageStore.currentCalendar && (
+        {calendarPageStore.currentCalendar && (
+          <SwipeableDrawer
+            anchor="right"
+            open={calendarPageStore.calendarSettingsOpen}
+            onClose={calendarPageStore.toggleCalendarSettingsOpen}
+            onOpen={calendarPageStore.toggleCalendarSettingsOpen}
+          >
             <CalendarSettings
               currentCalendar={calendarPageStore.currentCalendar}
+              withCross={true}
+              onClose={calendarPageStore.toggleCalendarSettingsOpen}
             />
-          )}
-        </WithModal>
+          </SwipeableDrawer>
+        )}
 
         <div className={styles.calendarPage_options}>
           <IconButton
@@ -88,28 +90,33 @@ const CalendarPage: React.FC = () => {
           >
             <MenuIcon />
           </IconButton>
-          <IconButton
-            id="fade-button"
-            aria-controls={
-              calendarPageStore.calendarSettingsOpen ? "fade-menu" : undefined
-            }
-            aria-haspopup="true"
-            aria-expanded={
-              calendarPageStore.calendarSettingsOpen ? "true" : undefined
-            }
-            color="inherit"
-            onClick={() => {
-              calendarPageStore.toggleCalendarSettingsOpen();
-            }}
-          >
-            <SettingsIcon />
-          </IconButton>
+
+          {calendarPageStore.currentCalendar && (
+            <IconButton
+              id="fade-button"
+              aria-controls={
+                calendarPageStore.calendarSettingsOpen ? "fade-menu" : undefined
+              }
+              aria-haspopup="true"
+              aria-expanded={
+                calendarPageStore.calendarSettingsOpen ? "true" : undefined
+              }
+              color="inherit"
+              onClick={() => {
+                calendarPageStore.toggleCalendarSettingsOpen();
+              }}
+            >
+              <SettingsIcon />
+            </IconButton>
+          )}
         </div>
 
-        {calendarPageStore.currentCalendar && (
+        {calendarPageStore.currentCalendar ? (
           <CalendarContent
             currentCalendar={calendarPageStore.currentCalendar}
           />
+        ) : (
+          <div className={styles.calendarPage_empty}>У вас нет календарей</div>
         )}
       </main>
     </div>

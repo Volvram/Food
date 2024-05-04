@@ -1,8 +1,10 @@
 import React from "react";
 
+import CloseIcon from "@mui/icons-material/Close";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import cn from "classnames";
 import { observer } from "mobx-react-lite";
 
 import {
@@ -18,10 +20,14 @@ import { useLocalStore } from "@/utils/useLocalStore";
 
 type CalendarSettingProps = {
   currentCalendar: CalendarType;
+  onClose?: () => void;
+  withCross?: boolean;
 };
 
 const CalendarSettings: React.FC<CalendarSettingProps> = ({
   currentCalendar,
+  withCross,
+  onClose,
 }) => {
   const calendarSettingStore = useLocalStore(
     () => new CalendarSettingsStore(currentCalendar),
@@ -59,6 +65,33 @@ const CalendarSettings: React.FC<CalendarSettingProps> = ({
       );
   };
 
+  const handleDeleteParticipant = (participantId: number) => {
+    const answer = confirm("Удалить участника? Это действие необратимо");
+
+    if (answer) {
+      calendarSettingStore.requestDeleteParticipant(participantId).then(
+        (response) => {
+          alert(response);
+          calendarSettingStore.requestParticipants();
+        },
+        (error) => {
+          alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
+        },
+      );
+    }
+  };
+
+  const handleInviteParticipant = () => {
+    calendarSettingStore.requestInviteParticipant().then(
+      (response) => {
+        alert(response);
+      },
+      (error) => {
+        alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
+      },
+    );
+  };
+
   const handleDeleteCalendar = () => {
     const answer = confirm(
       "Подтвердить удаление календаря? Это действие необратимо",
@@ -80,7 +113,18 @@ const CalendarSettings: React.FC<CalendarSettingProps> = ({
 
   return (
     <div className={styles.root}>
+      {withCross && (
+        <div className={styles.root_close}>
+          <CloseIcon
+            onClick={() => {
+              onClose?.();
+            }}
+            className={styles.root_close_icon}
+          />
+        </div>
+      )}
       <h2>Настройки</h2>
+      <span className={styles.root_text}>Управление календарем</span>
       <div className={styles.root_block}>
         <Input
           onChange={(value: string) => {
@@ -145,6 +189,18 @@ const CalendarSettings: React.FC<CalendarSettingProps> = ({
                     })}
                   </Select>
                 </FormControl>
+                {calendarSettingStore.calendar?.userAccess == "Владелец" ? (
+                  <div
+                    className={styles.root_participants_particip_del}
+                    onClick={() => {
+                      handleDeleteParticipant(particip.userId);
+                    }}
+                  >
+                    Удалить
+                  </div>
+                ) : (
+                  <></>
+                )}
               </div>
             );
           })
@@ -153,6 +209,52 @@ const CalendarSettings: React.FC<CalendarSettingProps> = ({
             Участники не найдены
           </div>
         )}
+      </div>
+
+      <span className={styles.root_text}>Пригласить участника</span>
+      <div className={styles.root_block}>
+        <Input
+          onChange={(value: string) => {
+            calendarSettingStore.setNewParticipantEmail(value);
+          }}
+          placeholder="Email"
+          className={cn(styles.root_input, styles.root_email)}
+          containerClassName={styles.root_inputContainer}
+        />
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+          <Select
+            labelId="demo-simple-select-standard-label"
+            id="demo-simple-select-standard"
+            value={calendarSettingStore.newParticipantAccess}
+            onChange={(event: SelectChangeEvent) => {
+              if (
+                event.target.value == "OWNER" ||
+                event.target.value == "READ" ||
+                event.target.value == "WRITE" ||
+                event.target.value == "COMMENT"
+              ) {
+                calendarSettingStore.setNewParticipantAccess(
+                  event.target.value,
+                );
+              }
+            }}
+            label="Доступ нового пользователя"
+          >
+            {calendarUserAccesses.map((access) => {
+              return (
+                <MenuItem key={access.id} value={access.access}>
+                  {access.title}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+        <Button
+          className={styles.root_button}
+          onClick={handleInviteParticipant}
+        >
+          Пригласить
+        </Button>
       </div>
 
       {calendarSettingStore.calendar?.userAccess == "Владелец" ? (

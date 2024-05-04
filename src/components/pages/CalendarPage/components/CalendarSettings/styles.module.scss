@@ -3,22 +3,36 @@
 .root {
     padding: 10px 20px;
     width: fit-content;
+    min-height: 95vh;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+
+    &_close {
+        display: flex;
+
+        &_icon {
+            cursor: pointer;
+            margin-left: auto;
+        }
+    }
 
     &_block {
-        margin-top: 10px;
-        margin-bottom: 10px;
+        margin-top: 5px;
+        margin-bottom: 20px;
         display: flex;
         align-items: center;
-        gap: 40px;
+        gap: 5px;
     }
 
     &_input {
         padding-top: 12px;
         padding-bottom: 10px;
         padding-left: 16px;
+        padding-right: 5px;
         width: 100%;
         border-radius: 50px;
-        border: 1px solid $very-light-gray;
+        border: 1px solid $light-gray;
         box-shadow: $light-shadow;
 
         font-size: $p2;
@@ -34,21 +48,38 @@
     }
 
     &_inputContainer {
-        margin-top: 6px;
-        margin-bottom: 12px;
         width: 100%;
     }
 
+    &_text {
+        color: $gray;
+        font-size: $p2;
+    }
+
     &_participants {
-        margin-top: 10px;
+        margin-top: 5px;
+        margin-bottom: 20px;
 
         &_particip {
             padding-top: 5px;
             padding-bottom: 5px;
             border-bottom: 1px solid $light-gray;
+            font-size: $p2;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 5px;
+
+            &_del {
+                padding: 5px;
+                cursor: pointer;
+                width: fit-content;
+                border: 1px solid $red;
+                border-radius: 8px;
+                color: $red;
+                text-align: right;
+                font-size: $p3
+            }
         }
 
         &_empty {
@@ -58,16 +89,41 @@
         }
     }
 
-    &_text {
-        color: $gray;
-    }
-
     &_delete {
         cursor: pointer;
-        margin-top: 20px;
+        margin-top: auto;
         margin-bottom: 20px;
+        margin-left: auto;
         background-color: $white;
         text-decoration: underline;
         color: $red;
+    }
+}
+
+@media screen and (max-width: $tablet) {
+    .root {
+        width: 80vw;
+    }
+}
+
+@media screen and (max-width: $phone) {
+    .root {
+        width: 80vw;
+
+        &_participants {
+            margin-top: 10px;
+    
+            &_particip {
+                flex-direction: column;
+            }
+        }
+
+        &_block {
+            flex-wrap: wrap;
+        }
+
+        &_email {
+            flex-basis: 100%;
+        }
     }
 }

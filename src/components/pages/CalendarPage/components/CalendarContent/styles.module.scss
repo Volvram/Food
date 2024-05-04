@@ -130,3 +130,36 @@
     }
   }
 }
+
+@media screen and (max-width: $tablet) {
+  .calendar{
+    &_panel {
+  
+      &_header {
+        flex-basis: 60%;
+      }
+
+      &_arrows {
+        margin-right: 5%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $phone) {
+  .calendar{
+    &_panel {
+  
+      &_header {
+  
+        &_month {
+          font-size: $h3;
+        }
+  
+        &_name {
+          font-size: $h2;
+        }
+      }
+    }
+  }
+}

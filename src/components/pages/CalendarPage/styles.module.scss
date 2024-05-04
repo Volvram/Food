@@ -10,4 +10,9 @@
         align-items: center;
         gap: 70px;
     }
+
+    &_empty {
+        margin: 0 auto;
+        width: fit-content;
+    }
 }

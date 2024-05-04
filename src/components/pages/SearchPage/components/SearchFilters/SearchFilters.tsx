@@ -20,7 +20,7 @@ import SearchFiltersStore, { FiltersType } from "@/store/SearchFiltersStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 
 type SearchFiltersType = {
-  onClose: () => void;
+  onClose?: () => void;
   onSubmit: (filters: FiltersType | null) => void;
   filters: FiltersType | null;
   withCross?: boolean;
@@ -59,7 +59,7 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
         <div className={style.filtersearch_close}>
           <CloseIcon
             onClick={() => {
-              onClose();
+              onClose?.();
             }}
             className={style.filtersearch_close_icon}
           />
@@ -398,7 +398,7 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
                 products: searchFiltersStore.products,
               };
               onSubmit(filters);
-              onClose();
+              onClose?.();
             }}
           >
             Применить
