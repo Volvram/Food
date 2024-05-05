@@ -189,7 +189,8 @@ const CalendarSettings: React.FC<CalendarSettingProps> = ({
                     })}
                   </Select>
                 </FormControl>
-                {calendarSettingStore.calendar?.userAccess == "Владелец" ? (
+                {calendarSettingStore.calendar?.userAccess == "Владелец" &&
+                particip.userAccess != "Владелец" ? (
                   <div
                     className={styles.root_participants_particip_del}
                     onClick={() => {

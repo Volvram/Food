@@ -165,8 +165,12 @@
 
             &_link {
                 cursor: pointer;
-                color: $light-blue;
+                color: $blue;
                 text-decoration: underline;
+
+                &:hover {
+                    color: $light-blue;
+                }
             }
         }
     }
