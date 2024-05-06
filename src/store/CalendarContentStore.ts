@@ -1,3 +1,5 @@
+import axios from "axios";
+import dayjs from "dayjs";
 import {
   makeObservable,
   observable,
@@ -5,8 +7,14 @@ import {
   computed,
   IReactionDisposer,
   reaction,
+  runInAction,
 } from "mobx";
 
+import { CalendarType } from "./CalendarPageStore";
+import rootStore from "./RootStore/instance";
+import { UserType } from "./RootStore/UserStore";
+import { HOST } from "@/shared/hosts";
+import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
 
 const months = [
@@ -40,9 +48,48 @@ ruDaysOfWeek.push(ruDaysOfWeek[0]);
 ruDaysOfWeek = ruDaysOfWeek.slice(1);
 
 export type MealType = {
-  id: string;
-  eatingId: string;
-  title: string;
+  id: number;
+  calendarId: number;
+  name: string;
+  group: string;
+  description: string;
+  timestamp: Date;
+  status: string;
+  totalEnergy: number;
+  totalProtein: number;
+  totalCarbs: number;
+  totalFat: number;
+  priority: number;
+  user: UserType;
+  createdAt: Date;
+  mealDishLinks: MealDishLinkType[];
+  mealProductLinks: MealProductLinkType[];
+};
+
+export type MealDishLinkType = {
+  mealId: number;
+  dishId: number;
+  dishName: string;
+  dishImage: string;
+  servingSize: ServingSizeLinkType;
+  count: number;
+};
+
+export type ServingSizeLinkType = {
+  dishId?: number;
+  servingSizeId: number;
+  name: string;
+  grams: number;
+  productId?: number;
+};
+
+export type MealProductLinkType = {
+  mealId: number;
+  productId: number;
+  productName: string;
+  productImage: string;
+  servingSize: ServingSizeLinkType;
+  count: number;
 };
 
 export type DayOfTheWeekType = {
@@ -53,6 +100,7 @@ export type DayOfTheWeekType = {
 };
 
 type PrivateFields =
+  | "_calendar"
   | "_currentDate"
   | "_year"
   | "_monthStr"
@@ -62,6 +110,7 @@ type PrivateFields =
   | "_chosenWeekDay";
 
 class CalendarContentStore implements ILocalStore {
+  private _calendar: CalendarType | null = null;
   private _currentDate = new Date(
     new Date().getFullYear(),
     new Date().getMonth(),
@@ -87,8 +136,11 @@ class CalendarContentStore implements ILocalStore {
   private _isOpenAddMeal = false;
   private _chosenWeekDay: DayOfTheWeekType | null = null;
 
-  constructor() {
+  constructor(calendar: CalendarType) {
     makeObservable<CalendarContentStore, PrivateFields>(this, {
+      _calendar: observable,
+      setCalendar: action,
+      calendar: computed,
       _currentDate: observable,
       setCurrentDate: action,
       currentDate: computed,
@@ -106,6 +158,7 @@ class CalendarContentStore implements ILocalStore {
       _week: observable,
       setWeek: action,
       week: computed,
+      setWeekMeals: action,
       _isOpenAddMeal: observable,
       setIsOpenAddMeal: action,
       isOpenAddMeal: computed,
@@ -113,6 +166,8 @@ class CalendarContentStore implements ILocalStore {
       setChosenWeekDay: action,
       chosenWeekDay: computed,
     });
+
+    this.setCalendar(calendar);
 
     // **Подсчет дней недели**
 
@@ -122,28 +177,7 @@ class CalendarContentStore implements ILocalStore {
       date: currentDate,
       dayOfTheWeek: daysOfWeek[currentDate.getDay()],
       month: months[currentDate.getMonth()],
-      meals: [
-        {
-          id: "1",
-          eatingId: "1",
-          title: "Lorem ipsum dolor sit amet.",
-        },
-        {
-          id: "2",
-          eatingId: "1",
-          title: "dolor sit amet Lorem ipsum.",
-        },
-        {
-          id: "3",
-          eatingId: "1",
-          title: "Lorem ipsum dolor sit amet.",
-        },
-        {
-          id: "4",
-          eatingId: "1",
-          title: "Lorem ipsum dolor sit amet.",
-        },
-      ],
+      meals: [],
     };
 
     while (daysOfWeek[currentDate.getDay()] != daysOfWeek[1]) {
@@ -159,13 +193,7 @@ class CalendarContentStore implements ILocalStore {
         date: currentDate,
         dayOfTheWeek: daysOfWeek[currentDate.getDay()],
         month: months[currentDate.getMonth()],
-        meals: [
-          {
-            id: "1",
-            eatingId: "1",
-            title: "Lorem ipsum dolor sit amet.",
-          },
-        ],
+        meals: [],
       };
     }
 
@@ -173,6 +201,14 @@ class CalendarContentStore implements ILocalStore {
 
     // Переворачиваем неделю
     this._week = this._week.slice().reverse();
+  }
+
+  setCalendar(calendar: CalendarType) {
+    this._calendar = calendar;
+  }
+
+  get calendar() {
+    return this._calendar;
   }
 
   setCurrentDate(currentDate: Date) {
@@ -223,6 +259,61 @@ class CalendarContentStore implements ILocalStore {
     return this._week;
   }
 
+  setWeekMeals(meals: MealType[]) {
+    this.setWeek(
+      this.week.map((day) => {
+        return {
+          ...day,
+          meals: [],
+        };
+      }),
+    );
+
+    meals.forEach((meal) => {
+      const mealWeekDay = new Date(meal.timestamp).getDay();
+      const weekDay = this.week.find((day) => day.date.getDay() == mealWeekDay);
+
+      if (weekDay) {
+        weekDay.meals.push(meal);
+      }
+    });
+  }
+
+  requestWeekMeals = async () => {
+    try {
+      await rootStore.user.checkAuthorization();
+
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const params: any = {
+        user_id: rootStore.user.id,
+        calendar_id: this.calendar?.id,
+        date_from: dayjs(this.week[0].date).format("YYYY-MM-DD"),
+        date_to: dayjs(this.week[this.week.length - 1].date).format(
+          "YYYY-MM-DD",
+        ),
+      };
+
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
+      const meals = await axios({
+        url: `${HOST}/meals`,
+        method: "get",
+        params,
+        headers,
+      });
+
+      runInAction(() => {
+        this.setWeekMeals(meals.data);
+      });
+    } catch (e) {
+      log("CalendarContentStore: ", e);
+    }
+  };
+
   setPreviousWeek() {
     this.setWeek(
       this._week.map((day) => {
@@ -240,6 +331,8 @@ class CalendarContentStore implements ILocalStore {
         };
       }),
     );
+
+    this.requestWeekMeals();
   }
 
   setNextWeek() {
@@ -259,6 +352,8 @@ class CalendarContentStore implements ILocalStore {
         };
       }),
     );
+
+    this.requestWeekMeals();
   }
 
   setIsOpenAddMeal(isOpenAddMeal: boolean) {

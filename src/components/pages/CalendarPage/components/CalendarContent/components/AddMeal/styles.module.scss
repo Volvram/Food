@@ -1,7 +1,10 @@
 @import "@/styles/variables.scss";
 
 .addMeal {
+    margin-left: auto;
+    margin-right: auto;
     padding: 10px 30px;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
 
@@ -9,10 +12,59 @@
         font-size: $h3;
         margin-left: auto;
         margin-right: auto;
-        margin-bottom: 30px;
+        margin-bottom: 15px;
+    }
+
+    &_input {
+        padding-top: 12px;
+        padding-bottom: 10px;
+        padding-left: 16px;
+        padding-right: 5px;
+        width: 100%;
+        border-radius: 50px;
+        border: 1px solid $light-gray;
+        box-shadow: $light-shadow;
+
+        font-size: $p2;
+        font-style: normal;
+        font-weight: 400;
+
+        &::placeholder {
+            color: $light-gray;
+            font-size: $p2;
+            font-style: normal;
+            font-weight: 400;
+        }
+    }
+
+    &_inputContainer {
+        margin-top: 5px;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    &_text {
+        color: $gray;
+        font-size: $p2;
+    }
+
+    &_description {
+        margin-top: 5px;
+        margin-bottom: 10px;
+        padding: 10px 20px;
+        min-width: 200px;
+        border: 1px solid $gray;
+        border-radius: 20px;
+        font-family: 'Roboto';
+
+        &:focus {
+            outline-width: 0;
+            border: 1px solid $black-primary;
+        }
     }
 
     &_type {
+        margin-top: 5px;
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -21,7 +73,7 @@
     }
 
     &_search{
-        margin-top: 15px;
+        margin-top: 5px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -48,17 +100,17 @@
     }
 
     &_searchList {
-        margin-top: 20px;
+        margin-top: 10px;
+        margin-bottom: 20px;
         max-height: 300px;
         overflow-y: auto;
 
         display: flex;
         flex-direction: column;
 
-        &_dish {
+        &_obj {
             cursor: pointer;
             border-bottom: 1px solid $light-gray;
-
             display: flex;
             align-items: center;
 
@@ -68,6 +120,7 @@
 
             &_title {
                 padding: 5px 5px;
+                font-size: $p2;
             }
 
             &_img {
@@ -77,10 +130,27 @@
                 object-fit: cover;
             }
         }
+
+        &_empty {
+            font-size: $p2;
+            color: $gray;
+            border-bottom: 1px solid $light-gray;
+        }
+    }
+
+    &_selected {
+        margin-top: 5px;
+        margin-bottom: 10px;
+        padding: 5px;
+        max-width: 410px;
+        width: 100%;
+        min-height: 50px; 
+        border-radius: 16px;
+        box-shadow: 1px 2px 1px rgb(245, 240, 240),-1px -2px 1px rgb(245, 240, 240);
     }
 
     &_addedList {
-        margin-top: 20px;
+        margin-top: 5px;
         padding: 5px;
         max-width: 410px;
         width: 100%;

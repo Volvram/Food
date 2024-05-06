@@ -1,7 +1,6 @@
 import React from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
-import TuneIcon from "@mui/icons-material/Tune";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -16,15 +15,23 @@ import { Input } from "@/components/Input";
 import { debounce } from "@/shared/debounce";
 import AddMealStore from "@/store/AddMealStore";
 import { DayOfTheWeekType } from "@/store/CalendarContentStore";
+import { CalendarType } from "@/store/CalendarPageStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 
 type AddMealProps = {
+  calendar: CalendarType;
   weekDay: DayOfTheWeekType | null;
   onClose: () => void;
+  onSubmit: () => void;
 };
 
-const AddMeal: React.FC<AddMealProps> = ({ weekDay, onClose }) => {
-  const addMealStore = useLocalStore(() => new AddMealStore());
+const AddMeal: React.FC<AddMealProps> = ({
+  calendar,
+  weekDay,
+  onClose,
+  onSubmit,
+}) => {
+  const addMealStore = useLocalStore(() => new AddMealStore(calendar));
 
   const handleSearchChange = React.useCallback(
     debounce((value: string) => {
@@ -36,6 +43,23 @@ const AddMeal: React.FC<AddMealProps> = ({ weekDay, onClose }) => {
   return (
     <div className={styles.addMeal}>
       <h2 className={styles.addMeal_h}>Добавить приём пищи</h2>
+      <span className={styles.addMeal_text}>Название</span>
+      <Input
+        onChange={(value: string) => {
+          addMealStore.setMealName(value);
+        }}
+        placeholder="Название"
+        className={styles.addMeal_input}
+        containerClassName={styles.addMeal_inputContainer}
+      />
+      <span className={styles.addMeal_text}>Описание</span>
+      <textarea
+        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+          addMealStore.setMealDescription(event.target.value);
+        }}
+        className={styles.addMeal_description}
+        placeholder="Описание"
+      />
       <RadioGroup
         className={styles.addMeal_type}
         aria-labelledby="demo-radio-buttons-group-label"
@@ -57,47 +81,59 @@ const AddMeal: React.FC<AddMealProps> = ({ weekDay, onClose }) => {
       <div className={styles.addMeal_search}>
         <Input
           value={addMealStore.search}
-          className={styles.addMeal_search_searchInput}
-          containerClassName={styles.addMeal_searchInput_container}
+          className={styles.addMeal_input}
+          containerClassName={styles.addMeal_inputContainer}
           onChange={handleSearchChange}
           placeholder="Какое блюдо вас интересует?"
           icon={magnifier}
         />
-        {/* <TuneIcon
-          className={styles.addMeal_search_filters}
-          onClick={() => {}}
-        /> */}
       </div>
       <div className={styles.addMeal_searchList}>
-        {addMealStore.searchList.map((dish) => {
-          return (
-            <div
-              key={dish.id}
-              className={styles.addMeal_searchList_dish}
-              onClick={() => {
-                addMealStore.addToAddedList(dish);
-              }}
-            >
-              <span className={styles.addMeal_searchList_dish_title}>
-                {dish.name}
-              </span>
-              {dish.image ? (
-                <img
-                  src={dish.image}
-                  alt={dish.name}
-                  className={styles.addMeal_searchList_dish_img}
-                />
-              ) : (
-                <Image
-                  src={noImage}
-                  alt={dish.name}
-                  className={styles.addMeal_searchList_dish_img}
-                />
-              )}
-            </div>
-          );
-        })}
+        {addMealStore.searchList.length ? (
+          addMealStore.searchList.map((obj) => {
+            return (
+              <div
+                key={obj.id}
+                className={styles.addMeal_searchList_obj}
+                onClick={() => {
+                  addMealStore.addToAddedList(obj);
+                  addMealStore.setSearch("");
+                  addMealStore.setCurrentObject(obj);
+                }}
+              >
+                <span className={styles.addMeal_searchList_obj_title}>
+                  {obj.name}
+                </span>
+                {obj.image ? (
+                  <img
+                    src={obj.image}
+                    alt={obj.name}
+                    className={styles.addMeal_searchList_obj_img}
+                  />
+                ) : (
+                  <Image
+                    src={noImage}
+                    alt={obj.name}
+                    className={styles.addMeal_searchList_obj_img}
+                  />
+                )}
+              </div>
+            );
+          })
+        ) : (
+          <div className={styles.addMeal_searchList_empty}>Пища не найдена</div>
+        )}
       </div>
+      <span className={styles.addMeal_text}>Добавить</span>
+      {/* @TODO Доделать */}
+      <div className={styles.addMeal_selected}>
+        {addMealStore.currentObject ? (
+          <div>{addMealStore.currentObject.name}</div>
+        ) : (
+          <></>
+        )}
+      </div>
+      <span className={styles.addMeal_text}>Добавлено</span>
       <div className={styles.addMeal_addedList}>
         {addMealStore.addedList.map((dish) => {
           return (
@@ -120,11 +156,12 @@ const AddMeal: React.FC<AddMealProps> = ({ weekDay, onClose }) => {
             eatingId: "2",
             title: "Blah blah blah",
           });
+          onSubmit();
           onClose();
         }}
         className={styles.addMeal_btn}
       >
-        Добавить
+        Создать
       </Button>
     </div>
   );

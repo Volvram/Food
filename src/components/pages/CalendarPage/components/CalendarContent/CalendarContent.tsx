@@ -1,12 +1,12 @@
 import React from "react";
 
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import cn from "classnames";
 import { observer } from "mobx-react-lite";
 
 import AddMeal from "./components/AddMeal/AddMeal";
-import EatingCard from "./components/EatingCard/EatingCard";
+import MealCard from "./components/MealCard/MealCard";
 import s from "./styles.module.scss";
-import WithModal from "@/components/WithModal/WithModal";
 import CalendarContentStore from "@/store/CalendarContentStore";
 import { CalendarType } from "@/store/CalendarPageStore";
 import { useLocalStore } from "@/utils/useLocalStore";
@@ -21,7 +21,13 @@ const CalendarContent: React.FC<CalendarContentProps> = ({
   const listRef = React.useRef<HTMLDivElement | null>(null);
   const currentDayRef = React.useRef<HTMLDivElement | null>(null);
 
-  const calendarContentStore = useLocalStore(() => new CalendarContentStore());
+  const calendarContentStore = useLocalStore(
+    () => new CalendarContentStore(currentCalendar),
+  );
+
+  React.useEffect(() => {
+    calendarContentStore.requestWeekMeals();
+  }, []);
 
   React.useEffect(() => {
     if (listRef.current && currentDayRef.current) {
@@ -105,16 +111,19 @@ const CalendarContent: React.FC<CalendarContentProps> = ({
 
   return (
     <div className={s.calendar}>
-      <WithModal
+      <SwipeableDrawer
+        anchor="right"
         open={calendarContentStore.isOpenAddMeal}
         onClose={calendarContentStore.toggleIsOpenAddMeal}
-        withCross={true}
+        onOpen={calendarContentStore.toggleIsOpenAddMeal}
       >
         <AddMeal
+          calendar={currentCalendar}
           weekDay={calendarContentStore.chosenWeekDay}
           onClose={calendarContentStore.toggleIsOpenAddMeal}
+          onSubmit={calendarContentStore.requestWeekMeals}
         />
-      </WithModal>
+      </SwipeableDrawer>
       <div className={s.calendar_panel}>
         <div className={s.calendar_panel_header}>
           <div className={s.calendar_panel_header_month}>
@@ -176,7 +185,7 @@ const CalendarContent: React.FC<CalendarContentProps> = ({
                 <div className={s.calendar_card_meals}>
                   {weekDay.meals.map((meal) => {
                     return (
-                      <EatingCard key={meal.id} weekDay={weekDay} meal={meal} />
+                      <MealCard key={meal.id} weekDay={weekDay} meal={meal} />
                     );
                   })}
                 </div>

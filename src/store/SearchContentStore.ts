@@ -13,6 +13,7 @@ import {
   KitchenType,
   NutrientsType,
   ProductType,
+  ServingSizeType,
   TagType,
 } from "./CreateDishContentStore";
 import { UserType } from "./RootStore/UserStore";
@@ -40,6 +41,7 @@ export type DishType = {
   cooking_method: CookingMethodType;
   dietary_needs: string | null;
   dish_product_links: any[] | null;
+  serving_sizes: ServingSizeType[];
   tags: TagType[] | null;
   nutrients: NutrientsType[] | null;
 };

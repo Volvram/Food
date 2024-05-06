@@ -1,5 +1,8 @@
 import React from "react";
 
+import dayjs from "dayjs";
+
+import { mealGroups } from "../../mealGroups";
 import styles from "./styles.module.scss";
 import { DayOfTheWeekType, MealType } from "@/store/CalendarContentStore";
 
@@ -9,8 +12,12 @@ type EatingCardProps = {
 };
 
 const EatingCard: React.FC<EatingCardProps> = ({ weekDay, meal }) => {
+  // const [eaten, setEaten] = React.useState(
+  //   weekDay.date.getTime() - Date.now() >= 0 ? false : true,
+  // );
+
   const [eaten, setEaten] = React.useState(
-    weekDay.date.getTime() - Date.now() >= 0 ? false : true,
+    meal.status == "TODO" ? false : true,
   );
 
   return (
@@ -60,12 +67,18 @@ const EatingCard: React.FC<EatingCardProps> = ({ weekDay, meal }) => {
           )}
         </div>
         <div className={styles.eatingCard_inner_card_title_text}>
-          {meal.title}
+          {meal.name}
         </div>
       </div>
       <div className={styles.eatingCard_inner_card_data}>
-        <div className={styles.eatingCard_inner_card_data_gram}>210г</div>
-        <div className={styles.eatingCard_inner_card_data_ccal}>120ккал</div>
+        <div className={styles.eatingCard_inner_card_data_desc}>
+          {meal.description.length > 20
+            ? `${meal.description.slice(0, 20)}...`
+            : meal.description}
+        </div>
+        <div className={styles.eatingCard_inner_card_data_ccal}>
+          {meal.totalEnergy} Ккал
+        </div>
       </div>
       <div className={styles.eatingCard_inner_card_date}>
         <div className={styles.eatingCard_inner_card_date_calendar}>
@@ -86,25 +99,13 @@ const EatingCard: React.FC<EatingCardProps> = ({ weekDay, meal }) => {
             </svg>
           </>
         </div>
-        21 дек 14:00
-        <div className={styles.eatingCard_inner_card_date_tag}>
-          <>
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 15 15"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M11.0352 3.96482H11.0279M8.50068 1H10.486C11.716 1 12.331 1 12.8008 1.23938C13.2141 1.44994 13.5501 1.78593 13.7606 2.19919C14 2.66899 14 3.28401 14 4.51404V6.49932C14 7.03646 14 7.30506 13.9393 7.55785C13.8855 7.78195 13.7968 7.99616 13.6764 8.19272C13.5405 8.41433 13.3506 8.60423 12.9708 8.98411L9.52993 12.4249C8.6602 13.2947 8.22526 13.7296 7.72386 13.8925C7.2827 14.0358 6.80757 14.0358 6.36641 13.8925C5.865 13.7296 5.43007 13.2947 4.56034 12.4249L2.57506 10.4397C1.70533 9.56993 1.2704 9.135 1.10751 8.63359C0.964164 8.19243 0.964164 7.7173 1.10751 7.27614C1.2704 6.77474 1.70533 6.3398 2.57506 5.47007L6.01589 2.02924C6.39577 1.64939 6.58567 1.45946 6.80728 1.32364C7.00384 1.20322 7.21805 1.11448 7.44215 1.06068C7.69494 1 7.96354 1 8.50068 1ZM10.6691 3.96482C10.6691 4.16699 10.833 4.33087 11.0352 4.33087C11.2373 4.33087 11.4012 4.16699 11.4012 3.96482C11.4012 3.76266 11.2373 3.59878 11.0352 3.59878C10.833 3.59878 10.6691 3.76266 10.6691 3.96482Z"
-                stroke="#555555"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </>
-          кафе +3
+        {dayjs(new Date(meal.timestamp)).format("DD MMM HH:mm")}
+        <div className={styles.eatingCard_inner_card_date_group}>
+          {meal.group
+            ? mealGroups.find((group) => {
+                return meal.group == group.group;
+              })?.title
+            : ""}
         </div>
       </div>
     </div>

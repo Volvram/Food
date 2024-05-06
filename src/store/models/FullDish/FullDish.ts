@@ -5,6 +5,7 @@ import {
   DishProductLinkType,
   KitchenType,
   NutrientsType,
+  ServingSizeType,
   TagType,
 } from "@/store/CreateDishContentStore";
 
@@ -25,6 +26,7 @@ export type FullDishApi = {
   cooking_method: CookingMethodType;
   dietary_needs: DietaryNeedsType[];
   dish_product_links: DishProductLinkType[];
+  serving_sizes: ServingSizeType[];
   tags: TagType[];
   nutrients: NutrientsType;
 };
@@ -46,6 +48,7 @@ export type FullDishModel = {
   cookingMethod: CookingMethodType;
   dietaryNeeds: DietaryNeedsType[];
   dishProductLinks: DishProductLinkType[];
+  servingSizes: ServingSizeType[];
   tags: TagType[];
   nutrients: NutrientsType;
 };
@@ -68,6 +71,7 @@ export const normalizeFullDish = (from: FullDishApi): FullDishModel => {
     cookingMethod: from.cooking_method,
     dietaryNeeds: from.dietary_needs,
     dishProductLinks: from.dish_product_links,
+    servingSizes: from.serving_sizes,
     tags: from.tags,
     nutrients: from.nutrients,
   };
