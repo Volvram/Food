@@ -120,6 +120,7 @@ const CalendarContent: React.FC<CalendarContentProps> = ({
         <AddMeal
           calendar={currentCalendar}
           weekDay={calendarContentStore.chosenWeekDay}
+          withCross={true}
           onClose={calendarContentStore.toggleIsOpenAddMeal}
           onSubmit={calendarContentStore.requestWeekMeals}
         />

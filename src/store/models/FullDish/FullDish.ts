@@ -1,3 +1,4 @@
+import { ServingSizeLinkType } from "../FullProduct/FullProduct";
 import {
   CategoryType,
   CookingMethodType,
@@ -5,7 +6,6 @@ import {
   DishProductLinkType,
   KitchenType,
   NutrientsType,
-  ServingSizeType,
   TagType,
 } from "@/store/CreateDishContentStore";
 
@@ -26,7 +26,7 @@ export type FullDishApi = {
   cooking_method: CookingMethodType;
   dietary_needs: DietaryNeedsType[];
   dish_product_links: DishProductLinkType[];
-  serving_sizes: ServingSizeType[];
+  serving_sizes: ServingSizeLinkType[];
   tags: TagType[];
   nutrients: NutrientsType;
 };
@@ -48,7 +48,7 @@ export type FullDishModel = {
   cookingMethod: CookingMethodType;
   dietaryNeeds: DietaryNeedsType[];
   dishProductLinks: DishProductLinkType[];
-  servingSizes: ServingSizeType[];
+  servingSizes: ServingSizeLinkType[];
   tags: TagType[];
   nutrients: NutrientsType;
 };

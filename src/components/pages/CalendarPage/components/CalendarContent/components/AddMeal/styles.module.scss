@@ -3,10 +3,19 @@
 .addMeal {
     margin-left: auto;
     margin-right: auto;
-    padding: 10px 30px;
+    padding: 10px 20px;
     max-width: 600px;
     display: flex;
     flex-direction: column;
+
+    &_close {
+        display: flex;
+
+        &_icon {
+            cursor: pointer;
+            margin-left: auto;
+        }
+    }
 
     &_h {
         font-size: $h3;
@@ -19,7 +28,7 @@
         padding-top: 12px;
         padding-bottom: 10px;
         padding-left: 16px;
-        padding-right: 5px;
+        padding-right: 40px;
         width: 100%;
         border-radius: 50px;
         border: 1px solid $light-gray;
@@ -41,6 +50,7 @@
         margin-top: 5px;
         margin-bottom: 10px;
         width: 100%;
+        min-width: 280px;
     }
 
     &_text {
@@ -147,6 +157,22 @@
         min-height: 50px; 
         border-radius: 16px;
         box-shadow: 1px 2px 1px rgb(245, 240, 240),-1px -2px 1px rgb(245, 240, 240);
+
+        &_obj {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            flex-wrap: wrap;
+
+            &_select {
+                max-width: 230px;
+            }
+
+            &_counter {
+                width: 70px;
+            }
+        }
     }
 
     &_addedList {
@@ -162,6 +188,8 @@
             padding: 5px;
             display: flex;
             align-items: center;
+            gap: 10px;
+            font-size: $p3;
 
             &_remove {
                 cursor: pointer;

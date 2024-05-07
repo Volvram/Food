@@ -1,4 +1,12 @@
-import { NutrientsType, ServingSizeType } from "@/store/CreateDishContentStore";
+import { NutrientsType } from "@/store/CreateDishContentStore";
+
+export type ServingSizeLinkType = {
+  dishId?: number;
+  servingSizeId: number;
+  name: string;
+  grams: number;
+  productId?: number;
+};
 
 export type FullProductAPI = {
   id: number;
@@ -12,7 +20,7 @@ export type FullProductAPI = {
   custom: boolean;
   visible: boolean;
   nutrients: NutrientsType;
-  serving_sizes: ServingSizeType[];
+  serving_sizes: ServingSizeLinkType[];
 };
 
 export type FullProductModel = {
@@ -27,7 +35,7 @@ export type FullProductModel = {
   custom: boolean;
   visible: boolean;
   nutrients: NutrientsType;
-  servingSizes: ServingSizeType[];
+  servingSizes: ServingSizeLinkType[];
 };
 
 export const normalizeFullProduct = (

@@ -1,9 +1,12 @@
 import React from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
+import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import MenuItem from "@mui/material/MenuItem";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
 
@@ -11,6 +14,7 @@ import styles from "./styles.module.scss";
 import magnifier from "@/assets/img/magnifier.png";
 import noImage from "@/assets/img/noImage.jpg";
 import { Button } from "@/components/Button";
+import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
 import { debounce } from "@/shared/debounce";
 import AddMealStore from "@/store/AddMealStore";
@@ -21,6 +25,7 @@ import { useLocalStore } from "@/utils/useLocalStore";
 type AddMealProps = {
   calendar: CalendarType;
   weekDay: DayOfTheWeekType | null;
+  withCross?: boolean;
   onClose: () => void;
   onSubmit: () => void;
 };
@@ -28,6 +33,7 @@ type AddMealProps = {
 const AddMeal: React.FC<AddMealProps> = ({
   calendar,
   weekDay,
+  withCross,
   onClose,
   onSubmit,
 }) => {
@@ -40,8 +46,31 @@ const AddMeal: React.FC<AddMealProps> = ({
     [],
   );
 
+  const handleCreateMeal = () => {
+    addMealStore.requestCreateMeal(weekDay).then(
+      (response) => {
+        alert(response);
+        onSubmit();
+        onClose();
+      },
+      (error) => {
+        alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
+      },
+    );
+  };
+
   return (
     <div className={styles.addMeal}>
+      {withCross && (
+        <div className={styles.addMeal_close}>
+          <CloseIcon
+            onClick={() => {
+              onClose?.();
+            }}
+            className={styles.addMeal_close_icon}
+          />
+        </div>
+      )}
       <h2 className={styles.addMeal_h}>Добавить приём пищи</h2>
       <span className={styles.addMeal_text}>Название</span>
       <Input
@@ -78,6 +107,7 @@ const AddMeal: React.FC<AddMealProps> = ({
           label="Продукты"
         />
       </RadioGroup>
+
       <div className={styles.addMeal_search}>
         <Input
           value={addMealStore.search}
@@ -88,6 +118,7 @@ const AddMeal: React.FC<AddMealProps> = ({
           icon={magnifier}
         />
       </div>
+
       <div className={styles.addMeal_searchList}>
         {addMealStore.searchList.length ? (
           addMealStore.searchList.map((obj) => {
@@ -96,9 +127,9 @@ const AddMeal: React.FC<AddMealProps> = ({
                 key={obj.id}
                 className={styles.addMeal_searchList_obj}
                 onClick={() => {
-                  addMealStore.addToAddedList(obj);
+                  // addMealStore.addToAddedList(obj);
                   addMealStore.setSearch("");
-                  addMealStore.setCurrentObject(obj);
+                  addMealStore.requestFullObject(obj);
                 }}
               >
                 <span className={styles.addMeal_searchList_obj_title}>
@@ -124,21 +155,78 @@ const AddMeal: React.FC<AddMealProps> = ({
           <div className={styles.addMeal_searchList_empty}>Пища не найдена</div>
         )}
       </div>
+
       <span className={styles.addMeal_text}>Добавить</span>
-      {/* @TODO Доделать */}
       <div className={styles.addMeal_selected}>
         {addMealStore.currentObject ? (
-          <div>{addMealStore.currentObject.name}</div>
+          <div className={styles.addMeal_selected_obj}>
+            <div>{addMealStore.currentObject.name}</div>
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+              <Select
+                labelId="demo-simple-select-standard-label"
+                id="demo-simple-select-standard"
+                value={String(
+                  addMealStore.currentObjectServingSizeLink?.servingSizeId,
+                )}
+                onChange={(event: SelectChangeEvent) => {
+                  const servingSizeLink =
+                    addMealStore?.currentObject?.servingSizes.find(
+                      (size) =>
+                        size.servingSizeId == Number(event.target.value),
+                    );
+
+                  addMealStore.setCurrentObjectServingSizeLink(
+                    servingSizeLink ?? null,
+                  );
+                }}
+                label="Порции"
+                className={styles.addMeal_selected_obj_select}
+              >
+                {addMealStore.currentObject.servingSizes.map((size) => {
+                  return (
+                    <MenuItem
+                      key={size.servingSizeId}
+                      value={size.servingSizeId}
+                    >
+                      {size.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+            <Counter
+              onChange={(value) => {
+                addMealStore.setCurrentObjectAmount(value);
+              }}
+              defaultNumber={1}
+              min={1}
+              input={true}
+              className={styles.addMeal_selected_obj_counter}
+            />
+            <Button
+              onClick={() => {
+                addMealStore.addToAddedList();
+                addMealStore.setCurrentObject(null);
+                addMealStore.setCurrentObjectServingSizeLink(null);
+                addMealStore.setCurrentObjectAmount(1);
+              }}
+            >
+              +
+            </Button>
+          </div>
         ) : (
           <></>
         )}
       </div>
+
       <span className={styles.addMeal_text}>Добавлено</span>
       <div className={styles.addMeal_addedList}>
-        {addMealStore.addedList.map((dish) => {
+        {addMealStore.addedList.mealDishLinks.map((dish) => {
           return (
-            <div key={dish.id} className={styles.addMeal_addedList_object}>
+            <div key={dish.dishId} className={styles.addMeal_addedList_object}>
               <span>{dish.name}</span>
+              <div>{dish.servingSize.name}</div>
+              <div>{dish.count}</div>
               <CloseIcon
                 onClick={() => {
                   addMealStore.removeFromAddedList(dish);
@@ -148,16 +236,29 @@ const AddMeal: React.FC<AddMealProps> = ({
             </div>
           );
         })}
+        {addMealStore.addedList.mealProductLinks.map((product) => {
+          return (
+            <div
+              key={product.productId}
+              className={styles.addMeal_addedList_object}
+            >
+              <span>{product.name}</span>
+              <div>{product.servingSize.name}</div>
+              <div>{product.count} шт.</div>
+              <CloseIcon
+                onClick={() => {
+                  addMealStore.removeFromAddedList(product);
+                }}
+                className={styles.addMeal_addedList_object_remove}
+              />
+            </div>
+          );
+        })}
       </div>
+
       <Button
         onClick={() => {
-          weekDay?.meals.push({
-            id: `${Math.random()}`,
-            eatingId: "2",
-            title: "Blah blah blah",
-          });
-          onSubmit();
-          onClose();
+          handleCreateMeal();
         }}
         className={styles.addMeal_btn}
       >

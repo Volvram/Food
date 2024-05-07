@@ -1,4 +1,5 @@
 import axios from "axios";
+import dayjs from "dayjs";
 import {
   makeObservable,
   observable,
@@ -9,12 +10,47 @@ import {
   runInAction,
 } from "mobx";
 
+import { DayOfTheWeekType } from "./CalendarContentStore";
 import { CalendarType } from "./CalendarPageStore";
 import { ProductType } from "./CreateDishContentStore";
+import { FullDishModel, normalizeFullDish } from "./models/FullDish/FullDish";
+import {
+  FullProductModel,
+  normalizeFullProduct,
+  ServingSizeLinkType,
+} from "./models/FullProduct/FullProduct";
+import rootStore from "./RootStore/instance";
 import { DishType } from "./SearchContentStore";
 import { HOST } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
+
+type MealDishLinkType = {
+  dishId: number;
+  productId?: null;
+  name?: string;
+  servingSize: {
+    servingSizeId: number;
+    name?: string;
+  };
+  count: number;
+};
+
+type MealProductLinkType = {
+  productId: number;
+  dishId?: null;
+  name?: string;
+  servingSize: {
+    servingSizeId: number;
+    name?: string;
+  };
+  count: number;
+};
+
+type AddedListType = {
+  mealDishLinks: MealDishLinkType[];
+  mealProductLinks: MealProductLinkType[];
+};
 
 type PrivateFields =
   | "_calendar"
@@ -24,6 +60,8 @@ type PrivateFields =
   | "_search"
   | "_searchList"
   | "_currentObject"
+  | "_currentObjectServingSizeLink"
+  | "_currentObjectAmount"
   | "_addedList";
 
 class AddMealStore implements ILocalStore {
@@ -33,8 +71,13 @@ class AddMealStore implements ILocalStore {
   private _objectType: "Блюда" | "Продукты" = "Блюда";
   private _search = "";
   private _searchList: DishType[] | ProductType[] = [];
-  private _currentObject: DishType | ProductType | null = null;
-  private _addedList: (DishType | ProductType)[] = [];
+  private _currentObject: FullDishModel | FullProductModel | null = null;
+  private _currentObjectServingSizeLink: ServingSizeLinkType | null = null;
+  private _currentObjectAmount: number = 1;
+  private _addedList: AddedListType = {
+    mealDishLinks: [],
+    mealProductLinks: [],
+  };
 
   constructor(calendar: CalendarType) {
     makeObservable<AddMealStore, PrivateFields>(this, {
@@ -59,10 +102,17 @@ class AddMealStore implements ILocalStore {
       _currentObject: observable,
       setCurrentObject: action,
       currentObject: computed,
+      _currentObjectServingSizeLink: observable,
+      setCurrentObjectServingSizeLink: action,
+      currentObjectServingSizeLink: computed,
+      _currentObjectAmount: observable,
+      setCurrentObjectAmount: action,
+      currentObjectAmount: computed,
       _addedList: observable,
       setAddedList: action,
       addedList: computed,
       addToAddedList: action,
+      removeFromAddedList: action,
     });
 
     this.setCalendar(calendar);
@@ -147,7 +197,7 @@ class AddMealStore implements ILocalStore {
     }
   };
 
-  setCurrentObject(currentObject: DishType | ProductType | null) {
+  setCurrentObject(currentObject: FullDishModel | FullProductModel | null) {
     this._currentObject = currentObject;
   }
 
@@ -155,7 +205,58 @@ class AddMealStore implements ILocalStore {
     return this._currentObject;
   }
 
-  setAddedList(addedList: (DishType | ProductType)[]) {
+  requestFullObject = async (object: DishType | ProductType) => {
+    try {
+      await rootStore.user.checkAuthorization();
+
+      const params: any = {
+        id: object.id,
+      };
+
+      const fullObject =
+        this.objectType == "Продукты"
+          ? await axios({
+              url: `${HOST}/products/${object.id}`,
+              method: "get",
+              params,
+            })
+          : await axios({
+              url: `${HOST}/dishes/${object.id}`,
+              method: "get",
+              params,
+            });
+
+      if (this.objectType == "Продукты") {
+        this.setCurrentObject(normalizeFullProduct(fullObject.data));
+      } else if (this.objectType == "Блюда") {
+        this.setCurrentObject(normalizeFullDish(fullObject.data));
+      }
+
+      this.setCurrentObjectServingSizeLink(fullObject.data.serving_sizes[0]);
+    } catch (e) {
+      log("AddMealStore: ", e);
+    }
+  };
+
+  setCurrentObjectServingSizeLink(
+    currentObjectServingSizeLink: ServingSizeLinkType | null,
+  ) {
+    this._currentObjectServingSizeLink = currentObjectServingSizeLink;
+  }
+
+  get currentObjectServingSizeLink() {
+    return this._currentObjectServingSizeLink;
+  }
+
+  setCurrentObjectAmount(currentObjectAmount: number) {
+    this._currentObjectAmount = currentObjectAmount;
+  }
+
+  get currentObjectAmount() {
+    return this._currentObjectAmount;
+  }
+
+  setAddedList(addedList: AddedListType) {
     this._addedList = addedList;
   }
 
@@ -163,17 +264,98 @@ class AddMealStore implements ILocalStore {
     return this._addedList;
   }
 
-  addToAddedList(object: DishType | ProductType) {
-    this._addedList.push(object);
+  addToAddedList() {
+    if (
+      this.currentObject &&
+      this.currentObjectServingSizeLink &&
+      this.currentObjectAmount
+    ) {
+      if (this.currentObjectServingSizeLink.dishId) {
+        this._addedList.mealDishLinks.push({
+          dishId: this.currentObject.id,
+          name: this.currentObject.name,
+          servingSize: {
+            servingSizeId: this.currentObjectServingSizeLink.servingSizeId,
+            name: this.currentObjectServingSizeLink.name,
+          },
+          count: this.currentObjectAmount,
+        });
+      } else if (this.currentObjectServingSizeLink.productId) {
+        this._addedList.mealProductLinks.push({
+          productId: this.currentObject.id,
+          name: this.currentObject.name,
+          servingSize: {
+            servingSizeId: this.currentObjectServingSizeLink.servingSizeId,
+            name: this.currentObjectServingSizeLink.name,
+          },
+          count: this.currentObjectAmount,
+        });
+      }
+    }
   }
 
-  removeFromAddedList(object: DishType | ProductType) {
-    this.setAddedList(
-      this._addedList.filter(
-        (obj) => !(obj.id == object.id && obj.name == object.name),
-      ),
-    );
+  removeFromAddedList(link: MealDishLinkType | MealProductLinkType) {
+    if (link.dishId) {
+      this._addedList.mealDishLinks = this._addedList.mealDishLinks.filter(
+        (dishLink) =>
+          !(
+            dishLink.dishId == link.dishId &&
+            dishLink.servingSize.servingSizeId == link.servingSize.servingSizeId
+          ),
+      );
+    } else if (link.productId) {
+      this._addedList.mealProductLinks =
+        this._addedList.mealProductLinks.filter(
+          (productLink) =>
+            !(
+              productLink.productId == link.productId &&
+              productLink.servingSize.servingSizeId ==
+                link.servingSize.servingSizeId
+            ),
+        );
+    }
   }
+
+  requestCreateMeal = async (weekDay: DayOfTheWeekType | null) => {
+    try {
+      await rootStore.user.checkAuthorization();
+
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const params: any = {
+        user_id: rootStore.user.id,
+      };
+
+      const body = {
+        calendarId: this.calendar?.id,
+        name: this.mealName,
+        group: "BREAKFAST",
+        description: this.mealDescription,
+        timestamp: dayjs(weekDay?.date).format("YYYY-MM-DDTHH:mm:ss"),
+        priority: 0,
+        mealDishLinks: this.addedList.mealDishLinks,
+        mealProductLinks: this.addedList.mealProductLinks,
+      };
+
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
+      await axios({
+        url: `${HOST}/meals`,
+        method: "post",
+        params,
+        data: body,
+        headers,
+      });
+
+      return Promise.resolve("Прием пищи создан");
+    } catch (e) {
+      log("AddMealStore: ", e);
+      return Promise.reject(e);
+    }
+  };
 
   destroy() {
     this._handleSearchChange();

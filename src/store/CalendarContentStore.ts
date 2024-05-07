@@ -11,6 +11,7 @@ import {
 } from "mobx";
 
 import { CalendarType } from "./CalendarPageStore";
+import { ServingSizeLinkType } from "./models/FullProduct/FullProduct";
 import rootStore from "./RootStore/instance";
 import { UserType } from "./RootStore/UserStore";
 import { HOST } from "@/shared/hosts";
@@ -73,14 +74,6 @@ export type MealDishLinkType = {
   dishImage: string;
   servingSize: ServingSizeLinkType;
   count: number;
-};
-
-export type ServingSizeLinkType = {
-  dishId?: number;
-  servingSizeId: number;
-  name: string;
-  grams: number;
-  productId?: number;
 };
 
 export type MealProductLinkType = {

@@ -10,6 +10,8 @@ import {
 import {
   CategoryType,
   CookingMethodType,
+  DietaryNeedsType,
+  DishProductLinkType,
   KitchenType,
   NutrientsType,
   ProductType,
@@ -39,9 +41,9 @@ export type DishType = {
   category: CategoryType;
   kitchen_type: KitchenType;
   cooking_method: CookingMethodType;
-  dietary_needs: string | null;
-  dish_product_links: any[] | null;
-  serving_sizes: ServingSizeType[];
+  dietary_needs: DietaryNeedsType[] | null;
+  dish_product_links: DishProductLinkType[] | null;
+  serving_sizes: ServingSizeType[] | null;
   tags: TagType[] | null;
   nutrients: NutrientsType[] | null;
 };

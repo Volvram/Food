@@ -88,6 +88,7 @@
     &_week{
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 5px;
       color: #1D2130;
       text-align: center;
@@ -98,7 +99,7 @@
       &_title {
         padding: 5px;
         white-space: nowrap;
-        font-size: $p1;
+        font-size: $p2;
 
         &__active {
           background-color: $black-primary;
@@ -113,6 +114,7 @@
         height: 20px;
         border: 1px solid $black-primary;
         border-radius: 50%;
+        font-size: $p2;
       }
     }
     &_btn{
@@ -121,6 +123,7 @@
       margin-top: 15px;
       border-radius: 12px;
       display: flex;
+      justify-content: center;
       gap: 10px;
       font-size: $p3;
 
