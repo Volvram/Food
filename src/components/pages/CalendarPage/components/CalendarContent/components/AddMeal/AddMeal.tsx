@@ -10,6 +10,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
 
+import { mealGroups } from "../../mealGroups";
 import styles from "./styles.module.scss";
 import magnifier from "@/assets/img/magnifier.png";
 import noImage from "@/assets/img/noImage.jpg";
@@ -71,6 +72,7 @@ const AddMeal: React.FC<AddMealProps> = ({
           />
         </div>
       )}
+
       <h2 className={styles.addMeal_h}>Добавить приём пищи</h2>
       <span className={styles.addMeal_text}>Название</span>
       <Input
@@ -81,6 +83,7 @@ const AddMeal: React.FC<AddMealProps> = ({
         className={styles.addMeal_input}
         containerClassName={styles.addMeal_inputContainer}
       />
+
       <span className={styles.addMeal_text}>Описание</span>
       <textarea
         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -89,6 +92,44 @@ const AddMeal: React.FC<AddMealProps> = ({
         className={styles.addMeal_description}
         placeholder="Описание"
       />
+
+      <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+        <Select
+          labelId="demo-simple-select-standard-label"
+          id="demo-simple-select-standard"
+          value={addMealStore.mealGroup.group}
+          onChange={(event: SelectChangeEvent) => {
+            const newMealGroup = mealGroups.find(
+              (group) => group.group == event.target.value,
+            );
+
+            if (newMealGroup) {
+              addMealStore.setMealGroup(newMealGroup);
+            }
+          }}
+          label="Прием пищи"
+        >
+          {mealGroups.map((group) => {
+            return (
+              <MenuItem key={group.id} value={group.group}>
+                {group.title}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+
+      <span className={styles.addMeal_text}>Время</span>
+      <input
+        aria-label="Time"
+        type="time"
+        onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+          const target = event.target;
+          addMealStore.setMealTime(target.value);
+        }}
+        className={styles.addMeal_time}
+      />
+
       <RadioGroup
         className={styles.addMeal_type}
         aria-labelledby="demo-radio-buttons-group-label"
@@ -114,7 +155,7 @@ const AddMeal: React.FC<AddMealProps> = ({
           className={styles.addMeal_input}
           containerClassName={styles.addMeal_inputContainer}
           onChange={handleSearchChange}
-          placeholder="Какое блюдо вас интересует?"
+          placeholder="Что вас интересует?"
           icon={magnifier}
         />
       </div>
@@ -127,7 +168,6 @@ const AddMeal: React.FC<AddMealProps> = ({
                 key={obj.id}
                 className={styles.addMeal_searchList_obj}
                 onClick={() => {
-                  // addMealStore.addToAddedList(obj);
                   addMealStore.setSearch("");
                   addMealStore.requestFullObject(obj);
                 }}
@@ -223,7 +263,10 @@ const AddMeal: React.FC<AddMealProps> = ({
       <div className={styles.addMeal_addedList}>
         {addMealStore.addedList.mealDishLinks.map((dish) => {
           return (
-            <div key={dish.dishId} className={styles.addMeal_addedList_object}>
+            <div
+              key={`${dish.dishId}${dish.servingSize.servingSizeId}`}
+              className={styles.addMeal_addedList_object}
+            >
               <span>{dish.name}</span>
               <div>{dish.servingSize.name}</div>
               <div>{dish.count}</div>
@@ -239,7 +282,7 @@ const AddMeal: React.FC<AddMealProps> = ({
         {addMealStore.addedList.mealProductLinks.map((product) => {
           return (
             <div
-              key={product.productId}
+              key={`${product.productId}${product.servingSize.servingSizeId}`}
               className={styles.addMeal_addedList_object}
             >
               <span>{product.name}</span>

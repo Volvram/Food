@@ -370,11 +370,18 @@ class CalendarContentStore implements ILocalStore {
   }
 
   destroy() {
-    this.handleMonthChange();
-    this.handleWeekChange();
+    this._handleMonthChange();
+    this._handleWeekChange();
   }
 
-  readonly handleMonthChange: IReactionDisposer = reaction(
+  readonly _handleCalendarChange: IReactionDisposer = reaction(
+    () => this.calendar,
+    () => {
+      this.requestWeekMeals();
+    },
+  );
+
+  readonly _handleMonthChange: IReactionDisposer = reaction(
     () => this._currentDate.getMonth(),
     () => {
       this.setMonthStr(months[this._currentDate.getMonth()]);
@@ -389,7 +396,7 @@ class CalendarContentStore implements ILocalStore {
     },
   );
 
-  readonly handleWeekChange: IReactionDisposer = reaction(
+  readonly _handleWeekChange: IReactionDisposer = reaction(
     () => this._week,
     () => {
       this.setMonthStr(this._week[0].month);

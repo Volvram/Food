@@ -60,10 +60,9 @@
 
     &_description {
         margin-top: 5px;
-        margin-bottom: 10px;
         padding: 10px 20px;
         min-width: 200px;
-        border: 1px solid $gray;
+        border: 1px solid $light-gray;
         border-radius: 20px;
         font-family: 'Roboto';
 
@@ -71,6 +70,18 @@
             outline-width: 0;
             border: 1px solid $black-primary;
         }
+
+        &::placeholder {
+            color: $light-gray;
+            font-size: $p2;
+            font-style: normal;
+            font-weight: 400;
+        }
+    }
+
+    &_time {
+        margin-top: 5px;
+        width: fit-content;
     }
 
     &_type {
@@ -143,8 +154,8 @@
 
         &_empty {
             font-size: $p2;
-            color: $gray;
-            border-bottom: 1px solid $light-gray;
+            color: $light-gray;
+            border-bottom: 1px solid $very-light-gray;
         }
     }
 

@@ -30,6 +30,10 @@ const CalendarContent: React.FC<CalendarContentProps> = ({
   }, []);
 
   React.useEffect(() => {
+    calendarContentStore.setCalendar(currentCalendar);
+  }, [currentCalendar]);
+
+  React.useEffect(() => {
     if (listRef.current && currentDayRef.current) {
       listRef.current.scrollTo({
         top: 0,

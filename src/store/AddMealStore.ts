@@ -21,6 +21,10 @@ import {
 } from "./models/FullProduct/FullProduct";
 import rootStore from "./RootStore/instance";
 import { DishType } from "./SearchContentStore";
+import {
+  MealGroupsType,
+  mealGroups,
+} from "@/components/pages/CalendarPage/components/CalendarContent/mealGroups";
 import { HOST } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
@@ -56,6 +60,8 @@ type PrivateFields =
   | "_calendar"
   | "_mealName"
   | "_mealDescription"
+  | "_mealGroup"
+  | "_mealTime"
   | "_objectType"
   | "_search"
   | "_searchList"
@@ -68,6 +74,8 @@ class AddMealStore implements ILocalStore {
   private _calendar: CalendarType | null = null;
   private _mealName = "";
   private _mealDescription = "";
+  private _mealGroup: MealGroupsType = mealGroups[0];
+  private _mealTime = "00:00";
   private _objectType: "Блюда" | "Продукты" = "Блюда";
   private _search = "";
   private _searchList: DishType[] | ProductType[] = [];
@@ -90,6 +98,12 @@ class AddMealStore implements ILocalStore {
       _mealDescription: observable,
       setMealDescription: action,
       mealDescription: computed,
+      _mealGroup: observable,
+      setMealGroup: action,
+      mealGroup: computed,
+      _mealTime: observable,
+      setMealTime: action,
+      mealTime: computed,
       _objectType: observable,
       setObjectType: action,
       objectType: computed,
@@ -140,6 +154,22 @@ class AddMealStore implements ILocalStore {
 
   get mealDescription() {
     return this._mealDescription;
+  }
+
+  setMealGroup(mealGroup: MealGroupsType) {
+    this._mealGroup = mealGroup;
+  }
+
+  get mealGroup() {
+    return this._mealGroup;
+  }
+
+  setMealTime(mealTime: string) {
+    this._mealTime = mealTime;
+  }
+
+  get mealTime() {
+    return this._mealTime;
   }
 
   setObjectType(objectType: "Блюда" | "Продукты") {
@@ -323,6 +353,14 @@ class AddMealStore implements ILocalStore {
       const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
 
+      if (
+        !this.calendar ||
+        (this.addedList.mealDishLinks.length == 0 &&
+          this.addedList.mealProductLinks.length == 0)
+      ) {
+        throw new Error("Отсутствуют нужные данные");
+      }
+
       const params: any = {
         user_id: rootStore.user.id,
       };
@@ -330,9 +368,11 @@ class AddMealStore implements ILocalStore {
       const body = {
         calendarId: this.calendar?.id,
         name: this.mealName,
-        group: "BREAKFAST",
+        group: this.mealGroup.group,
         description: this.mealDescription,
-        timestamp: dayjs(weekDay?.date).format("YYYY-MM-DDTHH:mm:ss"),
+        timestamp: `${dayjs(weekDay?.date).format("YYYY-MM-DD")}T${
+          this.mealTime
+        }:00`,
         priority: 0,
         mealDishLinks: this.addedList.mealDishLinks,
         mealProductLinks: this.addedList.mealProductLinks,
