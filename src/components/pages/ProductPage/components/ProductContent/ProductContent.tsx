@@ -96,7 +96,7 @@ const ProductContent: React.FC<ProductContentProps> = ({ product }) => {
         <div className={styles.productContent_common_hr} />
         <h2 className={styles.productContent_common_info}>Общая информация</h2>
         <p className={styles.productContent_common_description}>
-          {product.description}
+          {product.description ? product.description : "-"}
         </p>
       </div>
       <ProductContentNutrition product={product} />

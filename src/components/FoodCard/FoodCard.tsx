@@ -21,7 +21,9 @@ export const FoodCard: React.FC<FoodCardType> = ({ item }) => {
           {item.cooking_time !== undefined ? (
             <div className={style.foodCard_icons_time}>
               <Image src={clockIcon} alt="" />
-              {item.cooking_time} мин.
+              <span className={style.foodCard_icons_time_text}>
+                {item.cooking_time} мин.
+              </span>
             </div>
           ) : (
             <></>

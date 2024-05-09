@@ -100,6 +100,8 @@ type PrivateFields =
   | "_monthDays"
   | "_week"
   | "_isOpenAddMeal"
+  | "_isOpenMealDetails"
+  | "_openedMealId"
   | "_chosenWeekDay";
 
 class CalendarContentStore implements ILocalStore {
@@ -127,6 +129,8 @@ class CalendarContentStore implements ILocalStore {
         );
   private _week: DayOfTheWeekType[] = [];
   private _isOpenAddMeal = false;
+  private _isOpenMealDetails = false;
+  private _openedMealId: number | null = null;
   private _chosenWeekDay: DayOfTheWeekType | null = null;
 
   constructor(calendar: CalendarType) {
@@ -155,6 +159,12 @@ class CalendarContentStore implements ILocalStore {
       _isOpenAddMeal: observable,
       setIsOpenAddMeal: action,
       isOpenAddMeal: computed,
+      _isOpenMealDetails: observable,
+      setIsOpenMealDetails: action,
+      isOpenMealDetails: computed,
+      _openedMealId: observable,
+      setOpenedMealId: action,
+      openedMealId: computed,
       _chosenWeekDay: observable,
       setChosenWeekDay: action,
       chosenWeekDay: computed,
@@ -360,6 +370,26 @@ class CalendarContentStore implements ILocalStore {
   toggleIsOpenAddMeal = () => {
     this.setIsOpenAddMeal(!this._isOpenAddMeal);
   };
+
+  setIsOpenMealDetails(isOpenMealDetails: boolean) {
+    this._isOpenMealDetails = isOpenMealDetails;
+  }
+
+  get isOpenMealDetails() {
+    return this._isOpenMealDetails;
+  }
+
+  toggleIsOpenMealDetails = () => {
+    this.setIsOpenMealDetails(!this.isOpenMealDetails);
+  };
+
+  setOpenedMealId(mealId: number | null) {
+    this._openedMealId = mealId;
+  }
+
+  get openedMealId() {
+    return this._openedMealId;
+  }
 
   setChosenWeekDay(chosenWeekDay: DayOfTheWeekType | null) {
     this._chosenWeekDay = chosenWeekDay;

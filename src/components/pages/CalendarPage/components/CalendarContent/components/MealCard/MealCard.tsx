@@ -6,12 +6,13 @@ import { mealGroups } from "../../mealGroups";
 import styles from "./styles.module.scss";
 import { DayOfTheWeekType, MealType } from "@/store/CalendarContentStore";
 
-type EatingCardProps = {
+type MealCardProps = {
   weekDay: DayOfTheWeekType;
   meal: MealType;
+  onClick?: (value: number) => void;
 };
 
-const EatingCard: React.FC<EatingCardProps> = ({ weekDay, meal }) => {
+const MealCard: React.FC<MealCardProps> = ({ weekDay, meal, onClick }) => {
   // const [eaten, setEaten] = React.useState(
   //   weekDay.date.getTime() - Date.now() >= 0 ? false : true,
   // );
@@ -21,11 +22,17 @@ const EatingCard: React.FC<EatingCardProps> = ({ weekDay, meal }) => {
   );
 
   return (
-    <div className={styles.eatingCard_inner_card}>
-      <div className={styles.eatingCard_inner_card_title}>
+    <div
+      className={styles.root}
+      onClick={() => {
+        onClick?.(meal.id);
+      }}
+    >
+      <div className={styles.root_title}>
         <div
-          className={styles.eatingCard_inner_card_title_circle}
-          onClick={() => {
+          className={styles.root_title_circle}
+          onClick={(event) => {
+            event.stopPropagation();
             setEaten(!eaten);
           }}
         >
@@ -66,22 +73,24 @@ const EatingCard: React.FC<EatingCardProps> = ({ weekDay, meal }) => {
             </svg>
           )}
         </div>
-        <div className={styles.eatingCard_inner_card_title_text}>
-          {meal.name}
-        </div>
+        <div className={styles.root_title_text}>{meal.name}</div>
       </div>
-      <div className={styles.eatingCard_inner_card_data}>
-        <div className={styles.eatingCard_inner_card_data_desc}>
-          {meal.description.length > 20
-            ? `${meal.description.slice(0, 20)}...`
-            : meal.description}
+      <div className={styles.root_data}>
+        <div className={styles.root_data_desc}>
+          {meal.description ? (
+            <i>
+              {meal.description.length > 20
+                ? `${meal.description.slice(0, 20)}...`
+                : meal.description}
+            </i>
+          ) : (
+            <div className={styles.root_data_desc_placeholder}>-</div>
+          )}
         </div>
-        <div className={styles.eatingCard_inner_card_data_ccal}>
-          {meal.totalEnergy} Ккал
-        </div>
+        <div className={styles.root_data_ccal}>{meal.totalEnergy} Ккал</div>
       </div>
-      <div className={styles.eatingCard_inner_card_date}>
-        <div className={styles.eatingCard_inner_card_date_calendar}>
+      <div className={styles.root_date}>
+        <div className={styles.root_date_calendar}>
           <>
             <svg
               width="16"
@@ -100,11 +109,11 @@ const EatingCard: React.FC<EatingCardProps> = ({ weekDay, meal }) => {
           </>
         </div>
         {dayjs(new Date(meal.timestamp)).format("DD MMM HH:mm")}
-        <div className={styles.eatingCard_inner_card_date_group}>
+        <div className={styles.root_date_group}>
           {meal.group
             ? mealGroups.find((group) => {
-                return meal.group == group.group;
-              })?.title
+                return meal.group == group.value;
+              })?.name
             : ""}
         </div>
       </div>
@@ -112,4 +121,4 @@ const EatingCard: React.FC<EatingCardProps> = ({ weekDay, meal }) => {
   );
 };
 
-export default EatingCard;
+export default MealCard;

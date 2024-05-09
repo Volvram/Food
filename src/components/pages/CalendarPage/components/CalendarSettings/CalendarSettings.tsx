@@ -162,8 +162,8 @@ const CalendarSettings: React.FC<CalendarSettingProps> = ({
                     id="demo-simple-select-standard"
                     value={
                       calendarUserAccesses.find(
-                        (access) => access.title == particip.userAccess,
-                      )?.access
+                        (access) => access.name == particip.userAccess,
+                      )?.value
                     }
                     onChange={(event: SelectChangeEvent) => {
                       if (
@@ -182,8 +182,8 @@ const CalendarSettings: React.FC<CalendarSettingProps> = ({
                   >
                     {calendarUserAccesses.map((access) => {
                       return (
-                        <MenuItem key={access.id} value={access.access}>
-                          {access.title}
+                        <MenuItem key={access.id} value={access.value}>
+                          {access.name}
                         </MenuItem>
                       );
                     })}
@@ -243,8 +243,8 @@ const CalendarSettings: React.FC<CalendarSettingProps> = ({
           >
             {calendarUserAccesses.map((access) => {
               return (
-                <MenuItem key={access.id} value={access.access}>
-                  {access.title}
+                <MenuItem key={access.id} value={access.value}>
+                  {access.name}
                 </MenuItem>
               );
             })}

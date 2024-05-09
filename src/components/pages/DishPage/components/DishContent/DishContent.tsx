@@ -96,7 +96,7 @@ const DishContent: React.FC<DishContentProps> = ({ dish }) => {
         <div className={styles.dishContent_common_hr} />
         <h2 className={styles.dishContent_common_info}>Общая информация</h2>
         <p className={styles.dishContent_common_description}>
-          {dish.description}
+          {dish.description ? dish.description : "-"}
         </p>
       </div>
       <DishContentAdditional dish={dish} />

@@ -1,32 +1,35 @@
-import { CalendarUserAccessType } from "@/store/CalendarPageStore";
-
 export type UserAccessType = "OWNER" | "READ" | "WRITE" | "COMMENT";
+export type UserAccessNameType =
+  | "Владелец"
+  | "Читатель"
+  | "Редактор"
+  | "Комментатор";
 
 export type CalendarUserAccessesType = {
   id: number;
-  title: CalendarUserAccessType;
-  access: UserAccessType;
+  name: UserAccessNameType;
+  value: UserAccessType;
 };
 
 export const calendarUserAccesses: CalendarUserAccessesType[] = [
   {
     id: 0,
-    title: "Владелец",
-    access: "OWNER",
+    name: "Владелец",
+    value: "OWNER",
   },
   {
     id: 1,
-    title: "Читатель",
-    access: "READ",
+    name: "Читатель",
+    value: "READ",
   },
   {
     id: 2,
-    title: "Редактор",
-    access: "WRITE",
+    name: "Редактор",
+    value: "WRITE",
   },
   {
     id: 3,
-    title: "Комментатор",
-    access: "COMMENT",
+    name: "Комментатор",
+    value: "COMMENT",
   },
 ];

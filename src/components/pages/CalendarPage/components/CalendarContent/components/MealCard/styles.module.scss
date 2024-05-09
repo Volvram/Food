@@ -1,58 +1,60 @@
 @import "@/styles/variables.scss";
 
-.eatingCard {
-    &_inner{
-        width: fit-content;
+.root {
+    cursor: pointer;
 
-        &_card{
-            border: 1px solid rgba(0, 0, 0, 0.25);
-            padding: 5px;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    padding: 5px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 
-            &_title{
-            display: flex;
-            align-items: center;
-            gap: 10px;
+    &_title{
+        display: flex;
+        align-items: center;
+        gap: 10px;
 
-            &_circle{
-                cursor: pointer;
-                width: 18px;
-                height: 18px;
+        &_circle{
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+    }
+
+    &_data{
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        &_desc{
+            padding-right: 12px;
+            border-right: 1px solid #D9D9D9;
+            color: $gray;
+            flex-basis: 65%;
+
+            &_placeholder {
+                text-align: center;
             }
         }
-        &_data{
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            &_desc{
-                border-right: 1px solid #D9D9D9;
-                padding-right: 12px;
-                flex-basis: 65%;
-            }
 
-            &_ccal {
-                flex-basis: 35%;
-            }
+        &_ccal {
+            flex-basis: 35%;
         }
-        &_date{
+    }
+    &_date{
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        color: #6B7CFF;
+        white-space: nowrap;
+
+        &_group{
             display: flex;
             gap: 5px;
             align-items: center;
-            // margin-left: 25px;
-            color: #6B7CFF;
-            white-space: nowrap;
-
-            &_group{
-                display: flex;
-                gap: 5px;
-                align-items: center;
-                margin-left: 15px;
-                color: #555;
-            }
-        }
+            margin-left: 15px;
+            color: #555;
         }
     }
 }

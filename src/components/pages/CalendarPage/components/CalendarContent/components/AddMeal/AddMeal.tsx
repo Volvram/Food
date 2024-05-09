@@ -97,10 +97,10 @@ const AddMeal: React.FC<AddMealProps> = ({
         <Select
           labelId="demo-simple-select-standard-label"
           id="demo-simple-select-standard"
-          value={addMealStore.mealGroup.group}
+          value={addMealStore.mealGroup.value}
           onChange={(event: SelectChangeEvent) => {
             const newMealGroup = mealGroups.find(
-              (group) => group.group == event.target.value,
+              (group) => group.value == event.target.value,
             );
 
             if (newMealGroup) {
@@ -111,8 +111,8 @@ const AddMeal: React.FC<AddMealProps> = ({
         >
           {mealGroups.map((group) => {
             return (
-              <MenuItem key={group.id} value={group.group}>
-                {group.title}
+              <MenuItem key={group.id} value={group.value}>
+                {group.name}
               </MenuItem>
             );
           })}

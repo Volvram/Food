@@ -57,12 +57,28 @@
 
 @media screen and (max-width: $phone) {
     .general {
+        margin-top: 10px;
+
         &_note {
             font-size: $p3;
         }
 
         &_nutrients {
             font-size: $p3;
+
+            &_body {
+                &_complextd {
+                    padding: 5px;
+
+                    &_subtr {
+                        padding: 5px;
+                    }
+                }
+            }
+
+            td {
+                padding: 5px;
+            }
         }
     }
 }

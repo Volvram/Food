@@ -21,11 +21,17 @@
         }
 
         &_delete {
+            padding: 3px;
             margin-left: auto;
             cursor: pointer;
             background-color: $white;
+            border-radius: 8px;
             text-decoration: underline;
             color: $red;
+
+            &:hover {
+                background-color: $light-red;
+            }
         }
     }
 }

@@ -6,7 +6,9 @@ import { observer } from "mobx-react-lite";
 
 import AddMeal from "./components/AddMeal/AddMeal";
 import MealCard from "./components/MealCard/MealCard";
+import MealDetails from "./components/MealDetails/MealDetails";
 import s from "./styles.module.scss";
+import WithModal from "@/components/WithModal/WithModal";
 import CalendarContentStore from "@/store/CalendarContentStore";
 import { CalendarType } from "@/store/CalendarPageStore";
 import { useLocalStore } from "@/utils/useLocalStore";
@@ -129,6 +131,21 @@ const CalendarContent: React.FC<CalendarContentProps> = ({
           onSubmit={calendarContentStore.requestWeekMeals}
         />
       </SwipeableDrawer>
+
+      {calendarContentStore.openedMealId && (
+        <WithModal
+          open={calendarContentStore.isOpenMealDetails}
+          withCross={true}
+          onClose={calendarContentStore.toggleIsOpenMealDetails}
+        >
+          <MealDetails
+            calendar={currentCalendar}
+            mealId={calendarContentStore.openedMealId}
+            weekDay={calendarContentStore.chosenWeekDay}
+          />
+        </WithModal>
+      )}
+
       <div className={s.calendar_panel}>
         <div className={s.calendar_panel_header}>
           <div className={s.calendar_panel_header_month}>
@@ -190,15 +207,24 @@ const CalendarContent: React.FC<CalendarContentProps> = ({
                 <div className={s.calendar_card_meals}>
                   {weekDay.meals.map((meal) => {
                     return (
-                      <MealCard key={meal.id} weekDay={weekDay} meal={meal} />
+                      <MealCard
+                        key={meal.id}
+                        weekDay={weekDay}
+                        meal={meal}
+                        onClick={(mealId) => {
+                          calendarContentStore.setOpenedMealId(mealId);
+                          calendarContentStore.setChosenWeekDay(weekDay);
+                          calendarContentStore.toggleIsOpenMealDetails();
+                        }}
+                      />
                     );
                   })}
                 </div>
                 <div
                   className={s.calendar_card_btn}
                   onClick={() => {
-                    calendarContentStore.toggleIsOpenAddMeal();
                     calendarContentStore.setChosenWeekDay(weekDay);
+                    calendarContentStore.toggleIsOpenAddMeal();
                   }}
                 >
                   <>

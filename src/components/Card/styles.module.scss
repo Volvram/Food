@@ -1,3 +1,5 @@
+@import "@/styles/variables.scss";
+
 .card{
     position: relative;
     margin-top: 6px;
@@ -46,3 +48,26 @@
     }
 }
 
+@media screen and (max-width: $phone) {
+    .card {
+        min-width: 280px;
+        max-width: 280px;
+        min-height: 250px;
+
+        &_img {
+            & img {
+                height: 150px;
+            }
+        }
+
+        &_info{
+            padding: 5px;
+            &_title{
+                font-size: $p2;
+            }
+            &_about {
+                font-size: $p3;
+            }
+        }
+    }
+}

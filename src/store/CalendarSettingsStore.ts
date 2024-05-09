@@ -9,9 +9,12 @@ import {
   runInAction,
 } from "mobx";
 
-import { CalendarType, CalendarUserAccessType } from "./CalendarPageStore";
+import { CalendarType } from "./CalendarPageStore";
 import rootStore from "./RootStore/instance";
-import { UserAccessType } from "@/components/pages/CalendarPage/calendarUserAccesses";
+import {
+  UserAccessNameType,
+  UserAccessType,
+} from "@/components/pages/CalendarPage/calendarUserAccesses";
 import { HOST } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
@@ -20,7 +23,7 @@ export type ParticipantType = {
   calendarId: number;
   userId: number;
   userEmail: string;
-  userAccess: CalendarUserAccessType;
+  userAccess: UserAccessNameType;
   createdAt: string;
   updatedAt: string;
 };

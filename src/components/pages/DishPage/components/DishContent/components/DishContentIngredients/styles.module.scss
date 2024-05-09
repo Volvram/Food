@@ -45,8 +45,14 @@
 
 @media screen and (max-width: $phone) {
     .ingredients {
+
+        &_h {
+            margin-top: 10px;
+            font-size: $p1;
+        }
     
         &_container {
+            padding: 10px 15px;
     
             &_ingredient {
     

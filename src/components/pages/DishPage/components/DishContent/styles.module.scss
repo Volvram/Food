@@ -21,11 +21,13 @@
         z-index: 1;
 
         &_title {
+            padding-left: 10%;
+            padding-right: 10%;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 30px;
+            gap: 5%;
 
             &_h {
                 width: fit-content;
@@ -56,7 +58,6 @@
         &_description {
             margin-left: 10%;
             margin-right: 30%;
-            margin-bottom: 20px;
             color: $dark-gray;
             font-size: $p1;
         }
@@ -110,6 +111,24 @@
     .dishContent {
         &_img {
             height: 250px;
+        }
+
+        &_common {
+            margin-bottom: 10px;
+
+            &_title {
+                &_h {
+                    font-size: $h3;
+                }
+            }
+
+            &_info {
+                font-size: $p1;
+            }
+
+            &_description {
+                font-size: $p3;
+            }
         }
     }
 }

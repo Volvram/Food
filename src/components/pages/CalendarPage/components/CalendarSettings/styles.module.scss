@@ -78,7 +78,11 @@
                 border-radius: 8px;
                 color: $red;
                 text-align: right;
-                font-size: $p3
+                font-size: $p3;
+
+                &:hover {
+                    background-color: $light-red;
+                }
             }
         }
 
@@ -90,13 +94,19 @@
     }
 
     &_delete {
+        padding: 3px;
         cursor: pointer;
         margin-top: auto;
         margin-bottom: 20px;
         margin-left: auto;
         background-color: $white;
+        border-radius: 8px;
         text-decoration: underline;
         color: $red;
+
+        &:hover {
+            background-color: $light-red;
+        }
     }
 }
 

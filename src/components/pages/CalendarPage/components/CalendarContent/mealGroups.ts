@@ -1,31 +1,31 @@
 export type MealGroupType = "BREAKFAST" | "DINNER" | "SUPPER" | "OTHER";
-export type RuMealGroupType = "Завтрак" | "Обед" | "Ужин" | "Другое";
+export type MealGroupNameType = "Завтрак" | "Обед" | "Ужин" | "Другое";
 
 export type MealGroupsType = {
   id: number;
-  title: RuMealGroupType;
-  group: MealGroupType;
+  name: MealGroupNameType;
+  value: MealGroupType;
 };
 
 export const mealGroups: MealGroupsType[] = [
   {
     id: 0,
-    title: "Завтрак",
-    group: "BREAKFAST",
+    name: "Завтрак",
+    value: "BREAKFAST",
   },
   {
     id: 1,
-    title: "Обед",
-    group: "DINNER",
+    name: "Обед",
+    value: "DINNER",
   },
   {
     id: 2,
-    title: "Ужин",
-    group: "SUPPER",
+    name: "Ужин",
+    value: "SUPPER",
   },
   {
     id: 3,
-    title: "Другое",
-    group: "OTHER",
+    name: "Другое",
+    value: "OTHER",
   },
 ];

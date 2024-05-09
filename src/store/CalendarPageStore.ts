@@ -8,21 +8,16 @@ import {
 } from "mobx";
 
 import rootStore from "./RootStore/instance";
+import { UserAccessNameType } from "@/components/pages/CalendarPage/calendarUserAccesses";
 import { HOST } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
-
-export type CalendarUserAccessType =
-  | "Владелец"
-  | "Читатель"
-  | "Редактор"
-  | "Комментатор";
 
 export type CalendarType = {
   id: number;
   name: string;
   inPrivate: boolean;
-  userAccess: CalendarUserAccessType;
+  userAccess: UserAccessNameType;
   createdAt: string;
   updatedAt: string;
 };

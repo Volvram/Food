@@ -21,3 +21,12 @@
         color: $black;
     }
 }
+
+@media screen and (max-width: $phone) {
+    .other {
+        &_h {
+            margin-top: 10px;
+            font-size: $p1;
+        }
+    }
+}

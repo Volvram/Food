@@ -1,0 +1,185 @@
+@import "@/styles/variables.scss";
+
+.root {
+    padding-bottom: 20px;
+
+    &_close {
+        display: flex;
+
+        &_icon {
+            cursor: pointer;
+            margin-left: auto;
+        }
+    }
+
+    &_inner {
+        margin-left: 5%;
+        margin-right: 5%;
+
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        &_text {
+            color: $light-gray;
+            font-size: $p2;
+        }
+
+        &_h {
+            margin-bottom: 5px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        &_title {
+            display: grid;
+            grid-template-columns: 5% 95%;
+            align-items: center;
+            font-size: $h2;
+
+            &_txt {
+                justify-self: center;
+            }
+
+            &_placeholder {
+                justify-self: center;
+            }
+        }
+
+        &_time {
+            display: grid;
+            grid-template-columns: 5% 95%;
+            align-items: center;
+            font-size: $p1;
+
+            &_txt {
+                justify-self: center;
+            }
+        }
+
+        &_status {
+            display: grid;
+            grid-template-columns: 5% 95%;
+            align-items: center;
+            font-size: $p1;
+
+            &_txt {
+                justify-self: center;
+            }
+        }
+
+        &_group {
+            display: grid;
+            grid-template-columns: 5% 95%;
+            align-items: center;
+            font-size: $p1;
+
+            &_txt {
+                justify-self: center;
+            }
+        }
+
+        &_creator {
+            display: grid;
+            grid-template-columns: 5% 95%;
+            align-items: center;
+            font-size: $p1;
+
+            &_txt {
+                justify-self: center;
+
+                width: fit-content;
+                min-width: 30%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+
+                &_img {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50px;
+                }
+            }
+        }
+
+        &_description {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            font-size: $p2;
+
+            &_txt {
+                margin-left: 10%;
+            }
+
+            &_placeholder {
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        &_products {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            font-size: $p2;
+        }
+
+        &_items {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            &_item {
+                cursor: pointer;
+                padding-right: 5px;
+                border-bottom: 1px solid $light-gray;
+                color: $black;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+
+                &:hover {
+                    background-color: $very-light-gray;
+                }
+
+                &_img {
+                    width: 40px;
+                    height: 40px;
+                }
+
+                &_servingSize {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+
+                    &_grams {
+                        white-space: nowrap;
+                    }
+                }
+            }
+        }
+
+        &_delete {
+            padding: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-left: auto;
+            background-color: $white;
+            border-radius: 8px;
+            text-decoration: underline;
+            color: $red;
+
+            &:hover {
+                background-color: $light-red;
+            }
+        }
+    }
+}
