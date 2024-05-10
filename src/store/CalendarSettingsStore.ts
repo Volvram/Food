@@ -42,7 +42,7 @@ class CalendarSettingsStore implements ILocalStore {
   private _newParticipantEmail: string = "";
   private _newParticipantAccess: UserAccessType = "READ";
 
-  constructor(calendar: CalendarType) {
+  constructor() {
     makeObservable<CalendarSettingsStore, PrivateFields>(this, {
       _calendar: observable,
       setCalendar: action,
@@ -60,8 +60,6 @@ class CalendarSettingsStore implements ILocalStore {
       setNewParticipantAccess: action,
       newParticipantAccess: computed,
     });
-
-    this._calendar = calendar;
   }
 
   setCalendar(calendar: CalendarType) {
@@ -103,6 +101,41 @@ class CalendarSettingsStore implements ILocalStore {
   get newParticipantAccess() {
     return this._newParticipantAccess;
   }
+
+  requestImportMeals = async (file: File) => {
+    try {
+      await rootStore.user.checkAuthorization();
+
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const params: any = {
+        user_id: rootStore.user.id,
+        calendar_id: this.calendar?.id,
+      };
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+        "Content-Type": "multipart/form-data",
+      };
+
+      await axios({
+        url: `${HOST}/import/meals`,
+        method: "post",
+        params,
+        data: formData,
+        headers,
+      });
+
+      return Promise.resolve("Приемы пищи импортированы");
+    } catch (e) {
+      log("CalendarSettingsStore: ", e);
+      return Promise.reject(e);
+    }
+  };
 
   requestParticipants = async () => {
     try {

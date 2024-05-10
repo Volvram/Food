@@ -51,6 +51,25 @@
         width: 100%;
     }
 
+    &_label {
+        cursor: pointer;
+        padding: 3px;
+        border: 1px solid $light-gray;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        font-size: $p2;
+
+        &:hover {
+            background-color: $light-gray;
+        }
+    }
+
+    &_load {
+        width: fit-content;
+        display: none;
+    }
+
     &_text {
         color: $gray;
         font-size: $p2;

@@ -1,6 +1,7 @@
 import React from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -29,13 +30,26 @@ const CalendarSettings: React.FC<CalendarSettingProps> = ({
   withCross,
   onClose,
 }) => {
-  const calendarSettingStore = useLocalStore(
-    () => new CalendarSettingsStore(currentCalendar),
-  );
+  const calendarSettingStore = useLocalStore(() => new CalendarSettingsStore());
 
   React.useEffect(() => {
     calendarSettingStore.requestParticipants();
   }, []);
+
+  React.useEffect(() => {
+    calendarSettingStore.setCalendar(currentCalendar);
+  }, [currentCalendar]);
+
+  const handleImportMeals = (file: File) => {
+    calendarSettingStore.requestImportMeals(file).then(
+      () => {
+        window.location.reload();
+      },
+      (error) => {
+        alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
+      },
+    );
+  };
 
   const handleEditCalendar = () => {
     calendarSettingStore.requestEditCalendar().then(
@@ -142,6 +156,24 @@ const CalendarSettings: React.FC<CalendarSettingProps> = ({
         <Button className={styles.root_button} onClick={handleEditCalendar}>
           Изменить название
         </Button>
+      </div>
+      <div className={styles.root_block}>
+        <label htmlFor="meals" className={styles.root_label}>
+          Импортировать приемы пищи
+          <FileUploadIcon />
+        </label>
+        <input
+          type="file"
+          id="meals"
+          name="meals"
+          onChange={(event) => {
+            if (event.target.files) {
+              handleImportMeals(event.target.files[0]);
+            }
+          }}
+          className={styles.root_load}
+          accept=".csv, .xls, .xlsx"
+        />
       </div>
 
       <span className={styles.root_text}>

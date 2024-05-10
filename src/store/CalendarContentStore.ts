@@ -399,6 +399,42 @@ class CalendarContentStore implements ILocalStore {
     return this._chosenWeekDay;
   }
 
+  requestExportWeek = async () => {
+    try {
+      await rootStore.user.checkAuthorization();
+
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const params: any = {
+        user_id: rootStore.user.id,
+        calendar_id: this.calendar?.id,
+        date_from: dayjs(this.week[0].date).format("YYYY-MM-DD"),
+        date_to: dayjs(this.week[this.week.length - 1].date).format(
+          "YYYY-MM-DD",
+        ),
+        fileFormat: "XLSX",
+      };
+
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
+      const file = await axios({
+        url: `${HOST}/export/meals`,
+        method: "get",
+        params,
+        headers,
+      });
+
+      return Promise.resolve(file.data);
+    } catch (e) {
+      log("CalendarContentStore: ", e);
+
+      return Promise.reject(e);
+    }
+  };
+
   destroy() {
     this._handleMonthChange();
     this._handleWeekChange();

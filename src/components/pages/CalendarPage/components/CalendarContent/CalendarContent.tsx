@@ -1,5 +1,6 @@
 import React from "react";
 
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import cn from "classnames";
 import { observer } from "mobx-react-lite";
@@ -36,14 +37,30 @@ const CalendarContent: React.FC<CalendarContentProps> = ({
   }, [currentCalendar]);
 
   React.useEffect(() => {
-    if (listRef.current && currentDayRef.current) {
-      listRef.current.scrollTo({
-        top: 0,
-        left: currentDayRef.current.offsetLeft - 25,
-        behavior: "smooth",
-      });
-    }
+    window.setTimeout(() => {
+      if (listRef.current && currentDayRef.current) {
+        listRef.current.scrollTo({
+          top: 0,
+          left: currentDayRef.current.offsetLeft - 25,
+          behavior: "smooth",
+        });
+      }
+    }, 1000);
   }, [currentDayRef.current]);
+
+  const handleExport = () => {
+    calendarContentStore.requestExportWeek().then(
+      (response) => {
+        const link = document.createElement("a");
+        link.setAttribute("href", response.file.url);
+        link.setAttribute("download", response.file.file_name);
+        link.click();
+      },
+      (error) => {
+        alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
+      },
+    );
+  };
 
   const previousWeek = () => {
     listRef.current?.animate(
@@ -155,6 +172,11 @@ const CalendarContent: React.FC<CalendarContentProps> = ({
             {currentCalendar.name}
           </div>
         </div>
+
+        <FileDownloadIcon
+          onClick={handleExport}
+          className={s.calendar_panel_export}
+        />
 
         <div className={s.calendar_panel_arrows}>
           <div
