@@ -34,7 +34,7 @@ const SearchPage: React.FC = () => {
     debounce((value: string | string[]) => {
       router.push({ query: { ...router.query, search: value } });
     }),
-    [router.query.search],
+    [],
   );
 
   return (

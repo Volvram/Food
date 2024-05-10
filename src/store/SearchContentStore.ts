@@ -59,7 +59,7 @@ class SearchContentStore implements ILocalStore {
   private _currentPageDishes: DishType[] = [];
   private _products: ProductType[] = [];
   private _currentPageProducts: ProductType[] = [];
-  private _countPerPage = 12;
+  private _countPerPage = 4;
 
   constructor() {
     makeObservable<SearchContentStore, PrivateFields>(this, {

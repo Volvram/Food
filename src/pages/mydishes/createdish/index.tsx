@@ -9,13 +9,11 @@ import rootStore from "@/store/RootStore/instance";
 const CreateDish: React.FC = () => {
   const router = useRouter();
 
-  // TODO Заменить временную заглушку
   React.useLayoutEffect(() => {
     rootStore.user.checkAuthorization().catch(() => {
       router.push("/login");
     });
   }, []);
-  // TODO ----------------------
 
   return <CreateDishPage />;
 };

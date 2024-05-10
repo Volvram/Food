@@ -291,3 +291,12 @@
         width: fit-content;
     }
 }
+
+@media screen and (max-width: $phone) {
+    .createDishContent {
+        &_block {
+            width: 100%;
+            font-size: $p2;
+        }
+    }
+}

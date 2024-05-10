@@ -38,7 +38,7 @@ const SearchContent: React.FC<SearchContentProps> = ({
   }, [objectType, createdByUser, filters, router.query.search]);
 
   React.useEffect(() => {
-    handlePageChange(router.query.page ? Number(router.query.page) : 1);
+    handlePageChange(1);
   }, [searchContentStore.dishes, searchContentStore.products]);
 
   const handlePageChange = React.useCallback(
@@ -59,7 +59,7 @@ const SearchContent: React.FC<SearchContentProps> = ({
 
       router.push({ query: { ...router.query, page: value } });
     },
-    [router.query.search, router.query.page],
+    [router.query.search],
   );
 
   return (
@@ -99,9 +99,17 @@ const SearchContent: React.FC<SearchContentProps> = ({
         <Pagination
           className={styles.searchContent_commonSearch_pagination}
           page={router.query.page ? Number(router.query.page) : 1}
-          count={Math.ceil(
-            searchContentStore.dishes.length / searchContentStore.countPerPage,
-          )}
+          count={
+            objectType == "Блюда"
+              ? Math.ceil(
+                  searchContentStore.dishes.length /
+                    searchContentStore.countPerPage,
+                )
+              : Math.ceil(
+                  searchContentStore.products.length /
+                    searchContentStore.countPerPage,
+                )
+          }
           variant="outlined"
           shape="rounded"
           onChange={(event, page) => handlePageChange(page)}
