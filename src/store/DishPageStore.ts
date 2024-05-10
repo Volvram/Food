@@ -125,7 +125,7 @@ class DishPageStore implements ILocalStore {
       };
 
       await axios({
-        url: `${HOST}/dishes/visibility`,
+        url: `${HOST}/dishes/${this.dish?.id}/visibility`,
         method: "get",
         params,
         headers,

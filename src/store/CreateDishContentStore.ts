@@ -105,6 +105,10 @@ export type ServingSizeType = {
   name: string;
 };
 
+export type ServingSizeWithGramsType = ServingSizeType & {
+  grams: number;
+};
+
 export type DishProductLinkType = {
   dishId?: number;
   productId: number;
@@ -133,6 +137,8 @@ type PrivateFields =
   | "_allTags"
   | "_tags"
   | "_nutrients"
+  | "_servingSizes"
+  | "_selectedServingSizes"
   | "_productSearch"
   | "_productSearchList"
   | "_currentProduct"
@@ -203,6 +209,8 @@ class CreateDishContentStore implements ILocalStore {
       vitaminK: 0,
     },
   };
+  private _servingSizes: ServingSizeType[] = [];
+  private _selectedServingSizes: ServingSizeWithGramsType[] = [];
   private _productSearch = "";
   private _productSearchList: ProductType[] = [];
   private _currentProduct: CurrentProductType | null = null;
@@ -268,6 +276,13 @@ class CreateDishContentStore implements ILocalStore {
       _nutrients: observable,
       setNutrients: action,
       nutrients: computed,
+      _servingSizes: observable,
+      setServingSizes: action,
+      servingSizes: computed,
+      _selectedServingSizes: observable,
+      setSelectedServingSizes: action,
+      selectedServingSizes: computed,
+      addSelectedServingSize: action,
       _productSearch: observable,
       setProductSearch: action,
       productSearch: computed,
@@ -554,6 +569,55 @@ class CreateDishContentStore implements ILocalStore {
     return this._nutrients;
   }
 
+  setServingSizes(servingSizes: ServingSizeType[]) {
+    this._servingSizes = servingSizes;
+  }
+
+  get servingSizes() {
+    return this._servingSizes;
+  }
+
+  async requestServingSizes() {
+    try {
+      const result = await axios({
+        url: `${HOST}/serving_sizes`,
+        method: "get",
+      });
+
+      runInAction(() => {
+        this.setServingSizes(result.data);
+      });
+    } catch (e) {
+      log("CreateProductContentStore: ", e);
+    }
+  }
+
+  setSelectedServingSizes(selectedServingSizes: ServingSizeWithGramsType[]) {
+    this._selectedServingSizes = selectedServingSizes;
+  }
+
+  get selectedServingSizes() {
+    return this._selectedServingSizes;
+  }
+
+  addSelectedServingSize(selectedServingSize: ServingSizeWithGramsType) {
+    const exists = this._selectedServingSizes.find(
+      (size) => size.id == selectedServingSize.id,
+    );
+    if (exists) {
+      this.removeSelectedServingSize(selectedServingSize.id);
+      this._selectedServingSizes.push(selectedServingSize);
+    } else {
+      this._selectedServingSizes.push(selectedServingSize);
+    }
+  }
+
+  removeSelectedServingSize(id: number | string) {
+    this.setSelectedServingSizes(
+      this._selectedServingSizes.filter((size) => size.id != id),
+    );
+  }
+
   setProductSearch(productSearch: string) {
     this._productSearch = productSearch;
   }
@@ -680,6 +744,10 @@ class CreateDishContentStore implements ILocalStore {
         dish_product_links: toJS(this.dishProductLinks),
         tags: [toJS(this.tags)],
         nutrients: toJS(this.nutrients),
+        serving_sizes: this.selectedServingSizes.map((size) => ({
+          servingSizeId: size.id,
+          grams: size.grams,
+        })),
       };
 
       const headers = {

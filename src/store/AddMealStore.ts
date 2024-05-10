@@ -198,11 +198,15 @@ class AddMealStore implements ILocalStore {
 
   requestSearchList = async () => {
     try {
-      const params: any = {};
+      const params: any = {
+        creator_type_filter: "ALL",
+      };
 
       params.search = this.search ? this.search : "null";
 
-      const body: any = {};
+      const body: any = {
+        creator_type_filter: "ALL",
+      };
 
       body.name_search = this.search ? this.search : "null";
 
@@ -368,7 +372,7 @@ class AddMealStore implements ILocalStore {
       const body = {
         calendarId: this.calendar?.id,
         name: this.mealName,
-        group: this.mealGroup.group,
+        group: this.mealGroup.value,
         description: this.mealDescription,
         timestamp: `${dayjs(weekDay?.date).format("YYYY-MM-DD")}T${
           this.mealTime

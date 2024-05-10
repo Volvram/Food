@@ -1,8 +1,10 @@
 import React from "react";
 
+import CloseIcon from "@mui/icons-material/Close";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import cn from "classnames";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -30,6 +32,10 @@ const CreateDishContent: React.FC = () => {
 
   React.useLayoutEffect(() => {
     createDishContentStore.requestDishOptions();
+  }, []);
+
+  React.useEffect(() => {
+    createDishContentStore.requestServingSizes();
   }, []);
 
   const handleProductSearch = React.useCallback(
@@ -277,6 +283,113 @@ const CreateDishContent: React.FC = () => {
         {/* --------------------------------- */}
       </div>
       <CommonAccordion
+        title="Порции"
+        className={styles.createDishContent_accordion}
+      >
+        <div className={styles.createDishContent_servingSizes}>
+          <div className={styles.createDishContent_servingSizes_current}>
+            <h2 className={styles.createDishContent_servingSizes_h}>
+              Добавить
+            </h2>
+            {createDishContentStore.servingSizes.map((size) => {
+              let grams: number = 0;
+
+              return (
+                <div
+                  key={size.id}
+                  className={styles.createDishContent_servingSizes_current_size}
+                >
+                  <span
+                    className={
+                      styles.createDishContent_servingSizes_current_size_text
+                    }
+                  >
+                    {size.name}
+                  </span>
+                  <Counter
+                    defaultNumber={grams}
+                    onChange={(value: number) => {
+                      grams = value;
+                    }}
+                    input={true}
+                    className={cn(
+                      styles.createDishContent_counter,
+                      styles.createDishContent_servingSizes_current_size_counter,
+                    )}
+                  />
+                  <span
+                    className={
+                      styles.createDishContent_servingSizes_current_size_creation
+                    }
+                  >
+                    Грамм
+                  </span>
+                  <Button
+                    onClick={() => {
+                      createDishContentStore.addSelectedServingSize({
+                        ...size,
+                        grams,
+                      });
+                      grams = 0;
+                    }}
+                    className={
+                      styles.createDishContent_servingSizes_current_size_creation
+                    }
+                  >
+                    +
+                  </Button>
+                </div>
+              );
+            })}
+          </div>
+          <div className={styles.createDishContent_servingSizes_selected}>
+            <h2 className={styles.createDishContent_servingSizes_h}>
+              Добавлено
+            </h2>
+            {createDishContentStore.selectedServingSizes.map((size) => {
+              return (
+                <div
+                  key={size.id}
+                  className={
+                    styles.createDishContent_servingSizes_selected_size
+                  }
+                >
+                  <span
+                    className={
+                      styles.createDishContent_servingSizes_selected_size_creation
+                    }
+                  >
+                    {size.name}
+                  </span>
+                  <span
+                    className={
+                      styles.createDishContent_servingSizes_selected_size_creation
+                    }
+                  >
+                    {size.grams}
+                  </span>
+                  <span
+                    className={
+                      styles.createDishContent_servingSizes_selected_size_creation
+                    }
+                  >
+                    г.
+                  </span>
+                  <CloseIcon
+                    onClick={() => {
+                      createDishContentStore.removeSelectedServingSize(size.id);
+                    }}
+                    className={
+                      styles.createDishContent_servingSizes_selected_size_close
+                    }
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </CommonAccordion>
+      <CommonAccordion
         title="Продукты"
         className={styles.createDishContent_accordion}
       >
@@ -394,6 +507,16 @@ const CreateDishContent: React.FC = () => {
                       >
                         <span>{dishProductLink.productName}</span>
                         <span>({dishProductLink.quantity} г.)</span>
+                        <CloseIcon
+                          onClick={() => {
+                            createDishContentStore.removeDishProductLink(
+                              dishProductLink.productId,
+                            );
+                          }}
+                          className={
+                            styles.createDishContent_products_selected_product_close
+                          }
+                        />
                       </div>
                     );
                   },

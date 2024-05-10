@@ -8,15 +8,15 @@ import {
   toJS,
 } from "mobx";
 
-import { NutrientsType, ServingSizeType } from "./CreateDishContentStore";
+import {
+  NutrientsType,
+  ServingSizeType,
+  ServingSizeWithGramsType,
+} from "./CreateDishContentStore";
 import rootStore from "./RootStore/instance";
 import { HOST } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
-
-export type ServingSizeWithGramsType = ServingSizeType & {
-  grams: number;
-};
 
 type PrivateFields =
   | "_name"
@@ -246,7 +246,7 @@ class CreateProductContentStore implements ILocalStore {
         fat: this.fat,
         nutrients: toJS(this.nutrients),
         serving_sizes: this.selectedServingSizes.map((size) => ({
-          serving_size_id: size.id,
+          servingSizeId: size.id,
           grams: size.grams,
         })),
       };

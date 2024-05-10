@@ -85,6 +85,76 @@
         margin-top: 20px;
     }
 
+    &_servingSizes {
+        margin-top: 20px;
+        padding: 10px 20px;
+        border: 1px solid $gray;
+        border-radius: 20px;
+        display: flex;
+
+        &_h {
+            text-align: center;
+            border-bottom: 1px solid $light-gray;
+            font-size: $h3;
+        }
+
+        &_current {
+            border-right: 1px solid $light-gray;
+            display: flex;
+            flex-direction: column;
+            flex-basis: 50%;
+
+            &_size {
+                cursor: pointer;
+                padding: 10px 5px;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+
+                &:hover {
+                    background-color: $very-light-gray;
+                }
+
+                &_counter {
+                    width: min-content;
+                    min-width: 70px;
+                }
+
+                &_text {
+                    margin-right: auto;
+                }
+
+                &_creation {
+                    margin-left: 10px;
+                }
+            }
+        }
+
+        &_selected {
+            margin-left: auto;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid $light-gray;
+            flex-basis: 50%;
+
+            &_size {
+                position: relative;
+                padding: 10px 5px;
+                display: flex;
+                align-items: center;
+
+                &_creation {
+                    margin-left: 10px;
+                }
+
+                &_close {
+                    margin-left: auto;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
     &_searchList {
         margin-top: 20px;
         max-height: 300px;
@@ -158,10 +228,15 @@
             border-left: 1px solid $light-gray;
 
             &_product {
-                margin-top: 20px;
+                padding: 10px 5px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+
+                &_close {
+                    margin-left: auto;
+                    cursor: pointer;
+                }
             }
         }
     }

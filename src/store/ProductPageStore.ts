@@ -128,7 +128,7 @@ class ProductPageStore implements ILocalStore {
       };
 
       await axios({
-        url: `${HOST}/products/visibility`,
+        url: `${HOST}/products/${this.product?.id}/visibility`,
         method: "get",
         params,
         headers,

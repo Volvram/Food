@@ -130,6 +130,14 @@
             font-size: $p2;
         }
 
+        &_dishes {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            font-size: $p2;
+        }
+
         &_items {
             display: flex;
             flex-direction: column;
@@ -153,6 +161,7 @@
                 &_img {
                     width: 40px;
                     height: 40px;
+                    object-fit: cover;
                 }
 
                 &_servingSize {
