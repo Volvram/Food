@@ -1,10 +1,15 @@
 import React from "react";
 
+import axios from "axios";
 import dayjs from "dayjs";
 
 import { mealGroups } from "../../mealGroups";
+import { mealStatuses } from "../../mealStatuses";
 import styles from "./styles.module.scss";
+import { HOST } from "@/shared/hosts";
 import { DayOfTheWeekType, MealType } from "@/store/CalendarContentStore";
+import rootStore from "@/store/RootStore/instance";
+import { log } from "@/utils/log";
 
 type MealCardProps = {
   weekDay: DayOfTheWeekType;
@@ -21,6 +26,44 @@ const MealCard: React.FC<MealCardProps> = ({ weekDay, meal, onClick }) => {
     meal.status == "TODO" ? false : true,
   );
 
+  const requestChangeMealStatus = async () => {
+    try {
+      await rootStore.user.checkAuthorization();
+
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const params: any = {
+        user_id: rootStore.user.id,
+        id: meal.id,
+        status: mealStatuses.find((status) => meal.status != status.value)
+          ?.value,
+      };
+
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
+      await axios({
+        url: `${HOST}/meals/${meal.id}/status`,
+        method: "put",
+        params,
+        headers,
+      });
+
+      return Promise.resolve("Статус приема пищи изменен");
+    } catch (e) {
+      log("MealCard: ", e);
+      return Promise.reject(e);
+    }
+  };
+
+  const handleChangeMealStatus = () => {
+    requestChangeMealStatus().catch((error) => {
+      alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
+    });
+  };
+
   return (
     <div
       className={styles.root}
@@ -33,6 +76,7 @@ const MealCard: React.FC<MealCardProps> = ({ weekDay, meal, onClick }) => {
           className={styles.root_title_circle}
           onClick={(event) => {
             event.stopPropagation();
+            handleChangeMealStatus();
             setEaten(!eaten);
           }}
         >

@@ -51,6 +51,7 @@ const SearchPage: React.FC = () => {
           open={searchPageStore.isOpenFilters}
           onClose={searchPageStore.toggleIsOpenFilters}
           onOpen={searchPageStore.toggleIsOpenFilters}
+          disableScrollLock={true}
         >
           <SearchFilters
             onClose={() => {

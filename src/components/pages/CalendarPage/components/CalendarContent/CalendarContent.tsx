@@ -1,6 +1,8 @@
 import React from "react";
 
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import cn from "classnames";
 import { observer } from "mobx-react-lite";
@@ -23,6 +25,9 @@ const CalendarContent: React.FC<CalendarContentProps> = ({
 }) => {
   const listRef = React.useRef<HTMLDivElement | null>(null);
   const currentDayRef = React.useRef<HTMLDivElement | null>(null);
+  const [anchorMenuEl, setAnchorMenuEl] = React.useState<
+    null | HTMLElement | SVGSVGElement
+  >(null);
 
   const calendarContentStore = useLocalStore(
     () => new CalendarContentStore(currentCalendar),
@@ -48,8 +53,8 @@ const CalendarContent: React.FC<CalendarContentProps> = ({
     }, 1000);
   }, [currentDayRef.current]);
 
-  const handleExport = () => {
-    calendarContentStore.requestExportWeek().then(
+  const handleExport = (fileFormat: "XLSX" | "CSV" = "XLSX") => {
+    calendarContentStore.requestExportWeek(fileFormat).then(
       (response) => {
         const link = document.createElement("a");
         link.setAttribute("href", response.file.url);
@@ -139,6 +144,7 @@ const CalendarContent: React.FC<CalendarContentProps> = ({
         open={calendarContentStore.isOpenAddMeal}
         onClose={calendarContentStore.toggleIsOpenAddMeal}
         onOpen={calendarContentStore.toggleIsOpenAddMeal}
+        disableScrollLock={true}
       >
         <AddMeal
           calendar={currentCalendar}
@@ -173,10 +179,60 @@ const CalendarContent: React.FC<CalendarContentProps> = ({
           </div>
         </div>
 
-        <FileDownloadIcon
-          onClick={handleExport}
-          className={s.calendar_panel_export}
-        />
+        <div>
+          <FileDownloadIcon
+            id="export-button"
+            onClick={(event: React.MouseEvent<SVGSVGElement>) => {
+              setAnchorMenuEl(event.currentTarget);
+              calendarContentStore.toggleIsOpenExportMenu();
+            }}
+            aria-controls={
+              calendarContentStore.isOpenExportMenu
+                ? "export-button"
+                : undefined
+            }
+            aria-haspopup="true"
+            aria-expanded={
+              calendarContentStore.isOpenExportMenu ? "true" : undefined
+            }
+            className={s.calendar_panel_export}
+          />
+          <Menu
+            id="export-button"
+            anchorEl={anchorMenuEl}
+            open={calendarContentStore.isOpenExportMenu}
+            onClose={calendarContentStore.toggleIsOpenExportMenu}
+            MenuListProps={{
+              "aria-labelledby": "export-button",
+            }}
+            disableScrollLock={true}
+          >
+            <MenuItem
+              onClick={(event: React.MouseEvent<HTMLElement>) => {
+                const target = event.target;
+                const value = (target as HTMLElement).textContent;
+
+                if (value == "XLSX" || value == "CSV") {
+                  handleExport(value);
+                }
+              }}
+            >
+              XLSX
+            </MenuItem>
+            <MenuItem
+              onClick={(event: React.MouseEvent<HTMLElement>) => {
+                const target = event.target;
+                const value = (target as HTMLElement).textContent;
+
+                if (value == "XLSX" || value == "CSV") {
+                  handleExport(value);
+                }
+              }}
+            >
+              CSV
+            </MenuItem>
+          </Menu>
+        </div>
 
         <div className={s.calendar_panel_arrows}>
           <div

@@ -102,7 +102,8 @@ type PrivateFields =
   | "_isOpenAddMeal"
   | "_isOpenMealDetails"
   | "_openedMealId"
-  | "_chosenWeekDay";
+  | "_chosenWeekDay"
+  | "_isOpenExportMenu";
 
 class CalendarContentStore implements ILocalStore {
   private _calendar: CalendarType | null = null;
@@ -132,6 +133,7 @@ class CalendarContentStore implements ILocalStore {
   private _isOpenMealDetails = false;
   private _openedMealId: number | null = null;
   private _chosenWeekDay: DayOfTheWeekType | null = null;
+  private _isOpenExportMenu = false;
 
   constructor(calendar: CalendarType) {
     makeObservable<CalendarContentStore, PrivateFields>(this, {
@@ -168,6 +170,9 @@ class CalendarContentStore implements ILocalStore {
       _chosenWeekDay: observable,
       setChosenWeekDay: action,
       chosenWeekDay: computed,
+      _isOpenExportMenu: observable,
+      setIsOpenExportMenu: action,
+      isOpenExportMenu: computed,
     });
 
     this.setCalendar(calendar);
@@ -399,7 +404,19 @@ class CalendarContentStore implements ILocalStore {
     return this._chosenWeekDay;
   }
 
-  requestExportWeek = async () => {
+  setIsOpenExportMenu(isOpenExportMenu: boolean) {
+    this._isOpenExportMenu = isOpenExportMenu;
+  }
+
+  get isOpenExportMenu() {
+    return this._isOpenExportMenu;
+  }
+
+  toggleIsOpenExportMenu = () => {
+    this.setIsOpenExportMenu(!this.isOpenExportMenu);
+  };
+
+  requestExportWeek = async (fileFormat: "XLSX" | "CSV" = "XLSX") => {
     try {
       await rootStore.user.checkAuthorization();
 
@@ -413,7 +430,7 @@ class CalendarContentStore implements ILocalStore {
         date_to: dayjs(this.week[this.week.length - 1].date).format(
           "YYYY-MM-DD",
         ),
-        fileFormat: "XLSX",
+        fileFormat,
       };
 
       const headers: any = {

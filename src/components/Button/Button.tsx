@@ -5,7 +5,7 @@ import cn from "classnames";
 import styles from "./styles.module.scss";
 
 export type ButtonProps = React.PropsWithChildren<{
-  onClick?: (e: React.MouseEvent) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
   disabled?: boolean;
 }> &

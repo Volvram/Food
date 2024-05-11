@@ -45,6 +45,7 @@ const CalendarPage: React.FC = () => {
           open={calendarPageStore.calendarMenuOpen}
           onClose={calendarPageStore.toggleCalendarMenuOpen}
           onOpen={calendarPageStore.toggleCalendarMenuOpen}
+          disableScrollLock={true}
         >
           <CalendarMenu
             allCalendars={calendarPageStore.allCalendars}
@@ -64,6 +65,7 @@ const CalendarPage: React.FC = () => {
             open={calendarPageStore.calendarSettingsOpen}
             onClose={calendarPageStore.toggleCalendarSettingsOpen}
             onOpen={calendarPageStore.toggleCalendarSettingsOpen}
+            disableScrollLock={true}
           >
             <CalendarSettings
               currentCalendar={calendarPageStore.currentCalendar}
