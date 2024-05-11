@@ -34,7 +34,11 @@ const LoginContent: React.FC = () => {
         });
       },
       (error) => {
-        alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
+        alert(
+          `Ошибка: ${
+            error?.response?.data?.error_description ?? error.message ?? error
+          }`,
+        );
       },
     );
   };

@@ -269,7 +269,7 @@ const AddMeal: React.FC<AddMealProps> = ({
             >
               <span>{dish.name}</span>
               <div>{dish.servingSize.name}</div>
-              <div>{dish.count}</div>
+              <div>{dish.count} шт.</div>
               <CloseIcon
                 onClick={() => {
                   addMealStore.removeFromAddedList(dish);

@@ -55,6 +55,7 @@ const CalendarSettings: React.FC<CalendarSettingProps> = ({
     calendarSettingStore.requestEditCalendar().then(
       (response) => {
         alert(response);
+        window.location.reload();
       },
       (error) => {
         alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
