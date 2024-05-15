@@ -59,7 +59,7 @@ class SearchContentStore implements ILocalStore {
   private _currentPageDishes: DishType[] = [];
   private _products: ProductType[] = [];
   private _currentPageProducts: ProductType[] = [];
-  private _countPerPage = 4;
+  private _countPerPage = 8;
 
   constructor() {
     makeObservable<SearchContentStore, PrivateFields>(this, {
@@ -94,6 +94,7 @@ class SearchContentStore implements ILocalStore {
   ) {
     const params: any = {
       search: search ?? "",
+      per_page: 45,
       creator_type_filter: createdByUser ? "CUSTOM" : "SYSTEM_CREATED",
     };
 

@@ -6,17 +6,17 @@ import { observer } from "mobx-react-lite";
 import Image from "next/image";
 import Link from "next/link";
 
-import { mealGroups } from "../../mealGroups";
-import { mealStatuses } from "../../mealStatuses";
+import { mealGroups } from "../mealGroups";
+import { mealStatuses } from "../mealStatuses";
 import styles from "./styles.module.scss";
 import noImage from "@/assets/img/noImage.jpg";
-import { DayOfTheWeekType } from "@/store/CalendarContentStore";
+import { DayOfTheWeekType } from "@/store/CalendarContentPageStore";
 import { CalendarType } from "@/store/CalendarPageStore";
 import MealDetailsStore from "@/store/MealDetailsStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 
 type MealDetailsProps = {
-  calendar: CalendarType;
+  calendar: CalendarType | null;
   mealId: number;
   weekDay: DayOfTheWeekType | null;
   withCross?: boolean;

@@ -10,7 +10,7 @@ import {
   runInAction,
 } from "mobx";
 
-import { DayOfTheWeekType } from "./CalendarContentStore";
+import { DayOfTheWeekType } from "./CalendarContentPageStore";
 import { CalendarType } from "./CalendarPageStore";
 import { ProductType } from "./CreateDishContentStore";
 import { FullDishModel, normalizeFullDish } from "./models/FullDish/FullDish";
@@ -24,7 +24,7 @@ import { DishType } from "./SearchContentStore";
 import {
   MealGroupsType,
   mealGroups,
-} from "@/components/pages/CalendarPage/components/CalendarContent/mealGroups";
+} from "@/components/pages/CalendarPage/components/CalendarContentPage/components/mealGroups";
 import { HOST } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
@@ -87,7 +87,7 @@ class AddMealStore implements ILocalStore {
     mealProductLinks: [],
   };
 
-  constructor(calendar: CalendarType) {
+  constructor() {
     makeObservable<AddMealStore, PrivateFields>(this, {
       _calendar: observable,
       setCalendar: action,
@@ -128,11 +128,9 @@ class AddMealStore implements ILocalStore {
       addToAddedList: action,
       removeFromAddedList: action,
     });
-
-    this.setCalendar(calendar);
   }
 
-  setCalendar(calendar: CalendarType) {
+  setCalendar(calendar: CalendarType | null) {
     this._calendar = calendar;
   }
 

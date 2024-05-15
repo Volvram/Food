@@ -3,6 +3,7 @@ import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import cn from "classnames";
 import { observer } from "mobx-react-lite";
+import Link from "next/link";
 
 import styles from "./styles.module.scss";
 import { Button } from "@/components/Button";
@@ -15,8 +16,6 @@ import { useLocalStore } from "@/utils/useLocalStore";
 type CalendarMenuProps = {
   allCalendars: AllCaledarsType;
   currentCalendar: CalendarType | null;
-  onChange: (value: CalendarType) => void;
-  onSubmit?: () => void;
   onClose?: () => void;
   withCross?: boolean;
 };
@@ -24,8 +23,6 @@ type CalendarMenuProps = {
 const CalendarMenu: React.FC<CalendarMenuProps> = ({
   allCalendars,
   currentCalendar,
-  onChange,
-  onSubmit,
   onClose,
   withCross,
 }) => {
@@ -36,7 +33,7 @@ const CalendarMenu: React.FC<CalendarMenuProps> = ({
       (response) => {
         alert(response);
         calendarMenuStore.toggleCalendarCreateOpen();
-        onSubmit?.();
+        window.location.reload();
       },
       (error) => {
         alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
@@ -48,8 +45,9 @@ const CalendarMenu: React.FC<CalendarMenuProps> = ({
     if (calendarList.length) {
       return calendarList.map((calendar) => {
         return (
-          <div
+          <Link
             key={calendar.id}
+            href={`${calendar.id}`}
             className={cn(
               styles.root_inner_sections_section_items_name,
               currentCalendar &&
@@ -57,12 +55,11 @@ const CalendarMenu: React.FC<CalendarMenuProps> = ({
                 styles.root_inner_sections_section_items_name__active,
             )}
             onClick={() => {
-              onChange(calendar);
               onClose?.();
             }}
           >
             {calendar.name}
-          </div>
+          </Link>
         );
       });
     } else {

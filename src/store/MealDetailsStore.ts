@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeObservable, observable, action, computed } from "mobx";
 
-import { MealType } from "./CalendarContentStore";
+import { MealType } from "./CalendarContentPageStore";
 import { CalendarType } from "./CalendarPageStore";
 import rootStore from "./RootStore/instance";
 import { HOST } from "@/shared/hosts";
@@ -25,7 +25,7 @@ class MealDetailsStore implements ILocalStore {
     });
   }
 
-  setCalendar(calendar: CalendarType) {
+  setCalendar(calendar: CalendarType | null) {
     this._calendar = calendar;
   }
 

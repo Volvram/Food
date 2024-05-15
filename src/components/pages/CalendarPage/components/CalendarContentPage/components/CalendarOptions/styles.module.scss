@@ -1,0 +1,9 @@
+@import "@/styles/variables.scss";
+
+.root {
+    &_options {
+        display: flex;
+        align-items: center;
+        gap: 5%;
+    }
+}

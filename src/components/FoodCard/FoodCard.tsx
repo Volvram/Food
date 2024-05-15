@@ -28,9 +28,9 @@ export const FoodCard: React.FC<FoodCardType> = ({ item }) => {
           ) : (
             <></>
           )}
-          <div className={style.foodCard_icons_save}>
+          {/* <div className={style.foodCard_icons_save}>
             <Image src={favoritesIcon} alt="" />
-          </div>
+          </div> */}
         </div>
       </Card>
     </div>

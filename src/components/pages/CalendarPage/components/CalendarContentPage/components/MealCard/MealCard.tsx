@@ -3,11 +3,11 @@ import React from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 
-import { mealGroups } from "../../mealGroups";
-import { mealStatuses } from "../../mealStatuses";
+import { mealGroups } from "../mealGroups";
+import { mealStatuses } from "../mealStatuses";
 import styles from "./styles.module.scss";
 import { HOST } from "@/shared/hosts";
-import { DayOfTheWeekType, MealType } from "@/store/CalendarContentStore";
+import { DayOfTheWeekType, MealType } from "@/store/CalendarContentPageStore";
 import rootStore from "@/store/RootStore/instance";
 import { log } from "@/utils/log";
 

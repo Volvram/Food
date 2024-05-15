@@ -8,7 +8,7 @@ import {
 } from "mobx";
 
 import rootStore from "./RootStore/instance";
-import { UserAccessNameType } from "@/components/pages/CalendarPage/calendarUserAccesses";
+import { UserAccessNameType } from "@/components/pages/CalendarPage/components/CalendarContentPage/components/CalendarOptions/components/CalendarSettings/calendarUserAccesses";
 import { HOST } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
@@ -28,50 +28,30 @@ export type AllCaledarsType = {
   PRIVATE: CalendarType[];
 };
 
-type PrivateFields =
-  | "_calendarMenuOpen"
-  | "_allCalendars"
-  | "_currentCalendar"
-  | "_calendarSettingsOpen";
+type PrivateFields = "_allCalendars" | "_calendarCreateOpen" | "_calendarName";
 
 class CalendarPageStore implements ILocalStore {
-  private _calendarMenuOpen = false;
   private _allCalendars: AllCaledarsType = {
     PUBLIC_OWN: [],
     PUBLIC_OTHERS: [],
     PRIVATE: [],
   };
-  private _currentCalendar: CalendarType | null = null;
-  private _calendarSettingsOpen = false;
+  private _calendarCreateOpen = false;
+  private _calendarName: string | null = null;
 
   constructor() {
     makeObservable<CalendarPageStore, PrivateFields>(this, {
-      _calendarMenuOpen: observable,
-      setCalendarMenuOpen: action,
-      calendarMenuOpen: computed,
       _allCalendars: observable,
       setAllCalendars: action,
       allCalendars: computed,
-      _currentCalendar: observable,
-      setCurrentCalendar: action,
-      currentCalendar: computed,
-      _calendarSettingsOpen: observable,
-      setCalendarSettingsOpen: action,
-      calendarSettingsOpen: computed,
+      _calendarCreateOpen: observable,
+      setCalendarCreateOpen: action,
+      calendarCreateOpen: computed,
+      _calendarName: observable,
+      setCalendarName: action,
+      calendarName: computed,
     });
   }
-
-  setCalendarMenuOpen(calendarMenuOpen: boolean) {
-    this._calendarMenuOpen = calendarMenuOpen;
-  }
-
-  get calendarMenuOpen() {
-    return this._calendarMenuOpen;
-  }
-
-  toggleCalendarMenuOpen = () => {
-    this.setCalendarMenuOpen(!this.calendarMenuOpen);
-  };
 
   setAllCalendars(allCalendars: AllCaledarsType) {
     this._allCalendars = allCalendars;
@@ -104,31 +84,69 @@ class CalendarPageStore implements ILocalStore {
       });
 
       runInAction(() => {
-        this.setAllCalendars(allCalendars.data);
+        this.setAllCalendars(allCalendars.data ?? null);
       });
     } catch (e) {
       log("CalendarPageStore: ", e);
     }
   };
 
-  setCurrentCalendar(currentCalendar: CalendarType | null) {
-    this._currentCalendar = currentCalendar;
+  setCalendarCreateOpen(calendarCreateOpen: boolean) {
+    this._calendarCreateOpen = calendarCreateOpen;
   }
 
-  get currentCalendar() {
-    return this._currentCalendar;
+  get calendarCreateOpen() {
+    return this._calendarCreateOpen;
   }
 
-  setCalendarSettingsOpen(calendarSettingsOpen: boolean) {
-    this._calendarSettingsOpen = calendarSettingsOpen;
+  toggleCalendarCreateOpen = () => {
+    this.setCalendarCreateOpen(!this.calendarCreateOpen);
+  };
+
+  setCalendarName(calendarName: string) {
+    this._calendarName = calendarName;
   }
 
-  get calendarSettingsOpen() {
-    return this._calendarSettingsOpen;
+  get calendarName() {
+    return this._calendarName;
   }
 
-  toggleCalendarSettingsOpen = () => {
-    this.setCalendarSettingsOpen(!this.calendarSettingsOpen);
+  requestCreateCalendar = async () => {
+    try {
+      await rootStore.user.checkAuthorization();
+
+      if (!this.calendarName) {
+        throw new Error("Название не может быть пустым");
+      }
+
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const params: any = {
+        user_id: rootStore.user.id,
+      };
+
+      const body = {
+        name: this.calendarName,
+      };
+
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
+      await axios({
+        url: `${HOST}/calendars`,
+        method: "post",
+        params,
+        data: body,
+        headers,
+      });
+
+      return Promise.resolve("Календарь успешно создан");
+    } catch (e) {
+      log("CalendarPageStore: ", e);
+      return Promise.reject(e);
+    }
   };
 
   destroy() {}

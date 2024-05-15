@@ -10,7 +10,7 @@ import {
   runInAction,
 } from "mobx";
 
-import { CalendarType } from "./CalendarPageStore";
+import { AllCaledarsType, CalendarType } from "./CalendarPageStore";
 import { ServingSizeLinkType } from "./models/FullProduct/FullProduct";
 import rootStore from "./RootStore/instance";
 import { UserType } from "./RootStore/UserStore";
@@ -93,6 +93,7 @@ export type DayOfTheWeekType = {
 };
 
 type PrivateFields =
+  | "_allCalendars"
   | "_calendar"
   | "_currentDate"
   | "_year"
@@ -105,7 +106,12 @@ type PrivateFields =
   | "_chosenWeekDay"
   | "_isOpenExportMenu";
 
-class CalendarContentStore implements ILocalStore {
+class CalendarContentPageStore implements ILocalStore {
+  private _allCalendars: AllCaledarsType = {
+    PUBLIC_OWN: [],
+    PUBLIC_OTHERS: [],
+    PRIVATE: [],
+  };
   private _calendar: CalendarType | null = null;
   private _currentDate = new Date(
     new Date().getFullYear(),
@@ -135,8 +141,11 @@ class CalendarContentStore implements ILocalStore {
   private _chosenWeekDay: DayOfTheWeekType | null = null;
   private _isOpenExportMenu = false;
 
-  constructor(calendar: CalendarType) {
-    makeObservable<CalendarContentStore, PrivateFields>(this, {
+  constructor() {
+    makeObservable<CalendarContentPageStore, PrivateFields>(this, {
+      _allCalendars: observable,
+      setAllCalendars: action,
+      allCalendars: computed,
       _calendar: observable,
       setCalendar: action,
       calendar: computed,
@@ -175,8 +184,6 @@ class CalendarContentStore implements ILocalStore {
       isOpenExportMenu: computed,
     });
 
-    this.setCalendar(calendar);
-
     // **Подсчет дней недели**
 
     // Заполняем неделю с воскресенья
@@ -211,13 +218,54 @@ class CalendarContentStore implements ILocalStore {
     this._week = this._week.slice().reverse();
   }
 
-  setCalendar(calendar: CalendarType) {
+  setAllCalendars(allCalendars: AllCaledarsType) {
+    this._allCalendars = allCalendars;
+  }
+
+  get allCalendars() {
+    return this._allCalendars;
+  }
+
+  setCalendar(calendar: CalendarType | null) {
     this._calendar = calendar;
   }
 
   get calendar() {
     return this._calendar;
   }
+
+  requestAllCalendars = async () => {
+    try {
+      await rootStore.user.checkAuthorization();
+
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const params: any = {
+        user_id: rootStore.user.id,
+      };
+
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
+      const allCalendars = await axios({
+        url: `${HOST}/calendars`,
+        method: "get",
+        params,
+        headers,
+      });
+
+      runInAction(() => {
+        this.setAllCalendars(allCalendars.data ?? null);
+      });
+
+      return Promise.resolve(allCalendars.data);
+    } catch (e) {
+      log("CalendarContentPageStore: ", e);
+      return Promise.reject(e);
+    }
+  };
 
   setCurrentDate(currentDate: Date) {
     this._currentDate = currentDate;
@@ -290,6 +338,10 @@ class CalendarContentStore implements ILocalStore {
   requestWeekMeals = async () => {
     try {
       await rootStore.user.checkAuthorization();
+
+      if (!this.calendar) {
+        return;
+      }
 
       const tokenType = localStorage.getItem("token_type");
       const accessToken = localStorage.getItem("access_token");
@@ -495,4 +547,4 @@ class CalendarContentStore implements ILocalStore {
   );
 }
 
-export default CalendarContentStore;
+export default CalendarContentPageStore;

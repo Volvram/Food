@@ -1,17 +1,15 @@
 import React from "react";
 
-import MenuIcon from "@mui/icons-material/Menu";
-import SettingsIcon from "@mui/icons-material/Settings";
-import IconButton from "@mui/material/IconButton";
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import cn from "classnames";
 import { observer } from "mobx-react-lite";
+import Link from "next/link";
 
-import CalendarContent from "./components/CalendarContent/CalendarContent";
-import CalendarMenu from "./components/CalendarMenu/CalendarMenu";
-import CalendarSettings from "./components/CalendarSettings/CalendarSettings";
 import styles from "./styles.module.scss";
+import { Button } from "@/components/Button";
 import Header from "@/components/Header/Header";
+import { Input } from "@/components/Input";
 import Meta from "@/components/Meta/Meta";
+import WithModal from "@/components/WithModal/WithModal";
 import CalendarPageStore, { CalendarType } from "@/store/CalendarPageStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 
@@ -19,20 +17,42 @@ const CalendarPage: React.FC = () => {
   const calendarPageStore = useLocalStore(() => new CalendarPageStore());
 
   React.useEffect(() => {
-    calendarPageStore.requestAllCalendars().then(() => {
-      const calendars = Object.values(calendarPageStore.allCalendars).reduce(
-        (calendars, section) => {
-          return [...calendars, ...section];
-        },
-        [],
-      );
-
-      calendarPageStore.setCurrentCalendar(calendars[0] ?? null);
-    });
+    calendarPageStore.requestAllCalendars();
   }, []);
 
+  const handleCreateCalendar = () => {
+    calendarPageStore.requestCreateCalendar().then(
+      (response) => {
+        alert(response);
+        calendarPageStore.toggleCalendarCreateOpen();
+        calendarPageStore.requestAllCalendars();
+      },
+      (error) => {
+        alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
+      },
+    );
+  };
+
+  const renderCalendarList = (calendarList: CalendarType[]) => {
+    if (calendarList.length) {
+      return calendarList.map((calendar) => {
+        return (
+          <Link
+            key={calendar.id}
+            href={`calendar/${calendar.id}`}
+            className={cn(styles.root_inner_sections_section_items_name)}
+          >
+            {calendar.name}
+          </Link>
+        );
+      });
+    } else {
+      return <>-</>;
+    }
+  };
+
   return (
-    <div className={styles.calendarPage}>
+    <div className={styles.root}>
       <Meta
         title="Календарь"
         description="Запланируйте рацион"
@@ -40,86 +60,72 @@ const CalendarPage: React.FC = () => {
       />
       <main>
         <Header />
-        <SwipeableDrawer
-          anchor="left"
-          open={calendarPageStore.calendarMenuOpen}
-          onClose={calendarPageStore.toggleCalendarMenuOpen}
-          onOpen={calendarPageStore.toggleCalendarMenuOpen}
-          disableScrollLock={true}
+        <WithModal
+          open={calendarPageStore.calendarCreateOpen}
+          onClose={calendarPageStore.toggleCalendarCreateOpen}
+          withCross={true}
         >
-          <CalendarMenu
-            allCalendars={calendarPageStore.allCalendars}
-            currentCalendar={calendarPageStore.currentCalendar}
-            onChange={(value: CalendarType) => {
-              calendarPageStore.setCurrentCalendar(value);
-            }}
-            onSubmit={calendarPageStore.requestAllCalendars}
-            onClose={calendarPageStore.toggleCalendarMenuOpen}
-            withCross={true}
-          />
-        </SwipeableDrawer>
-
-        {calendarPageStore.currentCalendar && (
-          <SwipeableDrawer
-            anchor="right"
-            open={calendarPageStore.calendarSettingsOpen}
-            onClose={calendarPageStore.toggleCalendarSettingsOpen}
-            onOpen={calendarPageStore.toggleCalendarSettingsOpen}
-            disableScrollLock={true}
-          >
-            <CalendarSettings
-              currentCalendar={calendarPageStore.currentCalendar}
-              withCross={true}
-              onClose={calendarPageStore.toggleCalendarSettingsOpen}
-            />
-          </SwipeableDrawer>
-        )}
-
-        <div className={styles.calendarPage_options}>
-          <IconButton
-            id="fade-button"
-            aria-controls={
-              calendarPageStore.calendarMenuOpen ? "fade-menu" : undefined
-            }
-            aria-haspopup="true"
-            aria-expanded={
-              calendarPageStore.calendarMenuOpen ? "true" : undefined
-            }
-            color="inherit"
-            onClick={() => {
-              calendarPageStore.toggleCalendarMenuOpen();
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-
-          {calendarPageStore.currentCalendar && (
-            <IconButton
-              id="fade-button"
-              aria-controls={
-                calendarPageStore.calendarSettingsOpen ? "fade-menu" : undefined
-              }
-              aria-haspopup="true"
-              aria-expanded={
-                calendarPageStore.calendarSettingsOpen ? "true" : undefined
-              }
-              color="inherit"
-              onClick={() => {
-                calendarPageStore.toggleCalendarSettingsOpen();
+          <div className={styles.root_modal}>
+            <h2>Создать календарь</h2>
+            <Input
+              onChange={(value: string) => {
+                calendarPageStore.setCalendarName(value);
               }}
-            >
-              <SettingsIcon />
-            </IconButton>
-          )}
-        </div>
+              placeholder="Название"
+              className={styles.root_inner_input}
+              containerClassName={styles.root_inner_inputContainer}
+            />
+            <Button onClick={handleCreateCalendar}>Создать</Button>
+          </div>
+        </WithModal>
 
-        {calendarPageStore.currentCalendar ? (
-          <CalendarContent
-            currentCalendar={calendarPageStore.currentCalendar}
-          />
+        {calendarPageStore.allCalendars ? (
+          <div className={styles.root_inner}>
+            <h2>Выбрать календарь</h2>
+            <div className={styles.root_inner_sections}>
+              <div className={styles.root_inner_sections_section}>
+                <span className={styles.root_inner_sections_text}>
+                  <strong>Публичные мои:</strong>
+                </span>
+                <div className={styles.root_inner_sections_section_items}>
+                  {renderCalendarList(
+                    calendarPageStore.allCalendars.PUBLIC_OWN,
+                  )}
+                </div>
+              </div>
+
+              <div className={styles.root_inner_sections_section}>
+                <span className={styles.root_inner_sections_text}>
+                  <strong>Публичные другие:</strong>
+                </span>
+                <div className={styles.root_inner_sections_section_items}>
+                  {renderCalendarList(
+                    calendarPageStore.allCalendars.PUBLIC_OTHERS,
+                  )}
+                </div>
+              </div>
+
+              <div className={styles.root_inner_sections_section}>
+                <span className={styles.root_inner_sections_text}>
+                  <strong>Приватные:</strong>
+                </span>
+                <div className={styles.root_inner_sections_section_items}>
+                  {renderCalendarList(calendarPageStore.allCalendars.PRIVATE)}
+                </div>
+              </div>
+            </div>
+          </div>
         ) : (
-          <div className={styles.calendarPage_empty}>У вас нет календарей</div>
+          <div className={styles.root_empty}>У вас нет календарей</div>
         )}
+        <Button
+          className={styles.root_create}
+          onClick={() => {
+            calendarPageStore.toggleCalendarCreateOpen();
+          }}
+        >
+          Создать календарь
+        </Button>
       </main>
     </div>
   );

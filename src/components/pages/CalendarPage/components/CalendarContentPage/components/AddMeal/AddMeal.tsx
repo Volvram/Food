@@ -10,7 +10,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
 
-import { mealGroups } from "../../mealGroups";
+import { mealGroups } from "../mealGroups";
 import styles from "./styles.module.scss";
 import magnifier from "@/assets/img/magnifier.png";
 import noImage from "@/assets/img/noImage.jpg";
@@ -19,12 +19,12 @@ import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
 import { debounce } from "@/shared/debounce";
 import AddMealStore from "@/store/AddMealStore";
-import { DayOfTheWeekType } from "@/store/CalendarContentStore";
+import { DayOfTheWeekType } from "@/store/CalendarContentPageStore";
 import { CalendarType } from "@/store/CalendarPageStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 
 type AddMealProps = {
-  calendar: CalendarType;
+  calendar: CalendarType | null;
   weekDay: DayOfTheWeekType | null;
   withCross?: boolean;
   onClose: () => void;
@@ -38,7 +38,11 @@ const AddMeal: React.FC<AddMealProps> = ({
   onClose,
   onSubmit,
 }) => {
-  const addMealStore = useLocalStore(() => new AddMealStore(calendar));
+  const addMealStore = useLocalStore(() => new AddMealStore());
+
+  React.useEffect(() => {
+    addMealStore.setCalendar(calendar);
+  }, [calendar]);
 
   const handleSearchChange = React.useCallback(
     debounce((value: string) => {

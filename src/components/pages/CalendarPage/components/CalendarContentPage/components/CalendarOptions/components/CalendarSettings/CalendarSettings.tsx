@@ -8,10 +8,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import cn from "classnames";
 import { observer } from "mobx-react-lite";
 
-import {
-  UserAccessType,
-  calendarUserAccesses,
-} from "../../calendarUserAccesses";
+import { UserAccessType, calendarUserAccesses } from "./calendarUserAccesses";
 import styles from "./styles.module.scss";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
@@ -34,7 +31,7 @@ const CalendarSettings: React.FC<CalendarSettingProps> = ({
 
   React.useEffect(() => {
     calendarSettingStore.requestParticipants();
-  }, []);
+  }, [calendarSettingStore.calendar]);
 
   React.useEffect(() => {
     calendarSettingStore.setCalendar(currentCalendar);

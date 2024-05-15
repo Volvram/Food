@@ -14,7 +14,7 @@ import rootStore from "./RootStore/instance";
 import {
   UserAccessNameType,
   UserAccessType,
-} from "@/components/pages/CalendarPage/calendarUserAccesses";
+} from "@/components/pages/CalendarPage/components/CalendarContentPage/components/CalendarOptions/components/CalendarSettings/calendarUserAccesses";
 import { HOST } from "@/shared/hosts";
 import { log } from "@/utils/log";
 import { ILocalStore } from "@/utils/useLocalStore";
