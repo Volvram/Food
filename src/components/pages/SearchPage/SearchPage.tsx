@@ -19,6 +19,7 @@ import { Button } from "@/components/Button";
 import Header from "@/components/Header/Header";
 import { Input } from "@/components/Input";
 import Meta from "@/components/Meta/Meta";
+import WithCross from "@/components/WithCross/WithCross";
 import { debounce } from "@/shared/debounce";
 import { FiltersType } from "@/store/SearchFiltersStore";
 import SearchPageStore from "@/store/SearchPageStore";
@@ -53,16 +54,20 @@ const SearchPage: React.FC = () => {
           onOpen={searchPageStore.toggleIsOpenFilters}
           disableScrollLock={true}
         >
-          <SearchFilters
-            onClose={() => {
-              searchPageStore.toggleIsOpenFilters();
-            }}
-            onSubmit={(filters: FiltersType | null) => {
-              searchPageStore.setFilters(filters);
-            }}
-            filters={searchPageStore.filters}
-            withCross={true}
-          />
+          <WithCross
+            open={searchPageStore.isOpenFilters}
+            onClose={searchPageStore.toggleIsOpenFilters}
+          >
+            <SearchFilters
+              onClose={() => {
+                searchPageStore.toggleIsOpenFilters();
+              }}
+              onSubmit={(filters: FiltersType | null) => {
+                searchPageStore.setFilters(filters);
+              }}
+              filters={searchPageStore.filters}
+            />
+          </WithCross>
         </SwipeableDrawer>
         <div className={styles.searchPage_body_search}>
           <Input

@@ -1,6 +1,5 @@
 import React from "react";
 
-import CloseIcon from "@mui/icons-material/Close";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
@@ -18,14 +17,10 @@ import { useLocalStore } from "@/utils/useLocalStore";
 
 type CalendarSettingProps = {
   currentCalendar: CalendarType;
-  onClose?: () => void;
-  withCross?: boolean;
 };
 
 const CalendarSettings: React.FC<CalendarSettingProps> = ({
   currentCalendar,
-  withCross,
-  onClose,
 }) => {
   const calendarSettingStore = useLocalStore(() => new CalendarSettingsStore());
 
@@ -125,16 +120,6 @@ const CalendarSettings: React.FC<CalendarSettingProps> = ({
 
   return (
     <div className={styles.root}>
-      {withCross && (
-        <div className={styles.root_close}>
-          <CloseIcon
-            onClick={() => {
-              onClose?.();
-            }}
-            className={styles.root_close_icon}
-          />
-        </div>
-      )}
       <h2>Настройки</h2>
       <span className={styles.root_text}>Управление календарем</span>
       <div className={styles.root_block}>

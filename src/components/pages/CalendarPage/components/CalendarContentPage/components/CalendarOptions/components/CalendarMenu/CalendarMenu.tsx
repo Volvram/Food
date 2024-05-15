@@ -1,6 +1,5 @@
 import React from "react";
 
-import CloseIcon from "@mui/icons-material/Close";
 import cn from "classnames";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
@@ -17,14 +16,12 @@ type CalendarMenuProps = {
   allCalendars: AllCaledarsType;
   currentCalendar: CalendarType | null;
   onClose?: () => void;
-  withCross?: boolean;
 };
 
 const CalendarMenu: React.FC<CalendarMenuProps> = ({
   allCalendars,
   currentCalendar,
   onClose,
-  withCross,
 }) => {
   const calendarMenuStore = useLocalStore(() => new CalendarMenuStore());
 
@@ -69,16 +66,6 @@ const CalendarMenu: React.FC<CalendarMenuProps> = ({
 
   return (
     <div className={styles.root}>
-      {withCross && (
-        <div className={styles.root_close}>
-          <CloseIcon
-            onClick={() => {
-              onClose?.();
-            }}
-            className={styles.root_close_icon}
-          />
-        </div>
-      )}
       <div className={styles.root_inner}>
         <h2>Календари</h2>
         <div className={styles.root_inner_sections}>

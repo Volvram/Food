@@ -19,17 +19,6 @@
     -moz-border-radius: 20px;
     -ms-border-radius: 20px;
     -o-border-radius: 20px;
-
-    &_close {
-        margin-top: 15px;
-        margin-right: 15px;
-        display: flex;
-
-        &_icon {
-            cursor: pointer;
-            margin-left: auto;
-        }
-    }
 }
 
 @media screen and (max-width: $tablet) {

@@ -1,6 +1,5 @@
 import React from "react";
 
-import CloseIcon from "@mui/icons-material/Close";
 import dayjs from "dayjs";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
@@ -19,16 +18,12 @@ type MealDetailsProps = {
   calendar: CalendarType | null;
   mealId: number;
   weekDay: DayOfTheWeekType | null;
-  withCross?: boolean;
-  onClose?: () => void;
 };
 
 const MealDetails: React.FC<MealDetailsProps> = ({
   calendar,
   mealId,
   weekDay,
-  withCross = false,
-  onClose,
 }) => {
   const mealDetailsStore = useLocalStore(() => new MealDetailsStore());
 
@@ -60,16 +55,6 @@ const MealDetails: React.FC<MealDetailsProps> = ({
 
   return (
     <div className={styles.root}>
-      {withCross && (
-        <div className={styles.root_close}>
-          <CloseIcon
-            onClick={() => {
-              onClose?.();
-            }}
-            className={styles.root_close_icon}
-          />
-        </div>
-      )}
       <div className={styles.root_inner}>
         <h2 className={styles.root_inner_h}>Прием пищи</h2>
         <div className={styles.root_inner_title}>

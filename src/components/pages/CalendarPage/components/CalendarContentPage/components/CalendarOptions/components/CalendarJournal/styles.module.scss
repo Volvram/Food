@@ -1,0 +1,89 @@
+@import "@/styles/variables.scss";
+
+.root {
+    max-width: 100%;
+    height: 85vh;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    &_title {
+        display: flex;
+        justify-content: center;
+
+        &_h {
+            margin-bottom: 5px;
+            width: fit-content;
+            font-size: $h2;
+        }
+    }
+
+    &_export {
+        cursor: pointer;
+        padding: 3px;
+        border-radius: 8px;
+        color: $dark-gray;
+        
+        &:hover {
+          background-color: $light-gray;
+        }
+      }
+
+    &_inner {
+        overflow: auto;
+        max-height: 100%;
+        border: 1px solid $black-primary;
+        border-radius: 8px;
+
+        &_items {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            &_item {
+                margin-left: 5px;
+                margin-right: 5px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                padding-left: 3px;
+                padding-right: 3px;
+                border-bottom: 1px solid $light-gray;
+                box-shadow: $dark-shadow;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+
+                &_date {
+                    margin-left: auto;
+                    font-size: $p2;
+                    color: $gray;
+                }
+
+                &_metadata {
+                    max-width: 300px;
+                }
+
+
+                &_user {
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                    gap: 5px;
+
+                    &_name {
+                        font-size: $p2;
+                    }
+
+                    &_img {
+                        width: 26px;
+                        height: 26px;
+                        border-radius: 50px;
+                    }
+                }
+            }
+        }
+
+        &_empty {
+            margin: 0 auto;
+        }
+    }
+}

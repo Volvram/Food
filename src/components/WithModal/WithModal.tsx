@@ -1,9 +1,9 @@
 import React from "react";
 
-import CloseIcon from "@mui/icons-material/Close";
 import { Modal, Box, Fade } from "@mui/material";
 import cn from "classnames";
 
+import WithCross from "../WithCross/WithCross";
 import styles from "./styles.module.scss";
 
 type WithModalProps = React.PropsWithChildren<{
@@ -25,16 +25,10 @@ const WithModal: React.FC<WithModalProps> = ({
       <Fade in={open}>
         <Box className={cn(styles.modal, className)}>
           {withCross && (
-            <div className={styles.modal_close}>
-              <CloseIcon
-                onClick={() => {
-                  onClose();
-                }}
-                className={styles.modal_close_icon}
-              />
-            </div>
+            <WithCross open={open} onClose={onClose}>
+              {children}
+            </WithCross>
           )}
-          {children}
         </Box>
       </Fade>
     </Modal>

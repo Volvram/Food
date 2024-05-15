@@ -2,11 +2,15 @@ import { makeObservable, observable, action, computed } from "mobx";
 
 import { ILocalStore } from "@/utils/useLocalStore";
 
-type PrivateFields = "_calendarMenuOpen" | "_calendarSettingsOpen";
+type PrivateFields =
+  | "_calendarMenuOpen"
+  | "_calendarSettingsOpen"
+  | "_calendarJournalOpen";
 
 class CalendarOptionsStore implements ILocalStore {
   private _calendarMenuOpen = false;
   private _calendarSettingsOpen = false;
+  private _calendarJournalOpen = false;
 
   constructor() {
     makeObservable<CalendarOptionsStore, PrivateFields>(this, {
@@ -16,6 +20,9 @@ class CalendarOptionsStore implements ILocalStore {
       _calendarSettingsOpen: observable,
       setCalendarSettingsOpen: action,
       calendarSettingsOpen: computed,
+      _calendarJournalOpen: observable,
+      setCalendarJournalOpen: action,
+      calendarJournalOpen: computed,
     });
   }
 
@@ -41,6 +48,18 @@ class CalendarOptionsStore implements ILocalStore {
 
   toggleCalendarSettingsOpen = () => {
     this.setCalendarSettingsOpen(!this.calendarSettingsOpen);
+  };
+
+  setCalendarJournalOpen(calendarJournalOpen: boolean) {
+    this._calendarJournalOpen = calendarJournalOpen;
+  }
+
+  get calendarJournalOpen() {
+    return this._calendarJournalOpen;
+  }
+
+  toggleCalendarJournalOpen = () => {
+    this.setCalendarJournalOpen(!this.calendarJournalOpen);
   };
 
   destroy() {}

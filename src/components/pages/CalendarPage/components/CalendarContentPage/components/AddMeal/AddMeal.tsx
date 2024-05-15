@@ -26,7 +26,6 @@ import { useLocalStore } from "@/utils/useLocalStore";
 type AddMealProps = {
   calendar: CalendarType | null;
   weekDay: DayOfTheWeekType | null;
-  withCross?: boolean;
   onClose: () => void;
   onSubmit: () => void;
 };
@@ -34,7 +33,6 @@ type AddMealProps = {
 const AddMeal: React.FC<AddMealProps> = ({
   calendar,
   weekDay,
-  withCross,
   onClose,
   onSubmit,
 }) => {
@@ -66,17 +64,6 @@ const AddMeal: React.FC<AddMealProps> = ({
 
   return (
     <div className={styles.addMeal}>
-      {withCross && (
-        <div className={styles.addMeal_close}>
-          <CloseIcon
-            onClick={() => {
-              onClose?.();
-            }}
-            className={styles.addMeal_close_icon}
-          />
-        </div>
-      )}
-
       <h2 className={styles.addMeal_h}>Добавить приём пищи</h2>
       <span className={styles.addMeal_text}>Название</span>
       <Input

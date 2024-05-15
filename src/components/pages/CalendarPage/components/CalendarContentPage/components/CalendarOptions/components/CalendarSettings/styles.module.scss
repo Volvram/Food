@@ -8,15 +8,6 @@
     display: flex;
     flex-direction: column;
 
-    &_close {
-        display: flex;
-
-        &_icon {
-            cursor: pointer;
-            margin-left: auto;
-        }
-    }
-
     &_block {
         margin-top: 5px;
         margin-bottom: 20px;

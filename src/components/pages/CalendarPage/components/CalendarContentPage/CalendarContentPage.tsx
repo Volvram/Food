@@ -14,6 +14,7 @@ import MealDetails from "./components/MealDetails/MealDetails";
 import s from "./styles.module.scss";
 import Header from "@/components/Header/Header";
 import Meta from "@/components/Meta/Meta";
+import WithCross from "@/components/WithCross/WithCross";
 import WithModal from "@/components/WithModal/WithModal";
 import CalendarContentPageStore from "@/store/CalendarContentPageStore";
 import { AllCaledarsType } from "@/store/CalendarPageStore";
@@ -173,13 +174,17 @@ const CalendarContentPage: React.FC<CalendarContentPageProps> = ({ id }) => {
           onOpen={calendarContentPageStore.toggleIsOpenAddMeal}
           disableScrollLock={true}
         >
-          <AddMeal
-            calendar={calendarContentPageStore.calendar}
-            weekDay={calendarContentPageStore.chosenWeekDay}
-            withCross={true}
+          <WithCross
+            open={calendarContentPageStore.isOpenAddMeal}
             onClose={calendarContentPageStore.toggleIsOpenAddMeal}
-            onSubmit={calendarContentPageStore.requestWeekMeals}
-          />
+          >
+            <AddMeal
+              calendar={calendarContentPageStore.calendar}
+              weekDay={calendarContentPageStore.chosenWeekDay}
+              onClose={calendarContentPageStore.toggleIsOpenAddMeal}
+              onSubmit={calendarContentPageStore.requestWeekMeals}
+            />
+          </WithCross>
         </SwipeableDrawer>
 
         {calendarContentPageStore.openedMealId && (

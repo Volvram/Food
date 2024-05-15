@@ -1,0 +1,12 @@
+@import "@/styles/variables.scss";
+
+.root {
+    &_close {
+        margin-left: auto;
+        display: flex;
+
+        &_icon {
+            cursor: pointer;
+        }
+    }
+}

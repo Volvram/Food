@@ -23,14 +23,12 @@ type SearchFiltersType = {
   onClose?: () => void;
   onSubmit: (filters: FiltersType | null) => void;
   filters: FiltersType | null;
-  withCross?: boolean;
 };
 
 const SearchFilters: React.FC<SearchFiltersType> = ({
   onClose,
   onSubmit,
   filters,
-  withCross = false,
 }) => {
   const searchFiltersStore = useLocalStore(() => new SearchFiltersStore());
 
@@ -55,16 +53,6 @@ const SearchFilters: React.FC<SearchFiltersType> = ({
 
   return (
     <div className={style.filtersearch}>
-      {withCross && (
-        <div className={style.filtersearch_close}>
-          <CloseIcon
-            onClick={() => {
-              onClose?.();
-            }}
-            className={style.filtersearch_close_icon}
-          />
-        </div>
-      )}
       <div className={style.filtersearch_inner}>
         <>
           <div className={style.filtersearch_inner_accordion}>
