@@ -38,6 +38,7 @@
         border: 1px solid $gray;
         border-radius: 20px;
         color: $blue;
+        transition: color 150ms;
 
         &:hover {
             color: $light-blue;
@@ -91,6 +92,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: flex-end;
+                transition: background-color 150ms;
 
                 &:hover {
                     background-color: $very-light-gray;

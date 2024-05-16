@@ -62,6 +62,7 @@ type PrivateFields =
   | "_mealDescription"
   | "_mealGroup"
   | "_mealTime"
+  | "_autoCalculate"
   | "_objectType"
   | "_search"
   | "_searchList"
@@ -76,6 +77,7 @@ class AddMealStore implements ILocalStore {
   private _mealDescription = "";
   private _mealGroup: MealGroupsType = mealGroups[0];
   private _mealTime = "00:00";
+  private _autoCalculate = false;
   private _objectType: "Блюда" | "Продукты" = "Блюда";
   private _search = "";
   private _searchList: DishType[] | ProductType[] = [];
@@ -104,6 +106,9 @@ class AddMealStore implements ILocalStore {
       _mealTime: observable,
       setMealTime: action,
       mealTime: computed,
+      _autoCalculate: observable,
+      setAutoCalculate: action,
+      autoCalculate: computed,
       _objectType: observable,
       setObjectType: action,
       objectType: computed,
@@ -169,6 +174,18 @@ class AddMealStore implements ILocalStore {
   get mealTime() {
     return this._mealTime;
   }
+
+  setAutoCalculate(autoCalculate: boolean) {
+    this._autoCalculate = autoCalculate;
+  }
+
+  get autoCalculate() {
+    return this._autoCalculate;
+  }
+
+  toggleAutoCalculate = () => {
+    this.setAutoCalculate(!this.autoCalculate);
+  };
 
   setObjectType(objectType: "Блюда" | "Продукты") {
     this._objectType = objectType;
@@ -365,6 +382,7 @@ class AddMealStore implements ILocalStore {
 
       const params: any = {
         user_id: rootStore.user.id,
+        auto_calculate: this.autoCalculate,
       };
 
       const body = {

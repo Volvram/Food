@@ -7,6 +7,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Switch from "@mui/material/Switch";
+import Typography from "@mui/material/Typography";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
 
@@ -121,6 +123,16 @@ const AddMeal: React.FC<AddMealProps> = ({
         className={styles.addMeal_time}
       />
 
+      <div className={styles.addMeal_switch}>
+        <Typography>Авто расчет питательности</Typography>
+        <Switch
+          checked={addMealStore.autoCalculate}
+          onChange={() => {
+            addMealStore.toggleAutoCalculate();
+          }}
+        />
+      </div>
+
       <RadioGroup
         className={styles.addMeal_type}
         aria-labelledby="demo-radio-buttons-group-label"
@@ -192,7 +204,10 @@ const AddMeal: React.FC<AddMealProps> = ({
         {addMealStore.currentObject ? (
           <div className={styles.addMeal_selected_obj}>
             <div>{addMealStore.currentObject.name}</div>
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+            <FormControl
+              variant="standard"
+              sx={{ m: 1, minWidth: 120, maxWidth: 230 }}
+            >
               <Select
                 labelId="demo-simple-select-standard-label"
                 id="demo-simple-select-standard"

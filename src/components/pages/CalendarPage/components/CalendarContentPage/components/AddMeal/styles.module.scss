@@ -75,6 +75,14 @@
         width: fit-content;
     }
 
+    &_switch{
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
     &_type {
         margin-top: 5px;
         display: flex;

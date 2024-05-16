@@ -1,0 +1,115 @@
+@import "@/styles/variables.scss";
+
+.root {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    &_panel {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        &_user {
+
+            &_img {
+                width: 26px;
+                height: 26px;
+                border-radius: 50px;
+            }
+        }
+    
+        &_input {
+            padding-top: 8px;
+            padding-bottom: 8px;
+            padding-left: 16px;
+            padding-right: 5px;
+            width: 100%;
+            border-radius: 50px;
+            border: 1px solid $very-light-gray;
+            box-shadow: $light-shadow;
+    
+            font-size: $p3;
+            font-style: normal;
+            font-weight: 400;
+    
+            &::placeholder {
+                color: $light-gray;
+                font-size: $p3;
+                font-style: normal;
+                font-weight: 400;
+            }
+        }
+    
+        &_inputContainer {
+            width: 70%;
+        }
+    
+        &_label {
+            cursor: pointer;
+            padding: 3px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            font-size: $p2;
+            transition: background-color 150ms;
+    
+            &:hover {
+                background-color: $very-light-gray;
+            }
+        }
+    
+        &_load {
+            width: fit-content;
+            display: none;
+        }
+    
+        &_iconButton {
+            width: 30px;
+            height: 30px;
+            border: 1px solid $very-light-gray;
+    
+            &_icon {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    }
+
+    &_text {
+        color: $light-gray;
+        font-size: $p2;
+    }
+
+    &_files {
+        overflow: auto;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        &_file {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+
+            &_name {
+                max-width: 100px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                -o-text-overflow: ellipsis;
+                white-space: nowrap;
+                font-size: $p2;
+            }
+
+            &_del {
+                width: 30px;
+                height: 30px;
+
+                &_icon {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+        }
+    }
+}

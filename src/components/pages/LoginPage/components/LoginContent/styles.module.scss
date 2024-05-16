@@ -132,6 +132,7 @@
                 cursor: pointer;
                 color: $blue;
                 text-decoration: underline;
+                transition: color 150ms;
 
                 &:hover {
                     color: $light-blue;

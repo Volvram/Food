@@ -36,6 +36,7 @@
                     &_name {
                         cursor: pointer;
                         color: $blue;
+                        transition: color 150ms;
 
                         &:hover {
                             color: $light-blue;

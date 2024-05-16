@@ -1,0 +1,105 @@
+@import "@/styles/variables.scss";
+
+.root {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    &_items {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        &_item {
+            margin-left: 5px;
+            margin-right: 5px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 3px;
+            padding-right: 3px;
+            border-bottom: 1px solid $light-gray;
+            border-radius: 8px;
+            box-shadow: $dark-shadow;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+
+            &_user {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+                &_name {
+                    font-size: $p3;
+                }
+
+                &_img {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50px;
+                }
+            }
+
+            &_message {
+                max-width: 300px;
+                font-size: $p2;
+            }
+
+            &_bottom {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+                &_files {
+                    display: flex;
+                    align-items: center;
+                    max-width: 70%;
+                    overflow: auto;
+                    gap: 5px;
+
+                    &_icon {
+                        width: 20px;
+                        height: 20px;
+                    }
+
+                    &_link {
+                        min-width: 70px;
+                        max-width: 100px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -o-text-overflow: ellipsis;
+                        white-space: nowrap;
+                        font-size: $p3;
+                        text-decoration: none;
+                        color: $light-blue;
+                    }
+                }
+
+                &_date {
+                    margin-left: auto;
+                    font-size: $p3;
+                    color: $gray;
+                }
+            }
+
+            &_delete {
+                padding: 3px;
+                cursor: pointer;
+                margin-left: auto;
+                border-radius: 8px;
+                text-decoration: underline;
+                color: $red;
+                font-size: $p3;
+        
+                &:hover {
+                    background-color: $light-red;
+                }
+            }
+        }
+    }
+
+    &_empty {
+        margin: 0 auto;
+        font-size: $p2;
+    }
+}

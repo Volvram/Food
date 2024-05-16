@@ -70,6 +70,7 @@
                 border-bottom: 1px solid $light-gray;
                 display: flex;
                 align-items: center;
+                transition: background-color 150ms;
     
                 &:hover {
                     background-color: $very-light-gray;

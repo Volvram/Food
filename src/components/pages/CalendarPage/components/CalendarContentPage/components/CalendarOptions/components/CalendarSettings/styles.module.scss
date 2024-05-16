@@ -50,6 +50,7 @@
         display: flex;
         align-items: center;
         font-size: $p2;
+        transition: background-color 150ms;
 
         &:hover {
             background-color: $light-gray;
@@ -89,6 +90,7 @@
                 color: $red;
                 text-align: right;
                 font-size: $p3;
+                transition: background-color 150ms;
 
                 &:hover {
                     background-color: $light-red;

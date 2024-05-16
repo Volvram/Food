@@ -73,6 +73,7 @@
                 border-radius: 20px;
                 border: 1px solid $gray;
                 color: $dark-gray;
+                transition: background-color 150ms;
 
                 &:hover {
                     background-color: $light-gray;

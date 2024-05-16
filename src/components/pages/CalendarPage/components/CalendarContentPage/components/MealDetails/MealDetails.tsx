@@ -9,6 +9,9 @@ import { mealGroups } from "../mealGroups";
 import { mealStatuses } from "../mealStatuses";
 import styles from "./styles.module.scss";
 import noImage from "@/assets/img/noImage.jpg";
+import { Comment } from "@/components/Comment";
+import { CommentType } from "@/components/Comment/Comment";
+import { Comments } from "@/components/Comments";
 import { DayOfTheWeekType } from "@/store/CalendarContentPageStore";
 import { CalendarType } from "@/store/CalendarPageStore";
 import MealDetailsStore from "@/store/MealDetailsStore";
@@ -51,6 +54,17 @@ const MealDetails: React.FC<MealDetailsProps> = ({
         },
       );
     }
+  };
+
+  const handleSendComment = (comment: Partial<CommentType>) => {
+    mealDetailsStore.requestSendComment(mealId, comment).then(
+      () => {
+        mealDetailsStore.requestComments(mealId);
+      },
+      (error) => {
+        alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);
+      },
+    );
   };
 
   return (
@@ -218,6 +232,15 @@ const MealDetails: React.FC<MealDetailsProps> = ({
         <div className={styles.root_inner_delete} onClick={handleMealDelete}>
           Удалить прием пищи
         </div>
+
+        <Comment onSend={handleSendComment} />
+        <Comments
+          comments={mealDetailsStore.comments}
+          onDelete={() => {
+            mealDetailsStore.requestComments(mealId);
+          }}
+          className={styles.root_inner_comments}
+        />
       </div>
     </div>
   );

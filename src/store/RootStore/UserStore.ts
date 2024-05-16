@@ -14,7 +14,7 @@ export type UserType = {
   id: number;
   email: string;
   password: null;
-  image: null;
+  image: string | null;
   name: string;
   sex: string;
   birthdate: Date;
@@ -31,7 +31,7 @@ type PrivateFields =
   | "_sex"
   | "_email"
   | "_birthdate"
-  | "_avatar"
+  | "_image"
   | "_roles"
   | "_height"
   | "_weight"
@@ -44,7 +44,7 @@ export default class UserStore {
   private _sex: string | null = null;
   private _email: string | null = null;
   private _birthdate: Date | null = null;
-  private _avatar: string | null = null;
+  private _image: string | null = null;
   private _roles: string[] | null = null;
   private _height: number | null = null;
   private _weight: number | null = null;
@@ -71,9 +71,9 @@ export default class UserStore {
       _birthdate: observable,
       setBirthDate: action,
       birthdate: computed,
-      _avatar: observable,
-      setAvatar: action,
-      avatar: computed,
+      _image: observable,
+      setImage: action,
+      image: computed,
       _roles: observable,
       setRoles: action,
       roles: computed,
@@ -137,12 +137,12 @@ export default class UserStore {
     return this._birthdate;
   }
 
-  setAvatar(avatar: string | null) {
-    this._avatar = avatar;
+  setImage(image: string | null) {
+    this._image = image;
   }
 
-  get avatar() {
-    return this._avatar;
+  get image() {
+    return this._image;
   }
 
   setRoles(roles: string[] | null) {
@@ -184,7 +184,7 @@ export default class UserStore {
     sex: string | null,
     email: string | null,
     birthdate: Date | null,
-    avatar: string | null,
+    image: string | null,
     roles: string[] | null,
     height: number | null,
     weight: number | null,
@@ -196,7 +196,7 @@ export default class UserStore {
     this.setSex(sex);
     this.setEmail(email);
     this.setBirthDate(birthdate);
-    this.setAvatar(avatar);
+    this.setImage(image);
     this.setRoles(roles);
     this.setHeight(height);
     this.setWeight(weight);

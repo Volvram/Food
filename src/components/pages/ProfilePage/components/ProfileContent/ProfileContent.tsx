@@ -28,7 +28,7 @@ const ProfileContent: React.FC = () => {
     profileContentStore.setAll(
       rootStore.user.email,
       rootStore.user.name,
-      rootStore.user.avatar,
+      rootStore.user.image,
       rootStore.user.height,
       rootStore.user.weight,
       rootStore.user.birthdate,
@@ -42,7 +42,7 @@ const ProfileContent: React.FC = () => {
   }, [
     rootStore.user.email,
     rootStore.user.name,
-    rootStore.user.avatar,
+    rootStore.user.image,
     rootStore.user.height,
     rootStore.user.weight,
     rootStore.user.birthdate,

@@ -28,6 +28,7 @@
             border-radius: 8px;
             text-decoration: underline;
             color: $red;
+            transition: background-color 150ms;
 
             &:hover {
                 background-color: $light-red;

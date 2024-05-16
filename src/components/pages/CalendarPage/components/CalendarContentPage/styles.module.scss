@@ -39,6 +39,7 @@
       padding: 3px;
       border-radius: 8px;
       color: $dark-gray;
+      transition: background-color 150ms;
       
       &:hover {
         background-color: $light-gray;
@@ -59,9 +60,10 @@
         border: 1px solid $light-gray;
         border-top-left-radius: 8px;
         border-bottom-left-radius: 8px;
+        transition: background-color 150ms;
 
         &:hover {
-          background-color: $light-gray
+          background-color: $light-gray;
         }
       }
 
@@ -71,9 +73,10 @@
         border: 1px solid $light-gray;
         border-top-right-radius: 8px;
         border-bottom-right-radius: 8px;
+        transition: background-color 150ms;
 
         &:hover {
-          background-color: $light-gray
+          background-color: $light-gray;
         }
       }
     }
@@ -137,6 +140,7 @@
       justify-content: center;
       gap: 10px;
       font-size: $p3;
+      transition: background-color 150ms;
 
       &:hover {
         background-color: $light-gray;

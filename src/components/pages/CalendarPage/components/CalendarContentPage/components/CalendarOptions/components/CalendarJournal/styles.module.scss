@@ -22,6 +22,7 @@
         padding: 3px;
         border-radius: 8px;
         color: $dark-gray;
+        transition: background-color 150ms;
         
         &:hover {
           background-color: $light-gray;

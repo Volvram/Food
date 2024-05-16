@@ -49,6 +49,7 @@
                     margin-top: 10px;
                     cursor: pointer;
                     color: $blue;
+                    transition: color 150ms;
 
                     &:hover {
                         color: $light-blue;
@@ -165,6 +166,7 @@
         background-color: $white;
         text-decoration: underline;
         color: $red;
+        transition: background-color 150ms;
 
             &:hover {
                 background-color: $light-red;

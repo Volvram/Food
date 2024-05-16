@@ -127,9 +127,9 @@ const Header: React.FC = () => {
                   href={"/profile"}
                   className={styles.header_login_panel_link}
                 >
-                  {rootStore.user.avatar ? (
+                  {rootStore.user.image ? (
                     <img
-                      src={rootStore.user.avatar}
+                      src={rootStore.user.image}
                       className={styles.header_login_panel_avatar}
                     />
                   ) : (
