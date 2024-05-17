@@ -143,7 +143,7 @@ const CalendarSettings: React.FC<CalendarSettingProps> = ({
       <div className={styles.root_block}>
         <label htmlFor="meals" className={styles.root_label}>
           Импортировать приемы пищи
-          <FileUploadIcon />
+          <FileUploadIcon className={styles.root_icon} />
         </label>
         <input
           type="file"
