@@ -114,6 +114,9 @@
 
             &_txt {
                 margin-left: 10%;
+                overflow-y: hidden;
+                overflow-x: auto;
+                max-height: 70px;
             }
 
             &_placeholder {
@@ -200,6 +203,58 @@
             padding-bottom: 5px;
             max-height: 180px;
             overflow: auto;
+        }
+    }
+}
+
+@media screen and (max-width: $phone) {
+    .root {
+        &_inner {
+            &_h {
+                font-size: $h3;
+            }
+
+            &_title {
+                &_txt {
+                    font-size: $p1;
+                }
+            }
+
+            &_status {
+                &_txt {
+                    font-size: $p2;
+                }
+            }
+
+            &_time {
+                &_txt {
+                    font-size: $p2;
+                }
+            }
+
+            &_group {
+                &_txt {
+                    font-size: $p2;
+                }
+            }
+
+            &_products {
+                font-size: $p3;
+            }
+
+            &_dishes {
+                font-size: $p3;
+            }
+
+            &_items {
+                max-height: 90px;
+                &_item {
+                    &_img {
+                        width: 30px;
+                        height: 30px;
+                    }
+                }
+            }
         }
     }
 }

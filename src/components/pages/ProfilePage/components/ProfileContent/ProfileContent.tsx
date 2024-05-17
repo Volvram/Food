@@ -138,6 +138,7 @@ const ProfileContent: React.FC = () => {
             onClick={() => {
               profileContentStore.setChangePassword(true);
             }}
+            className={styles.profileContent_button}
           >
             Сменить пароль
           </Button>
@@ -170,15 +171,6 @@ const ProfileContent: React.FC = () => {
       </div>
       <h1 className={styles.profileContent_h}>Уведомления</h1>
       <div className={styles.profileContent_notifications}>
-        <div className={styles.profileContent_notifications_notification}>
-          <p className={styles.profileContent_notifications_notification_text}>
-            Отправьте мне напоминание, если я забуду ввести данные в календарь
-          </p>
-          <Switch
-            // checked={searchFiltersStore.removeDrinks}
-            onChange={() => {}}
-          />
-        </div>
         <div className={styles.profileContent_notifications_notification}>
           <p className={styles.profileContent_notifications_notification_text}>
             Отправьте мне напоминание, если я забуду ввести данные в календарь
@@ -224,6 +216,7 @@ const ProfileContent: React.FC = () => {
         <span className={styles.profileContent_inputText}>Дата рождения</span>
         <div className={styles.profileContent_block}>
           <CalendarInput
+            className={styles.profileContent_calendarInput}
             onChange={(value) => {
               profileContentStore.setTempBirthdate(value);
             }}
@@ -233,7 +226,7 @@ const ProfileContent: React.FC = () => {
         </div>
         <span className={styles.profileContent_inputText}>Пол</span>
         <RadioGroup
-          className={styles.profileContent_check}
+          className={styles.profileContent_radio}
           aria-labelledby="demo-radio-buttons-group-label"
           value={profileContentStore.tempSex ?? "MALE"}
           name="sex"
@@ -309,7 +302,7 @@ const ProfileContent: React.FC = () => {
               // @TODO заменить на сброс значений полей к неизмененным
               window.location.reload();
             }}
-            className={styles.profileContent_edit_btn}
+            className={styles.profileContent_button}
           >
             Отменить
           </Button>
@@ -317,7 +310,7 @@ const ProfileContent: React.FC = () => {
             onClick={() => {
               handleEdit();
             }}
-            className={styles.profileContent_edit_btn}
+            className={styles.profileContent_button}
           >
             Отредактировать
           </Button>
@@ -328,14 +321,14 @@ const ProfileContent: React.FC = () => {
             onClick={() => {
               setEditMode(true);
             }}
-            className={styles.profileContent_edit_btn}
+            className={styles.profileContent_button}
           >
             Редактировать
           </Button>
         </div>
       )}
 
-      <p>
+      <p className={styles.profileContent_note}>
         * Если вы удалите свой аккаунт, все ваши данные будут безвозвратно
         удалены
       </p>

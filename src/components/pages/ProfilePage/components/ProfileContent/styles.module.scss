@@ -8,6 +8,7 @@
     &_h {
         margin-top: 15px;
         margin-bottom: 15px;
+        width: fit-content;
         font-size: $h1;
     }
 
@@ -31,12 +32,13 @@
                 width: 288px;
                 height: 288px;
                 object-fit: cover;
+                box-shadow: $dark-shadow;
                 border-radius: 80px;
 
                 &__fake {
                     width: 288px;
                     height: 288px;
-                    background-color: $gray;
+                    background-color: $light-gray;
                     border-radius: 80px;
                 }
             }
@@ -76,6 +78,7 @@
         padding-top: 22px;
         padding-bottom: 20px;
         padding-left: 37px;
+        padding-right: 5px;
         width: 100%;
         border-radius: 50px;
         border: 1px solid $very-light-gray;
@@ -121,7 +124,7 @@
             margin-bottom: 25px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: space-around;
 
             &_index {
                 display: flex;
@@ -130,7 +133,7 @@
 
                 &_counter {
                     margin-top: 12px;
-                    width: 50%;
+                    width: 100px;
                 }
             }
         }
@@ -141,7 +144,7 @@
         margin-bottom: 25px;
     }
 
-    &_check{
+    &_radio {
         margin-bottom: 25px;
         display: flex;
         flex-direction: row;
@@ -171,5 +174,138 @@
             &:hover {
                 background-color: $light-red;
             }
+    }
+}
+
+@media screen and (max-width: $phone) {
+    .profileContent {
+        margin-left: 3%;
+        margin-right: 3%;
+
+        &_h {
+            margin-top: 8px;
+            margin-bottom: 5px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: $h3;
+        }
+        &_main {
+            margin-top: 10px;
+            flex-direction: column-reverse;
+
+            &_data {
+                margin-top: 5px;
+                width: 100%;
+            }
+
+            &_avatar {
+                &_img {
+                    width: 100px;
+                    height: 100px;
+                    border-radius: 30px;
+
+                    &__fake {
+                        width: 100px;
+                        height: 100px;
+                        border-radius: 30px;
+                    }
+                }
+
+                &_load {
+                    &_text {
+                        font-size: $p2;
+                    }
+                }
+            }
+
+            &_vr {
+                display: none;
+            }
+        }
+
+        &_inputText {
+            font-size: $p2;
+        }
+    
+        &_input {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 16px;
+            border-radius: 50px;
+            font-size: $p3;
+    
+            &::placeholder {
+                font-size: $p3;
+            }
+        }
+    
+        &_inputContainer {
+            margin-top: 6px;
+            margin-bottom: 12px;
+        }
+
+        &_button {
+            width: fit-content;
+            font-size: $p3;
+        }
+
+        &_notifications {
+            &_notification {
+                margin-top: 5px;
+    
+                &_text {
+                    max-width: 100%;
+                    font-size: $p3;
+                }
+            }
+        }
+
+        &_personal {
+            max-width: 100%;
+    
+            &_indexes {
+                margin-bottom: 12px;
+    
+                &_index {
+
+                    &_text {
+                        font-size: $p2;
+                    }
+    
+                    &_counter {
+                        margin-top: 6px;
+                        width: 80px;
+                    }
+                }
+            }
+        }
+
+        &_block {
+            margin-top: 0px;
+            margin-bottom: 12px;
+        }
+
+        &_calendarInput {
+            font-size: $p2;
+        }
+
+        &_radio {
+            margin-bottom: 6px;
+            font-size: $p3;
+            gap: 10%;
+        }
+
+        &_edit {
+            margin-bottom: 10px;
+        }
+
+        &_note {
+            font-size: $p3;
+        }
+
+        &_delete {
+            margin-bottom: 10px;
+            font-size: $p2;
+        }
     }
 }
