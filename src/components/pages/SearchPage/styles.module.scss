@@ -29,6 +29,8 @@
 
             &_filtersIcon {
                 cursor: pointer;
+                width: 24px;
+                height: 24px;
 
                 &__disabled {
                     opacity: 0.5;
@@ -46,6 +48,7 @@
 
             &_type {
                 display: flex;
+                flex-flow: row;
                 flex-direction: row;
                 justify-content: center;
                 align-items: center;
@@ -109,6 +112,10 @@
 @media screen and (max-width: $phone) {
     .searchPage {
         &_body {
+            &_search {
+                gap: 10px;
+            }
+
             &_options {
                 flex-direction: column;
                 gap: 0px;

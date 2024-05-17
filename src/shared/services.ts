@@ -11,7 +11,7 @@ interface IService {
 
 export const yandex: IService = {
   clientId: "808964bd868e4a2d8be23d929269a011",
-  redirectUri: "http://localhost:3000?service=yandex",
+  redirectUri: `${process.env.NEXT_PUBLIC_FRONT_HOST}?service=yandex`,
   clientSecret: process.env.NEXT_PUBLIC_YANDEX_CLIENT_SECRET,
   responseType: "code",
   grantType: "authorization_code",
@@ -20,7 +20,7 @@ export const yandex: IService = {
 
 export const mailru: IService = {
   clientId: "fbfc9d6e748440f28504c60c0854d9c9",
-  redirectUri: "http://localhost:3000?service=mailru",
+  redirectUri: `${process.env.NEXT_PUBLIC_FRONT_HOST}?service=mailru`,
   clientSecret: process.env.NEXT_PUBLIC_MAILRU_CLIENT_SECRET,
   scope: "userinfo",
   state: "zachem",
@@ -32,7 +32,7 @@ export const mailru: IService = {
 export const google: IService = {
   clientId:
     "792610227582-kmbvbf06go0pu013ob8hi5c6am9aqi3q.apps.googleusercontent.com",
-  redirectUri: "http://localhost:3000?service=google",
+  redirectUri: `${process.env.NEXT_PUBLIC_FRONT_HOST}?service=google`,
   clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET,
   scope:
     "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email openid",

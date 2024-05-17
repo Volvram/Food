@@ -150,7 +150,8 @@ export const useAuthCode = (): [
             setNeedsRegister(true);
             setUserEmail(response);
           } else {
-            window.location.href = localhost;
+            window.location.href =
+              process.env.NEXT_PUBLIC_FRONT_HOST ?? localhost;
           }
         },
         (e) => {

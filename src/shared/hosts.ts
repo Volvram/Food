@@ -3,16 +3,15 @@
 
 import { google, mailru, yandex } from "./services";
 
-// ### Local server for emulator
-// export const HOST = 'http://10.0.2.2:8080/api';
+// ### Frontend servers
+export const productionHost = "https://foodify-khaki.vercel.app";
+export const localhost = "http://localhost:3000";
 
 // ### Local server for web
 export const HOST = "http://localhost:8080/api";
 
 export const KeyCloakHost =
   "http://localhost:8180/realms/diploma/protocol/openid-connect/token";
-
-export const localhost = "http://localhost:3000";
 
 export const yandexAuthHost = `https://oauth.yandex.ru/authorize?client_id=${yandex.clientId}&redirect_uri=${yandex.redirectUri}&response_type=${yandex.responseType}`;
 export const mailruAuthHost = `https://oauth.mail.ru/login?client_id=${mailru.clientId}&redirect_uri=${mailru.redirectUri}&response_type=${mailru.responseType}&scope=${mailru.scope}&state=${mailru.state}`;

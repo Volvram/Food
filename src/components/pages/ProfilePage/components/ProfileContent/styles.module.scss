@@ -149,6 +149,7 @@
     &_radio {
         margin-bottom: 25px;
         display: flex;
+        flex-flow: row;
         flex-direction: row;
         gap: 40px;
         align-items: center;

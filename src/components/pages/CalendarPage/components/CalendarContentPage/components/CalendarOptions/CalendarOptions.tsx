@@ -95,7 +95,7 @@ const CalendarOptions: React.FC<CalendarOptionsProps> = ({
             calendarOptionsStore.toggleCalendarMenuOpen();
           }}
         >
-          <MenuIcon />
+          <MenuIcon className={styles.root_options_icon} />
         </IconButton>
 
         {calendar && (
@@ -115,7 +115,7 @@ const CalendarOptions: React.FC<CalendarOptionsProps> = ({
               calendarOptionsStore.toggleCalendarSettingsOpen();
             }}
           >
-            <SettingsIcon />
+            <SettingsIcon className={styles.root_options_icon} />
           </IconButton>
         )}
 
@@ -134,7 +134,7 @@ const CalendarOptions: React.FC<CalendarOptionsProps> = ({
           }}
           className={styles.root_options_journal}
         >
-          <ImportContactsIcon />
+          <ImportContactsIcon className={styles.root_options_icon} />
         </IconButton>
       </div>
     </div>
