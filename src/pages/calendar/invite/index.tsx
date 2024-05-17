@@ -11,7 +11,7 @@ const CalendarInvite: React.FC = () => {
 
   React.useLayoutEffect(() => {
     rootStore.user.checkAuthorization().catch(() => {
-      router.push("/login");
+      router.push("/login?return=true");
     });
   }, []);
 

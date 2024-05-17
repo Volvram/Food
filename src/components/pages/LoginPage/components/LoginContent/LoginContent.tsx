@@ -4,7 +4,7 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import styles from "./styles.module.scss";
 import googleIcon from "@/assets/img/google_icon.png";
@@ -21,6 +21,7 @@ import { useLocalStore } from "@/utils/useLocalStore";
 
 const LoginContent: React.FC = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const loginContentStore = useLocalStore(() => new LoginContentStore());
 
@@ -30,7 +31,12 @@ const LoginContent: React.FC = () => {
         alert(response);
         rootStore.user.checkAuthorization().then(() => {
           loginContentStore.checkFavouriteCookbook();
-          router.push("/");
+
+          if (searchParams && searchParams.get("return")) {
+            router.back();
+          } else {
+            router.push("/");
+          }
         });
       },
       (error) => {
