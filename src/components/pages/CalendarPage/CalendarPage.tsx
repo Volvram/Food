@@ -12,6 +12,7 @@ import Meta from "@/components/Meta/Meta";
 import WithModal from "@/components/WithModal/WithModal";
 import CalendarPageStore, { CalendarType } from "@/store/CalendarPageStore";
 import { useLocalStore } from "@/utils/useLocalStore";
+import "./MuiCalendarPage.scss";
 
 const CalendarPage: React.FC = () => {
   const calendarPageStore = useLocalStore(() => new CalendarPageStore());

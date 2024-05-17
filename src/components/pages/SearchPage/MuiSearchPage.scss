@@ -1,5 +1,9 @@
 @import "@/styles/variables.scss";
 
+.MuiFormGroup-root {
+  flex-direction: row;
+}
+
 .MuiPaginationItem-root {
   background-color: $black-primary;
   color: $white;
@@ -20,4 +24,16 @@
 .MuiPaginationItem-ellipsis:hover {
   background-color: $black-primary;
   color: $white;
+}
+
+@media screen and (max-width: $tablet) {
+  .MuiFormGroup-root {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: $phone) {
+  .MuiFormGroup-root {
+    flex-direction: row;
+  }
 }

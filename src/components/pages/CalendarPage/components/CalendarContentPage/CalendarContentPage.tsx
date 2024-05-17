@@ -19,6 +19,7 @@ import WithModal from "@/components/WithModal/WithModal";
 import CalendarContentPageStore from "@/store/CalendarContentPageStore";
 import { AllCaledarsType } from "@/store/CalendarPageStore";
 import { useLocalStore } from "@/utils/useLocalStore";
+import "./MuiCalendarContentPage.scss";
 
 type CalendarContentPageProps = {
   id: string | string[] | undefined;

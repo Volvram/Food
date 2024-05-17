@@ -13,6 +13,7 @@ import Header from "@/components/Header/Header";
 import Meta from "@/components/Meta/Meta";
 import CreateDishPageStore from "@/store/CreateDishPageStore";
 import { useLocalStore } from "@/utils/useLocalStore";
+import "./MuiCreateDishPage.scss";
 
 const CreateDishPage: React.FC = () => {
   const createDishPageStore = useLocalStore(() => new CreateDishPageStore());

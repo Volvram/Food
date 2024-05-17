@@ -13,6 +13,7 @@ import Header from "@/components/Header/Header";
 import Meta from "@/components/Meta/Meta";
 import MyDishesPageStore from "@/store/MyDishesPageStore";
 import { useLocalStore } from "@/utils/useLocalStore";
+import "./MuiMyDishesPage.scss";
 
 const MyDishesPage: React.FC = () => {
   const myDishesPageStore = useLocalStore(() => new MyDishesPageStore());

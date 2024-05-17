@@ -13,6 +13,7 @@ import Header from "@/components/Header/Header";
 import Meta from "@/components/Meta/Meta";
 import FavouritePageStore from "@/store/FavouritePageStore";
 import { useLocalStore } from "@/utils/useLocalStore";
+import "./MuiFavouritePage.scss";
 
 const FavouritePage: React.FC = () => {
   const favouritePageStore = useLocalStore(() => new FavouritePageStore());
