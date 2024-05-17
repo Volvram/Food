@@ -11,8 +11,8 @@
     &_input {
         padding-top: 10px;
         padding-bottom: 10px;
-        padding-left: 15px;
-        padding-right: 15px;
+        padding-left: 12px;
+        padding-right: 25px;
         width: 100%;
         min-height: 20px;
         background-color: $white;
@@ -35,8 +35,8 @@
     &_count {
         padding-top: 10px;
         padding-bottom: 10px;
-        padding-left: 15px;
-        padding-right: 15px;
+        padding-left: 12px;
+        padding-right: 25px;
         width: 100%;
         min-height: 20px;
         background-color: $white;
@@ -56,7 +56,7 @@
         width: 24px;
         height: 24px;
 
-        right: 6px;
+        right: 0px;
         // align-center
         top: 50%;
         transform: translateY(-50%);

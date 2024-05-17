@@ -31,7 +31,7 @@
         &_alternative {
             cursor: pointer;
             margin-top: 10px;
-            padding: 20px 90px;
+            padding: 16px 90px;
             border-radius: 50px;
             border: 1px solid $very-light-gray;
             box-shadow: $light-shadow;
@@ -52,6 +52,7 @@
 
             &_text {
                 color: $black-primary;
+                text-align: center;
                 font-size: $p1;
                 font-style: normal;
                 font-weight: 300;
@@ -59,7 +60,7 @@
         }
 
         &_or {
-            margin: 16px 0;
+            margin: 12px 0;
             display: flex;
             align-items: center;
 
@@ -84,9 +85,10 @@
         }
 
         &_input {
-            padding-top: 22px;
-            padding-bottom: 20px;
-            padding-left: 37px;
+            padding-top: 18px;
+            padding-bottom: 18px;
+            padding-left: 30px;
+            padding-right: 10px;
             width: 100%;
             border-radius: 50px;
             border: 1px solid $very-light-gray;
@@ -111,7 +113,7 @@
         }
 
         &_button {
-            margin-top: 12px;
+            margin-top: 10px;
             margin-bottom: 12px;
             padding: 16px 40px;
             width: 100%;
@@ -136,6 +138,74 @@
 
                 &:hover {
                     color: $light-blue;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: $phone) {
+    .loginContent {
+        &_block {
+            border-radius: 20px;
+
+            &_h {
+                font-size: $h3;
+            }
+
+            &_alternative {
+                padding: 10px 45px;
+
+                &_icon {
+                    margin-right: 4px;
+                    width: 20px;
+                    height: 20px;
+                }
+
+                &_text {
+                    font-size: $p2;
+                }
+            }
+
+            &_or {
+                margin: 8px 0;
+
+                &_text {
+                    font-size: $p2;
+                }
+            }
+
+            &_text {
+                font-size: $p2;
+            }
+
+            &_input {
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-left: 16px;
+                font-size: $p2;
+        
+                &::placeholder {
+                    font-size: $p2;
+                }
+            }
+        
+            &_inputContainer {
+                margin-top: 6px;
+                margin-bottom: 12px;
+            }
+
+            &_button {
+                margin-top: 5px;
+                padding: 8px 20px;
+                border-radius: 8px;
+
+                font-size: $p2;
+            }
+
+            &_links {
+                &_link {
+                    font-size: $p2;
                 }
             }
         }

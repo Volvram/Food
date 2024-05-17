@@ -189,7 +189,7 @@ const RegisterContent: React.FC = () => {
         </div>
         <span className={styles.registerContent_window_text}>Пол</span>
         <RadioGroup
-          className={styles.registerContent_window_check}
+          className={styles.registerContent_window_radio}
           aria-labelledby="demo-radio-buttons-group-label"
           value={registerContentStore.sex}
           name="sex"

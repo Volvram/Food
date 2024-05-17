@@ -32,14 +32,16 @@
                 width: 288px;
                 height: 288px;
                 object-fit: cover;
-                box-shadow: $dark-shadow;
+                border: 1px solid $very-light-gray;
                 border-radius: 80px;
+                box-shadow: $dark-shadow;
 
                 &__fake {
                     width: 288px;
                     height: 288px;
                     background-color: $light-gray;
                     border-radius: 80px;
+                    box-shadow: $dark-shadow;
                 }
             }
 
