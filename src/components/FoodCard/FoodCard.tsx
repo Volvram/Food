@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Card } from "../Card";
 import style from "./styles.module.scss";
 import clockIcon from "@/assets/img/clock.png";
-import favoritesIcon from "@/assets/img/favorites.png";
 import { ProductType } from "@/store/CreateDishContentStore";
 import { DishType } from "@/store/SearchContentStore";
 

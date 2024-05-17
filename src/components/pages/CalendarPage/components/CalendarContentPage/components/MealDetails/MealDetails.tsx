@@ -23,11 +23,7 @@ type MealDetailsProps = {
   weekDay: DayOfTheWeekType | null;
 };
 
-const MealDetails: React.FC<MealDetailsProps> = ({
-  calendar,
-  mealId,
-  weekDay,
-}) => {
+const MealDetails: React.FC<MealDetailsProps> = ({ calendar, mealId }) => {
   const mealDetailsStore = useLocalStore(() => new MealDetailsStore());
 
   React.useEffect(() => {

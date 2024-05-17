@@ -17,7 +17,7 @@ type MealCardProps = {
   onClick?: (value: number) => void;
 };
 
-const MealCard: React.FC<MealCardProps> = ({ weekDay, meal, onClick }) => {
+const MealCard: React.FC<MealCardProps> = ({ meal, onClick }) => {
   // const [eaten, setEaten] = React.useState(
   //   weekDay.date.getTime() - Date.now() >= 0 ? false : true,
   // );
