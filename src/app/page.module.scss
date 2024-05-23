@@ -7,7 +7,120 @@
 }
 
 .page {
+  padding-bottom: 20px;
   height: 100%;
+
+  &_cover {
+    padding: 0 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &_info {
+      flex-basis: 45%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      
+      &_title {
+        font-size: $large; 
+        font-weight: 700; 
+        letter-spacing: -0.02em; 
+        line-height: 130%; 
+        text-align: left; 
+        color: rgb(29, 33, 47);
+
+        outline: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        flex-shrink: 0;
+        transform: none;
+
+        &_new {
+          color: blue;
+        }
+      }
+
+      &_description {
+        font-size: $p1; 
+        letter-spacing: -0.02em; 
+        line-height: 160%; 
+        color: $gray;
+      }
+
+      &_link {
+        width: fit-content;
+
+        &_start {
+          padding: 16px 40px;
+          color: $white;
+          font-size: $p1; 
+          font-weight: 700; 
+          letter-spacing: 0px; 
+          line-height: 150%; 
+          text-align: center; 
+        }
+      }
+    }
+
+    &_picture {
+      &_img {
+        margin-left: auto;
+        margin-right: auto;
+        flex-basis: 45%;
+        display: block; 
+        width: 100%; 
+        height: 100%; 
+        border-radius: inherit; 
+        object-position: center center; 
+        object-fit: contain; 
+        image-rendering: auto;
+      }
+    }
+  }
+
+  &_gradient {
+    filter: blur(100px);
+    background: linear-gradient(180deg, #42e0d3 0%, hsl(235, 100%, 50%) 100%);
+    border-radius: 250px;
+    flex: none;
+    height: 80%;
+    left: calc(50.00000000000002% - 100% / 2);
+    opacity: .22;
+    overflow: visible;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+  }
+
+  &_nutrients {
+    margin-top: 60px;
+    margin-bottom: 30px;
+    padding: 30px 50px;
+    background: linear-gradient(180deg, rgba(0, 246, 255, .16) 0%, rgba(0, 4, 255, .15) 97.14247601969826%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
+
+    &_title {
+      text-align: center;
+      font-size: $very-large; 
+      font-weight: 700;
+      letter-spacing: 0px; 
+      line-height: 120%; 
+      color: $black-primary;
+    }
+
+    &_description {
+      letter-spacing: 0px; 
+      line-height: 150%; 
+      color: $gray; 
+      font-size: $p1;
+    }
+  }
 
   &_features {
     margin-top: 50px;
@@ -17,12 +130,10 @@
     border-radius: 24px;
     background-color: $light-violet;
     display: flex;
-    align-items: center;
     justify-content: space-between;
     gap: 32px;
 
     &_section {
-
       display: flex;
       flex-direction: column;
 
@@ -50,5 +161,141 @@
 
   &_section {
 
+  }
+}
+
+@media screen and (max-width: $tablet) {
+  .page {
+    &_cover {
+      padding: 0 5%;
+      flex-direction: column;
+      justify-content: space-around;
+
+      &_info {
+        &_title {
+          text-align: center;
+          font-size: $very-large;
+        }
+
+        &_description {
+          text-align: center;
+        }
+
+        &_link {
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+
+      &_picture {
+        &_img {
+          width: 350px;
+        }
+      }
+    }
+
+    &_nutrients {
+      margin-top: 30px;
+      margin-bottom: 20px;
+      padding: 20px 5%;
+
+      &_title {
+        font-size: $h1; 
+        line-height: 120%; 
+      }
+  
+      &_description {
+        text-align: center;
+        font-size: $p1;
+      }
+    }
+
+    &_features {
+      margin-top: 30px;
+      margin-left: 10%;
+      margin-right: 10%;
+      padding: 50px;
+      flex-direction: column;
+
+      &_section {
+        align-items: center;
+
+        &_icon {
+          margin-bottom: 18px;
+          width: 48px;
+          height: 48px;
+        }
+
+        &_h {
+          margin-bottom: 0px;
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $phone) {
+  .page {
+    &_cover {
+      flex-direction: column;
+      justify-content: space-around;
+
+      &_info {
+        gap: 5px;
+
+        &_title {
+          line-height: 100%;
+          text-align: center;
+          font-size: $h2;
+        }
+
+        &_description {
+          line-height: 140%;
+          font-size: $p2;
+        }
+      }
+
+      &_picture {
+        &_img {
+          width: 280px;
+        }
+      }
+    }
+
+    &_nutrients {
+      margin-top: 30px;
+      margin-bottom: 20px;
+      padding: 20px 5%;
+
+      &_title {
+        line-height: 100%;
+        font-size: $h2;
+      }
+  
+      &_description {
+        line-height: 140%;
+        font-size: $p2;
+      }
+    }
+
+    &_features {
+      margin-top: 30px;
+      margin-left: 5%;
+      margin-right: 5%;
+      gap: 20px;
+
+      &_section {
+        &_icon {
+          margin-bottom: 16px;
+          width: 40px;
+          height: 40px;
+        }
+
+        &_h {
+          font-size: $h3;
+        }
+      }
+    }
   }
 }

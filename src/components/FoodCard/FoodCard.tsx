@@ -8,11 +8,11 @@ import clockIcon from "@/assets/img/clock.png";
 import { ProductType } from "@/store/CreateDishContentStore";
 import { DishType } from "@/store/SearchContentStore";
 
-type FoodCardType = {
+type FoodCardProps = {
   item: DishType | ProductType | any;
 };
 
-export const FoodCard: React.FC<FoodCardType> = ({ item }) => {
+export const FoodCard: React.FC<FoodCardProps> = ({ item }) => {
   return (
     <div className={style.foodCard}>
       <Card image={item.image} title={item.name} description={item.description}>

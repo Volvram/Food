@@ -5,13 +5,13 @@ import Image from "next/image";
 import style from "./styles.module.scss";
 import noImage from "@/assets/img/noImage.jpg";
 
-type CardType = React.PropsWithChildren<{
+type CardProps = React.PropsWithChildren<{
   image?: string | null;
   title: string;
   description?: string | null;
 }>;
 
-export const Card: React.FC<CardType> = ({
+export const Card: React.FC<CardProps> = ({
   image,
   title,
   description,
