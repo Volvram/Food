@@ -293,6 +293,9 @@ const ProfileContent: React.FC = () => {
           </Select>
         </FormControl> */}
       </div>
+
+      <div className={styles.profileContent_gradient} />
+
       {editMode ? (
         <div className={styles.profileContent_edit}>
           <Button

@@ -1,14 +1,10 @@
 @import "@/styles/variables.scss";
 
 .createDishContent {
-    margin: 20px 10%;
-
-    &_radio {
-        display: flex;
-        flex-direction: row;
-        gap: 40px;
-        align-items: center;
-    }
+    margin: 0px 10%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 
     &_input {
         padding: 10px 20px;
@@ -18,7 +14,6 @@
         border: 1px solid $gray;
 
         &_container {
-            margin-top: 20px;
             width: 80%;
         }
     }
@@ -86,8 +81,7 @@
     }
 
     &_servingSizes {
-        margin-top: 20px;
-        padding: 10px 20px;
+        padding: 10px 15px;
         border: 1px solid $gray;
         border-radius: 20px;
         display: flex;
@@ -102,31 +96,31 @@
             border-right: 1px solid $light-gray;
             display: flex;
             flex-direction: column;
+            gap: 10px;
             flex-basis: 50%;
 
             &_size {
-                cursor: pointer;
-                padding: 10px 5px;
+                margin-right: 5px;
+                padding-bottom: 3px;
                 display: flex;
                 align-items: center;
-                justify-content: flex-end;
-                transition: background-color 150ms;
-
-                &:hover {
-                    background-color: $very-light-gray;
-                }
-
-                &_counter {
-                    width: min-content;
-                    min-width: 70px;
-                }
+                justify-content: center;
+                border-bottom: 1px solid $light-gray;
+                gap: 3px;
 
                 &_text {
                     margin-right: auto;
                 }
 
-                &_creation {
-                    margin-left: 10px;
+                &_panel {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+
+                    &_counter {
+                        width: min-content;
+                        min-width: 70px;
+                    }
                 }
             }
         }
@@ -136,29 +130,43 @@
             display: flex;
             flex-direction: column;
             border-left: 1px solid $light-gray;
+            gap: 10px;
             flex-basis: 50%;
 
             &_size {
+                margin-left: 5px;
+                padding-bottom: 3px;
                 position: relative;
-                padding: 10px 5px;
+                border-bottom: 1px solid $light-gray;
                 display: flex;
                 align-items: center;
+                justify-content: space-between;
+                gap: 3px;
 
-                &_creation {
-                    margin-left: 10px;
-                }
+                &_panel {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
 
-                &_close {
-                    margin-left: auto;
-                    cursor: pointer;
+                    &_grams {
+                        margin-left: 10px;
+                        white-space: nowrap;
+                    }
+    
+                    &_close {
+                        margin-left: auto;
+                        cursor: pointer;
+                        width: 24px;
+                        height: 24px;
+                    }
                 }
             }
         }
     }
 
     &_searchList {
-        margin-top: 20px;
-        max-height: 300px;
+        margin-top: 10px;
+        max-height: 200px;
         overflow-y: auto;
         width: 80%;
 
@@ -211,13 +219,31 @@
             border-right: 1px solid $light-gray;
             display: flex;
             flex-direction: column;
+            gap: 10px;
             flex-basis: 60%;
 
             &_product {
-                margin-top: 20px;
+                margin-right: 5px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                gap: 5px;
+
+                &_text {
+                    margin-right: auto;
+                }
+
+                &_panel {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+
+                    &_counter {
+                        width: min-content;
+                        min-width: 80px;
+                    }
+                }
             }
         }
 
@@ -226,10 +252,12 @@
             display: flex;
             flex-direction: column;
             flex-basis: 40%;
+            gap: 10px;
             border-left: 1px solid $light-gray;
 
             &_product {
-                padding: 10px 5px;
+                margin-left: 5px;
+                padding-bottom: 3px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -270,6 +298,7 @@
                     padding: 10px;
                     display: flex;
                     justify-content: space-between;
+                    gap: 5px;
                 }
             }
 
@@ -286,18 +315,189 @@
     }
 
     &_btn {
-        margin-top: 20px;
         margin-left: auto;
         margin-right: auto;
         width: fit-content;
     }
 }
 
+@media screen and (max-width: $tablet) {
+    .createDishContent {
+        margin: 0px 5%;
+
+        &_servingSizes {
+            padding: 5px 10px;
+            border-radius: 14px;
+    
+            &_h {
+                font-size: $p1;
+            }
+    
+            &_current {
+                gap: 5px;
+    
+                &_size {
+                    font-size: $p2;
+                    flex-wrap: wrap;
+                    justify-content: center;
+    
+                    &_text {
+                        text-align: center;
+                        flex-basis: 100%;
+                    }
+                }
+            }
+    
+            &_selected {
+                gap: 5px;
+    
+                &_size {
+                    font-size: $p2;
+                }
+            }
+        }
+
+        &_products {
+            padding: 5px 10px;
+            border-radius: 14px;
+    
+            &_h {
+                font-size: $p1;
+            }
+    
+            &_current {
+                gap: 5px;
+    
+                &_product {
+                    margin-top: 10px;
+                    font-size: $p2;
+                    flex-wrap: wrap;
+    
+                    &_text {
+                        text-align: center;
+                        flex-basis: 100%;
+                    }
+    
+                    &_panel {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 10px;
+                    }
+                }
+            }
+    
+            &_selected {
+                gap: 5px;
+    
+                &_product {
+                    font-size: $p2;
+    
+                    &_close {
+                    }
+                }
+            }
+        }
+
+        &_nutrients {
+            width: 100%;
+            font-size: $p2;
+        }
+    }
+}
+
 @media screen and (max-width: $phone) {
     .createDishContent {
+        margin: 0px 3%;
+
         &_block {
             width: 100%;
             font-size: $p2;
+        }
+
+        &_servingSizes {
+            &_h {
+                font-size: $p1;
+            }
+    
+            &_current {
+    
+                &_size {
+                    font-size: $p3;
+
+                    &_panel {
+                        gap: 5px;
+    
+                        &_btn {
+                            padding: 5px 7px;
+                            border-radius: 8px;
+                        }
+                    }
+                }
+            }
+    
+            &_selected {
+                gap: 5px;
+    
+                &_size {
+                    font-size: $p2;
+                    flex-wrap: wrap;
+                    justify-content: center;
+
+                    &_text {
+                        text-align: center;
+                        flex-basis: 100%;
+                    }
+                }
+            }
+        }
+
+        &_searchList {
+            width: 100%;
+        }
+
+        &_products {
+            &_h {
+                font-size: $p1;
+            }
+    
+            &_current {
+
+                &_product {
+                    margin-top: 10px;
+                    font-size: $p3;
+    
+                    &_panel {
+                        gap: 5px;
+                    }
+                }
+            }
+    
+            &_selected {
+                gap: 5px;
+    
+                &_product {
+                    font-size: $p3;
+                }
+            }
+        }
+
+        &_nutrients {
+            font-size: $p3;
+
+            &_body {
+                &_complextd {
+                    padding: 5px;
+
+                    &_subtr {
+                        padding: 5px;
+                    }
+                }
+            }
+
+            td {
+                padding: 5px;
+            }
         }
     }
 }

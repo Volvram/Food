@@ -156,6 +156,8 @@ const LoginContent: React.FC = () => {
           </Link>
         </div>
       </div>
+
+      <div className={styles.loginContent_gradient} />
     </div>
   );
 };

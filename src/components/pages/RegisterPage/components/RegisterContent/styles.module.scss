@@ -178,6 +178,21 @@
             }
         }
     }
+
+    &_gradient {
+        filter: blur(100px);
+        background: linear-gradient(180deg, #42e0d3 0%, hsl(235, 100%, 50%) 100%);
+        border-radius: 250px;
+        flex: none;
+        height: 80%;
+        left: calc(50.00000000000002% - 100% / 2);
+        opacity: .22;
+        overflow: visible;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: -1;
+    }
 }
 
 @media screen and (max-width: $phone) {

@@ -1,7 +1,6 @@
 import React from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
-import cn from "classnames";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
 
@@ -169,38 +168,43 @@ const CreateProductContent: React.FC = () => {
                   >
                     {size.name}
                   </span>
-                  <Counter
-                    defaultNumber={grams}
-                    onChange={(value: number) => {
-                      grams = value;
-                    }}
-                    input={true}
-                    className={cn(
-                      styles.createProductContent_counter,
-                      styles.createProductContent_servingSizes_current_size_counter,
-                    )}
-                  />
-                  <span
+                  <div
                     className={
-                      styles.createProductContent_servingSizes_current_size_creation
+                      styles.createProductContent_servingSizes_current_size_panel
                     }
                   >
-                    Грамм
-                  </span>
-                  <Button
-                    onClick={() => {
-                      createProductContentStore.addSelectedServingSize({
-                        ...size,
-                        grams,
-                      });
-                      grams = 0;
-                    }}
-                    className={
-                      styles.createProductContent_servingSizes_current_size_creation
-                    }
-                  >
-                    +
-                  </Button>
+                    <Counter
+                      defaultNumber={grams}
+                      onChange={(value: number) => {
+                        grams = value;
+                      }}
+                      input={true}
+                      className={
+                        styles.createProductContent_servingSizes_current_size_panel_counter
+                      }
+                    />
+                    <span
+                      className={
+                        styles.createProductContent_servingSizes_current_size_panel_grams
+                      }
+                    >
+                      Грамм
+                    </span>
+                    <Button
+                      onClick={() => {
+                        createProductContentStore.addSelectedServingSize({
+                          ...size,
+                          grams,
+                        });
+                        grams = 0;
+                      }}
+                      className={
+                        styles.createProductContent_servingSizes_current_size_panel_btn
+                      }
+                    >
+                      +
+                    </Button>
+                  </div>
                 </div>
               );
             })}
@@ -219,35 +223,35 @@ const CreateProductContent: React.FC = () => {
                 >
                   <span
                     className={
-                      styles.createProductContent_servingSizes_selected_size_creation
+                      styles.createProductContent_servingSizes_selected_size_text
                     }
                   >
                     {size.name}
                   </span>
-                  <span
+
+                  <div
                     className={
-                      styles.createProductContent_servingSizes_selected_size_creation
+                      styles.createProductContent_servingSizes_selected_size_panel
                     }
                   >
-                    {size.grams}
-                  </span>
-                  <span
-                    className={
-                      styles.createProductContent_servingSizes_selected_size_creation
-                    }
-                  >
-                    г.
-                  </span>
-                  <CloseIcon
-                    onClick={() => {
-                      createProductContentStore.removeSelectedServingSize(
-                        size.id,
-                      );
-                    }}
-                    className={
-                      styles.createProductContent_servingSizes_selected_size_close
-                    }
-                  />
+                    <span
+                      className={
+                        styles.createProductContent_servingSizes_selected_size_panel_grams
+                      }
+                    >
+                      {size.grams} {" г."}
+                    </span>
+                    <CloseIcon
+                      onClick={() => {
+                        createProductContentStore.removeSelectedServingSize(
+                          size.id,
+                        );
+                      }}
+                      className={
+                        styles.createProductContent_servingSizes_selected_size_panel_close
+                      }
+                    />
+                  </div>
                 </div>
               );
             })}

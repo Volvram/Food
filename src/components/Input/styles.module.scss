@@ -7,6 +7,8 @@
 }
 .input{
 
+    background-color: $white;
+
     &:focus {
         outline-width: 0;
         border: 1px solid $black-primary;

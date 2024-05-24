@@ -96,6 +96,9 @@ const SearchContent: React.FC<SearchContentProps> = ({
             <div>Данные не найдены</div>
           )}
         </div>
+
+        <div className={styles.searchContent_commonSearch_gradient} />
+
         <Pagination
           className={styles.searchContent_commonSearch_pagination}
           page={router.query.page ? Number(router.query.page) : 1}

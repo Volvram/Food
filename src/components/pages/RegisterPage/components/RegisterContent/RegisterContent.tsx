@@ -262,6 +262,8 @@ const RegisterContent: React.FC = () => {
           </Link>
         </div>
       </div>
+
+      <div className={styles.registerContent_gradient} />
     </div>
   );
 };

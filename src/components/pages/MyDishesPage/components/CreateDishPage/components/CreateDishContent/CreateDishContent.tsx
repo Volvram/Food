@@ -4,7 +4,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import cn from "classnames";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -306,38 +305,43 @@ const CreateDishContent: React.FC = () => {
                   >
                     {size.name}
                   </span>
-                  <Counter
-                    defaultNumber={grams}
-                    onChange={(value: number) => {
-                      grams = value;
-                    }}
-                    input={true}
-                    className={cn(
-                      styles.createDishContent_counter,
-                      styles.createDishContent_servingSizes_current_size_counter,
-                    )}
-                  />
-                  <span
+                  <div
                     className={
-                      styles.createDishContent_servingSizes_current_size_creation
+                      styles.createDishContent_servingSizes_current_size_panel
                     }
                   >
-                    Грамм
-                  </span>
-                  <Button
-                    onClick={() => {
-                      createDishContentStore.addSelectedServingSize({
-                        ...size,
-                        grams,
-                      });
-                      grams = 0;
-                    }}
-                    className={
-                      styles.createDishContent_servingSizes_current_size_creation
-                    }
-                  >
-                    +
-                  </Button>
+                    <Counter
+                      defaultNumber={grams}
+                      onChange={(value: number) => {
+                        grams = value;
+                      }}
+                      input={true}
+                      className={
+                        styles.createDishContent_servingSizes_current_size_panel_counter
+                      }
+                    />
+                    <span
+                      className={
+                        styles.createDishContent_servingSizes_current_size_panel_grams
+                      }
+                    >
+                      Грамм
+                    </span>
+                    <Button
+                      onClick={() => {
+                        createDishContentStore.addSelectedServingSize({
+                          ...size,
+                          grams,
+                        });
+                        grams = 0;
+                      }}
+                      className={
+                        styles.createDishContent_servingSizes_current_size_panel_btn
+                      }
+                    >
+                      +
+                    </Button>
+                  </div>
                 </div>
               );
             })}
@@ -356,33 +360,35 @@ const CreateDishContent: React.FC = () => {
                 >
                   <span
                     className={
-                      styles.createDishContent_servingSizes_selected_size_creation
+                      styles.createDishContent_servingSizes_selected_size_text
                     }
                   >
                     {size.name}
                   </span>
-                  <span
+
+                  <div
                     className={
-                      styles.createDishContent_servingSizes_selected_size_creation
+                      styles.createDishContent_servingSizes_selected_size_panel
                     }
                   >
-                    {size.grams}
-                  </span>
-                  <span
-                    className={
-                      styles.createDishContent_servingSizes_selected_size_creation
-                    }
-                  >
-                    г.
-                  </span>
-                  <CloseIcon
-                    onClick={() => {
-                      createDishContentStore.removeSelectedServingSize(size.id);
-                    }}
-                    className={
-                      styles.createDishContent_servingSizes_selected_size_close
-                    }
-                  />
+                    <span
+                      className={
+                        styles.createDishContent_servingSizes_selected_size_panel_grams
+                      }
+                    >
+                      {size.grams} {" г."}
+                    </span>
+                    <CloseIcon
+                      onClick={() => {
+                        createDishContentStore.removeSelectedServingSize(
+                          size.id,
+                        );
+                      }}
+                      className={
+                        styles.createDishContent_servingSizes_selected_size_panel_close
+                      }
+                    />
+                  </div>
                 </div>
               );
             })}
@@ -456,39 +462,54 @@ const CreateDishContent: React.FC = () => {
                 <div
                   className={styles.createDishContent_products_current_product}
                 >
-                  <span>{createDishContentStore.currentProduct.name}</span>
-                  <Counter
-                    onChange={(value: number) => {
-                      if (createDishContentStore.currentProduct) {
-                        const currProd = {
-                          ...createDishContentStore.currentProduct,
-                          quantity: value,
-                        };
-                        createDishContentStore.setCurrentProduct(currProd);
-                      }
-                    }}
-                    input={true}
-                    className={styles.createDishContent_counter}
-                  />
-                  <span>Грамм</span>
-                </div>
-                <Button
-                  onClick={() => {
-                    if (createDishContentStore.currentProduct) {
-                      const link = {
-                        productId: createDishContentStore.currentProduct.id,
-                        productName: createDishContentStore.currentProduct.name,
-                        unit: "gramms",
-                        quantity:
-                          createDishContentStore.currentProduct.quantity,
-                      };
-                      handleAddProduct(link);
+                  <span
+                    className={
+                      styles.createDishContent_products_current_product_text
                     }
-                  }}
-                  className={styles.createDishContent_btn}
-                >
-                  Добавить
-                </Button>
+                  >
+                    {createDishContentStore.currentProduct.name}
+                  </span>
+                  <div
+                    className={
+                      styles.createDishContent_products_current_product_panel
+                    }
+                  >
+                    <Counter
+                      onChange={(value: number) => {
+                        if (createDishContentStore.currentProduct) {
+                          const currProd = {
+                            ...createDishContentStore.currentProduct,
+                            quantity: value,
+                          };
+                          createDishContentStore.setCurrentProduct(currProd);
+                        }
+                      }}
+                      input={true}
+                      className={
+                        styles.createDishContent_products_current_product_panel_counter
+                      }
+                    />
+                    <span>Гр.</span>
+                    <Button
+                      onClick={() => {
+                        if (createDishContentStore.currentProduct) {
+                          const link = {
+                            productId: createDishContentStore.currentProduct.id,
+                            productName:
+                              createDishContentStore.currentProduct.name,
+                            unit: "gramms",
+                            quantity:
+                              createDishContentStore.currentProduct.quantity,
+                          };
+                          handleAddProduct(link);
+                        }
+                      }}
+                      className={styles.createDishContent_btn}
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
               </div>
             )}
             {Boolean(createDishContentStore.dishProductLinks.length) && (
@@ -505,8 +526,10 @@ const CreateDishContent: React.FC = () => {
                           styles.createDishContent_products_selected_product
                         }
                       >
-                        <span>{dishProductLink.productName}</span>
-                        <span>({dishProductLink.quantity} г.)</span>
+                        <span>
+                          {dishProductLink.productName} (
+                          {dishProductLink.quantity} г.)
+                        </span>
                         <CloseIcon
                           onClick={() => {
                             createDishContentStore.removeDishProductLink(
