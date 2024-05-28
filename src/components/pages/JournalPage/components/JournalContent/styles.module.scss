@@ -1,0 +1,163 @@
+@import "@/styles/variables.scss";
+
+.root {
+    &_common {
+        margin-top: 1%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 2%;
+        padding-top: 2%;
+        padding-bottom: 3%;
+        padding-left: 3%;
+        padding-right: 3%;
+        height: fit-content;
+        width: fit-content;
+        background-color: white;
+        border-radius: 40px;
+        border: 1px solid $very-light-gray;
+        box-shadow: $dark-shadow;
+        display: flex;
+
+        &_h {
+            margin-bottom: 10px;
+            font-size: $h3;
+        }
+
+        &_energy {
+            display: flex;
+            flex-direction: column;
+
+            &_charts {
+                margin-top: 10%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+                
+                &_chart {
+                    position: relative;
+                    margin-left: 15px;
+                    margin-right: 15px;
+                    min-width: 100px;
+                    width: fit-content;
+                    min-height: 100px;
+                    height: fit-content;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+        
+                    &_num {
+                        position: absolute;
+                        top: 28%;
+                        left: 33%;
+                        font-size: $p1;
+                    }
+        
+                    &_text {
+                        color: $dark-gray;
+                    }
+                }
+            }
+        }
+
+        &_vr {
+            margin-left: 2%;
+            margin-right: 2%;
+            height: 250px;
+            border-left: 2px solid $light-gray;
+        }
+
+        &_bgu {
+            display: flex;
+            flex-direction: column;
+
+            &_bars {
+                margin-top: 15%;
+                min-width: 280px;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+
+                &_bar {
+                    width: 100%;
+                    height: 25px;
+                    display: flex;
+                    justify-content: space-between;
+    
+                    &_text {
+                        font-size: $p3;
+                        white-space: nowrap;
+                    }
+                }
+            }
+        }  
+    }
+
+    &_gradient {
+        filter: blur(100px);
+        background: linear-gradient(180deg, #42e0d3 0%, hsl(235, 100%, 50%) 100%);
+        border-radius: 250px;
+        flex: none;
+        height: 80%;
+        left: calc(50.00000000000002% - 100% / 2);
+        opacity: .22;
+        overflow: visible;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: -1;
+    }
+}
+
+@media screen and (max-width: $laptop) {
+    .root {
+        &_common {
+            flex-direction: column;
+            gap: 40px;
+
+            &_energy {
+                &_charts {
+                    margin-top: 0;
+                }
+            }
+
+            &_vr {
+                display: none;
+            }
+
+            &_bgu {
+                &_bars {
+                    margin-top: 0;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: $phone) {
+    .root {
+        &_common {
+            border-radius: 20px;
+
+            &_h {
+                font-size: $p1;
+            }
+
+            &_energy {
+                &_charts {
+                    flex-direction: column;
+                }
+            }
+
+            &_bgu {
+                &_bars {
+                    &_bar {
+                        margin-top: 10px;
+                        flex-direction: column;
+                    }
+                }
+            }
+        }
+    }
+}

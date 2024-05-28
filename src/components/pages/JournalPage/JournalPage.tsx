@@ -1,5 +1,6 @@
 import React from "react";
 
+import JournalContent from "./components/JournalContent/JournalContent";
 import styles from "./styles.module.scss";
 import Header from "@/components/Header/Header";
 import Meta from "@/components/Meta/Meta";
@@ -14,6 +15,7 @@ const JournalPage: React.FC = () => {
       />
       <main>
         <Header />
+        <JournalContent />
       </main>
     </div>
   );

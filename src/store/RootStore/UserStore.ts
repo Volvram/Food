@@ -1,4 +1,5 @@
 import axios from "axios";
+import dayjs from "dayjs";
 import {
   makeObservable,
   observable,
@@ -228,7 +229,7 @@ export default class UserStore {
             data.name,
             data.sex,
             data.email,
-            data.birthdate,
+            dayjs(data.birthdate).toDate(),
             data.image,
             data.roles,
             data.height,
