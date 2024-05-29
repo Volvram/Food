@@ -1,4 +1,11 @@
-import { makeObservable, observable, action, computed } from "mobx";
+import {
+  makeObservable,
+  observable,
+  action,
+  computed,
+  IReactionDisposer,
+  reaction,
+} from "mobx";
 
 import rootStore from "./RootStore/instance";
 import { log } from "@/utils/log";
@@ -6,14 +13,32 @@ import { ILocalStore } from "@/utils/useLocalStore";
 
 type PrivateFields =
   | "_currentDate"
+  | "_startDate"
+  | "_chosenPeriod"
+  | "_daysDifference"
   | "_dci"
+  | "_energyBurned"
   | "_proteinRemaining"
   | "_fatsRemaining"
   | "_carbsRemaining";
 
 class JournalContentStore implements ILocalStore {
   private _currentDate: Date = new Date();
+  private _startDate: Date = new Date(
+    this._currentDate.getFullYear(),
+    this._currentDate.getMonth(),
+    this._currentDate.getDate() - 1,
+  );
+  private _chosenPeriod: "День" | "Неделя" | "Месяц" | "Настраиваемый" = "День";
+  private _daysDifference = Math.floor(
+    (this.currentDate.getTime() - this.startDate.getTime()) /
+      1000 /
+      60 /
+      60 /
+      24,
+  );
   private _dci: number | null = null;
+  private _energyBurned: number | null = null;
   private _proteinRemaining: number | null = null;
   private _fatsRemaining: number | null = null;
   private _carbsRemaining: number | null = null;
@@ -23,9 +48,21 @@ class JournalContentStore implements ILocalStore {
       _currentDate: observable,
       setCurrentDate: action,
       currentDate: computed,
+      _startDate: observable,
+      setStartDate: action,
+      startDate: computed,
+      _chosenPeriod: observable,
+      setChosenPeriod: action,
+      chosenPeriod: computed,
+      _daysDifference: observable,
+      setDaysDifference: action,
+      daysDifference: computed,
       _dci: observable,
       setDci: action,
       dci: computed,
+      _energyBurned: observable,
+      setEnergyBurned: action,
+      energyBurned: computed,
       _proteinRemaining: observable,
       setProteinRemaining: action,
       proteinRemaining: computed,
@@ -45,6 +82,84 @@ class JournalContentStore implements ILocalStore {
   get currentDate() {
     return this._currentDate;
   }
+
+  setStartDate(startDate: Date) {
+    this._startDate = startDate;
+  }
+
+  get startDate() {
+    return this._startDate;
+  }
+
+  setChosenPeriod(chosenPeriod: "День" | "Неделя" | "Месяц" | "Настраиваемый") {
+    this._chosenPeriod = chosenPeriod;
+  }
+
+  get chosenPeriod() {
+    return this._chosenPeriod;
+  }
+
+  chooseDay = () => {
+    this.setCurrentDate(new Date());
+
+    this.setStartDate(
+      new Date(
+        this.currentDate.getFullYear(),
+        this.currentDate.getMonth(),
+        this.currentDate.getDate() - 1,
+      ),
+    );
+  };
+
+  chooseWeek = () => {
+    this.setCurrentDate(new Date());
+
+    this.setStartDate(
+      new Date(
+        this.currentDate.getFullYear(),
+        this.currentDate.getMonth(),
+        this.currentDate.getDate() - 7,
+      ),
+    );
+  };
+
+  chooseMonth = () => {
+    this.setCurrentDate(new Date());
+
+    this.setStartDate(
+      new Date(
+        this.currentDate.getFullYear(),
+        this.currentDate.getMonth(),
+        this.currentDate.getDate() - 30,
+      ),
+    );
+  };
+
+  chooseDate = (start: Date, current: Date) => {
+    this.setStartDate(start);
+
+    this.setCurrentDate(current);
+  };
+
+  setDaysDifference(daysDifference: number) {
+    this._daysDifference = daysDifference;
+  }
+
+  get daysDifference() {
+    return this._daysDifference;
+  }
+
+  calculateDaysDifference = () => {
+    this.setDaysDifference(
+      Math.floor(
+        (this.currentDate.getTime() - this.startDate.getTime()) /
+          1000 /
+          60 /
+          60 /
+          24,
+      ),
+    );
+  };
 
   setDci(dci: number | null) {
     this._dci = dci;
@@ -91,11 +206,31 @@ class JournalContentStore implements ILocalStore {
       }
 
       const dci =
-        (weight * 10 + height * 6.25 - age * 5 + genderKoef) * activityKoef;
+        (weight * 10 + height * 6.25 - age * 5 + genderKoef) *
+        activityKoef *
+        this.daysDifference;
 
       this.setDci(dci);
     } catch (e) {
       log("JournalContentStore: ", e);
+    }
+  };
+
+  setEnergyBurned(energyBurned: number | null) {
+    this._energyBurned = energyBurned;
+  }
+
+  get energyBurned() {
+    return this._energyBurned;
+  }
+
+  calculateEnergyBurned = () => {
+    if (this.dci) {
+      const energyBurned =
+        (this.dci / this.daysDifference) * (this.daysDifference - 1) +
+        (this.dci / this.daysDifference / 24) * this.currentDate.getHours();
+
+      this.setEnergyBurned(energyBurned);
     }
   };
 
@@ -117,7 +252,8 @@ class JournalContentStore implements ILocalStore {
         weight = 70;
       }
 
-      const proteinRemaining = Number((1.4 * weight).toFixed(0));
+      const proteinRemaining =
+        Number((1.4 * weight).toFixed(0)) * this.daysDifference;
 
       this.setProteinRemaining(proteinRemaining);
     } catch (e) {
@@ -143,7 +279,8 @@ class JournalContentStore implements ILocalStore {
         weight = 70;
       }
 
-      const fatsRemaining = Number((1.5 * weight).toFixed(0));
+      const fatsRemaining =
+        Number((1.5 * weight).toFixed(0)) * this.daysDifference;
 
       this.setFatsRemaining(fatsRemaining);
     } catch (e) {
@@ -161,10 +298,10 @@ class JournalContentStore implements ILocalStore {
 
   calculateCarbsRemaining = () => {
     try {
-      if (this.proteinRemaining && this.fatsRemaining) {
+      if (this.dci && this.proteinRemaining && this.fatsRemaining) {
         const carbsRemaining = Number(
           (
-            (1649 - this.proteinRemaining * 4 - this.fatsRemaining * 9) /
+            (this.dci - this.proteinRemaining * 4 - this.fatsRemaining * 9) /
             4
           ).toFixed(0),
         );
@@ -176,7 +313,23 @@ class JournalContentStore implements ILocalStore {
     }
   };
 
-  destroy() {}
+  destroy() {
+    this._handlePeriodChange();
+  }
+
+  readonly _handlePeriodChange: IReactionDisposer = reaction(
+    () => this.chosenPeriod,
+    () => {
+      this.calculateDaysDifference();
+
+      this.calculateDci().then(() => {
+        this.calculateEnergyBurned();
+        this.calculateProteinRemaining();
+        this.calculateFatsRemaining();
+        this.calculateCarbsRemaining();
+      });
+    },
+  );
 }
 
 export default JournalContentStore;

@@ -19,9 +19,9 @@ export const Button: React.FC<ButtonProps> = ({
   ...rest
 }) => {
   const classNames = cn(
+    className,
     styles.button,
     disabled && styles.button_disabled,
-    className,
   );
 
   return (
