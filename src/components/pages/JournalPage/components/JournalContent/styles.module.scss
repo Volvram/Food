@@ -121,6 +121,8 @@
 
                 &_bar {
                     width: 100%;
+                    white-space: nowrap;
+                    font-size: $p3;
                     display: flex;
                     justify-content: space-between;
                     gap: 10px;
@@ -178,6 +180,10 @@
 
 @media screen and (max-width: $phone) {
     .root {
+        &_panel {
+            border-radius: 10px; 
+        }
+
         &_common {
             border-radius: 20px;
             gap: 20px;

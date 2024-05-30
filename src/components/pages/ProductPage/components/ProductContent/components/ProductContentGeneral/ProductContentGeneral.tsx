@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "./styles.module.scss";
-import { nutrients } from "@/components/pages/MyDishesPage/components/CreateDishPage/components/nutrients";
+import { nutrients } from "@/shared/nutrients";
 import { FullProductModel } from "@/store/models/FullProduct/FullProduct";
 
 type ProductContentGeneralProps = {

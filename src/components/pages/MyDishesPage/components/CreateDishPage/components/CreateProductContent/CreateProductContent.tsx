@@ -4,12 +4,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
 
-import { nutrients } from "../nutrients";
 import styles from "./styles.module.scss";
 import { Button } from "@/components/Button";
 import { CommonAccordion } from "@/components/CommonAccordion";
 import { Counter } from "@/components/Counter";
 import { Input } from "@/components/Input";
+import { nutrients } from "@/shared/nutrients";
 import CreateProductContentStore from "@/store/CreateProductContentStore";
 import { useLocalStore } from "@/utils/useLocalStore";
 

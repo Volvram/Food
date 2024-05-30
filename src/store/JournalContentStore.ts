@@ -16,10 +16,14 @@ type PrivateFields =
   | "_startDate"
   | "_chosenPeriod"
   | "_daysDifference"
+  | "_energyConsumed"
   | "_dci"
   | "_energyBurned"
+  | "_proteinConsumed"
   | "_proteinRemaining"
+  | "_fatsConsumed"
   | "_fatsRemaining"
+  | "_carbsConsumed"
   | "_carbsRemaining";
 
 class JournalContentStore implements ILocalStore {
@@ -37,10 +41,14 @@ class JournalContentStore implements ILocalStore {
       60 /
       24,
   );
+  private _energyConsumed: number = 0;
   private _dci: number | null = null;
   private _energyBurned: number | null = null;
+  private _proteinConsumed: number = 0;
   private _proteinRemaining: number | null = null;
+  private _fatsConsumed: number = 0;
   private _fatsRemaining: number | null = null;
+  private _carbsConsumed: number = 0;
   private _carbsRemaining: number | null = null;
 
   constructor() {
@@ -59,10 +67,22 @@ class JournalContentStore implements ILocalStore {
       daysDifference: computed,
       _dci: observable,
       setDci: action,
+      _energyConsumed: observable,
+      setEnergyConsumed: action,
+      energyConsumed: computed,
       dci: computed,
       _energyBurned: observable,
       setEnergyBurned: action,
       energyBurned: computed,
+      _proteinConsumed: observable,
+      setProteinConsumed: action,
+      proteinConsumed: computed,
+      _fatsConsumed: observable,
+      setFatsConsumed: action,
+      fatsConsumed: computed,
+      _carbsConsumed: observable,
+      setCarbsConsumed: action,
+      carbsConsumed: computed,
       _proteinRemaining: observable,
       setProteinRemaining: action,
       proteinRemaining: computed,
@@ -216,6 +236,25 @@ class JournalContentStore implements ILocalStore {
     }
   };
 
+  setEnergyConsumed(energyConsumed: number) {
+    this._energyConsumed = energyConsumed;
+  }
+
+  get energyConsumed() {
+    return this._energyConsumed;
+  }
+
+  requestStatistics = async () => {
+    try {
+      this.setEnergyConsumed(488 * this.daysDifference);
+      this.setProteinConsumed(32 * this.daysDifference);
+      this.setFatsConsumed(47 * this.daysDifference);
+      this.setCarbsConsumed(71 * this.daysDifference);
+    } catch (e) {
+      log("JournalContentStore: ", e);
+    }
+  };
+
   setEnergyBurned(energyBurned: number | null) {
     this._energyBurned = energyBurned;
   }
@@ -233,6 +272,14 @@ class JournalContentStore implements ILocalStore {
       this.setEnergyBurned(energyBurned);
     }
   };
+
+  setProteinConsumed(proteinConsumed: number) {
+    this._proteinConsumed = proteinConsumed;
+  }
+
+  get proteinConsumed() {
+    return this._proteinConsumed;
+  }
 
   setProteinRemaining(proteinRemaining: number | null) {
     this._proteinRemaining = proteinRemaining;
@@ -261,6 +308,14 @@ class JournalContentStore implements ILocalStore {
     }
   };
 
+  setFatsConsumed(fatsConsumed: number) {
+    this._fatsConsumed = fatsConsumed;
+  }
+
+  get fatsConsumed() {
+    return this._fatsConsumed;
+  }
+
   setFatsRemaining(fatsRemaining: number | null) {
     this._fatsRemaining = fatsRemaining;
   }
@@ -287,6 +342,14 @@ class JournalContentStore implements ILocalStore {
       log("JournalContentStore: ", e);
     }
   };
+
+  setCarbsConsumed(carbsConsumed: number) {
+    this._carbsConsumed = carbsConsumed;
+  }
+
+  get carbsConsumed() {
+    return this._carbsConsumed;
+  }
 
   setCarbsRemaining(carbsRemaining: number | null) {
     this._carbsRemaining = carbsRemaining;
@@ -321,6 +384,8 @@ class JournalContentStore implements ILocalStore {
     () => this.chosenPeriod,
     () => {
       this.calculateDaysDifference();
+
+      this.requestStatistics();
 
       this.calculateDci().then(() => {
         this.calculateEnergyBurned();

@@ -6,6 +6,7 @@ type ProgressBarProps = {
   backgroundColor?: string; // цвет фона шкалы прогресса (по умолчанию #E5E5EA)
   width?: number;
   height?: number; // высота шкалы прогресса (по умолчанию 20px)
+  className?: string;
 };
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
@@ -14,9 +15,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   backgroundColor = "#F2F2F2",
   width = 200,
   height = 13,
+  className,
 }) => {
   const progressBarStyle = {
-    width: `${progress}%`,
+    width: `${progress < 100 ? progress : 100}%`,
     height: `${height}px`,
     backgroundColor: color,
     borderRadius: "10px",
@@ -32,7 +34,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   };
 
   return (
-    <div style={progressBarContainerStyle}>
+    <div style={progressBarContainerStyle} className={className}>
       <div style={progressBarStyle} />
     </div>
   );
