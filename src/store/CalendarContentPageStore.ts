@@ -54,7 +54,7 @@ export type MealType = {
   name: string;
   group: string;
   description: string;
-  timestamp: Date;
+  timestamp: Date | string;
   status: string;
   totalEnergy: number;
   totalProtein: number;
@@ -371,6 +371,41 @@ class CalendarContentPageStore implements ILocalStore {
       });
     } catch (e) {
       log("CalendarContentStore: ", e);
+    }
+  };
+
+  requestMoveMeal = async (mealId: number, timestamp: string) => {
+    try {
+      await rootStore.user.checkAuthorization();
+
+      if (!this.calendar) {
+        return;
+      }
+
+      const tokenType = localStorage.getItem("token_type");
+      const accessToken = localStorage.getItem("access_token");
+
+      const params: any = {
+        id: mealId,
+        timestamp: timestamp,
+        user_id: rootStore.user.id,
+      };
+
+      const headers: any = {
+        Authorization: `${tokenType} ${accessToken}`,
+      };
+
+      await axios({
+        url: `${HOST}/meals/${mealId}/timestamp`,
+        method: "put",
+        params,
+        headers,
+      });
+
+      return Promise.resolve("Прием пищи перемещен");
+    } catch (e) {
+      log("CalendarContentStore: ", e);
+      return Promise.reject(e);
     }
   };
 

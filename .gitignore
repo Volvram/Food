@@ -12,6 +12,9 @@
 /.next/
 /out/
 
+#web storm
+.idea/
+
 # production
 /build
 

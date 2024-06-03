@@ -77,7 +77,7 @@ class AddMealStore implements ILocalStore {
   private _mealDescription = "";
   private _mealGroup: MealGroupsType = mealGroups[0];
   private _mealTime = "00:00";
-  private _autoCalculate = false;
+  private _autoCalculate = true;
   private _objectType: "Блюда" | "Продукты" = "Блюда";
   private _search = "";
   private _searchList: DishType[] | ProductType[] = [];

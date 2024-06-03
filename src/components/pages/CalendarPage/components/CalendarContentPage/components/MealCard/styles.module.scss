@@ -2,9 +2,9 @@
 
 .root {
     cursor: pointer;
-
     border: 1px solid rgba(0, 0, 0, 0.25);
     padding: 5px;
+    background-color: $white;
     border-radius: 12px;
     display: flex;
     flex-direction: column;

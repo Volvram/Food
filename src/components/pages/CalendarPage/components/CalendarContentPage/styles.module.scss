@@ -95,6 +95,8 @@
   &_card{
     min-width: fit-content;
     &_meals {
+      min-height: 10px;
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
