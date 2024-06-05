@@ -203,7 +203,9 @@ const AddMeal: React.FC<AddMealProps> = ({
       <div className={styles.addMeal_selected}>
         {addMealStore.currentObject ? (
           <div className={styles.addMeal_selected_obj}>
-            <div>{addMealStore.currentObject.name}</div>
+            <div className={styles.addMeal_selected_obj_name}>
+              {addMealStore.currentObject.name}
+            </div>
             <FormControl
               variant="standard"
               sx={{ m: 1, minWidth: 120, maxWidth: 230 }}
@@ -240,25 +242,27 @@ const AddMeal: React.FC<AddMealProps> = ({
                 })}
               </Select>
             </FormControl>
-            <Counter
-              onChange={(value) => {
-                addMealStore.setCurrentObjectAmount(value);
-              }}
-              defaultNumber={1}
-              min={1}
-              input={true}
-              className={styles.addMeal_selected_obj_counter}
-            />
-            <Button
-              onClick={() => {
-                addMealStore.addToAddedList();
-                addMealStore.setCurrentObject(null);
-                addMealStore.setCurrentObjectServingSizeLink(null);
-                addMealStore.setCurrentObjectAmount(1);
-              }}
-            >
-              +
-            </Button>
+            <div className={styles.addMeal_selected_obj_panel}>
+              <Counter
+                onChange={(value) => {
+                  addMealStore.setCurrentObjectAmount(value);
+                }}
+                defaultNumber={1}
+                min={1}
+                input={true}
+                className={styles.addMeal_selected_obj_panel_counter}
+              />
+              <Button
+                onClick={() => {
+                  addMealStore.addToAddedList();
+                  addMealStore.setCurrentObject(null);
+                  addMealStore.setCurrentObjectServingSizeLink(null);
+                  addMealStore.setCurrentObjectAmount(1);
+                }}
+              >
+                +
+              </Button>
+            </div>
           </div>
         ) : (
           <></>

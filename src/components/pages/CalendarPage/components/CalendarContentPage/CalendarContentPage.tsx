@@ -89,11 +89,13 @@ const CalendarContentPage: React.FC<CalendarContentPageProps> = ({ id }) => {
   React.useEffect(() => {
     window.setTimeout(() => {
       if (listRef.current && currentDayRef.current) {
-        listRef.current.scrollTo({
-          top: 0,
-          left: currentDayRef.current.offsetLeft - 25,
-          behavior: "smooth",
-        });
+        // listRef.current.scrollTo({
+        //   top: 0,
+        //   left: currentDayRef.current.offsetLeft - 25,
+        //   behavior: "smooth",
+        // });
+
+        currentDayRef.current.scrollIntoView({ behavior: "smooth" });
       }
     }, 1000);
   }, [currentDayRef.current]);

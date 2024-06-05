@@ -161,7 +161,6 @@
         margin-top: 5px;
         margin-bottom: 10px;
         padding: 5px;
-        max-width: 410px;
         width: 100%;
         min-height: 50px; 
         border-radius: 16px;
@@ -172,14 +171,23 @@
             align-items: center;
             justify-content: center;
             gap: 5px;
-            flex-wrap: wrap;
+
+            &_name {
+                text-align: center;
+            }
 
             &_select {
                 max-width: 230px;
             }
 
-            &_counter {
-                width: 70px;
+            &_panel {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+                &_counter {
+                    width: 70px;
+                }
             }
         }
     }
@@ -187,7 +195,6 @@
     &_addedList {
         margin-top: 5px;
         padding: 5px;
-        max-width: 410px;
         width: 100%;
         min-height: 100px; 
         border-radius: 16px;
@@ -211,5 +218,29 @@
         margin-top: 20px;
         margin-left: auto;
         margin-right: auto;
+    }
+}
+
+@media screen and (max-width: $tablet) {
+    .addMeal {
+        &_selected {
+            max-width: 440px;
+    
+            &_obj {
+                flex-wrap: wrap;
+
+                &_name {
+                    flex-basis: 100%;
+                }
+    
+                &_select {
+                    max-width: 230px;
+                }
+    
+                &_counter {
+                    width: 70px;
+                }
+            }
+        }
     }
 }

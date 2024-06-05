@@ -133,6 +133,14 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onClick }) => {
         </div>
         <div className={styles.root_data_ccal}>{meal.totalEnergy} Ккал</div>
       </div>
+      <div className={styles.root_bgu}>
+        <div className={styles.root_bgu_elem}>Б: {meal.totalProtein}</div>
+        <div className={styles.root_bgu_vr} />
+        <div className={styles.root_bgu_elem}>Ж: {meal.totalFat}</div>
+        <div className={styles.root_bgu_vr} />
+        <div className={styles.root_bgu_elem}>У: {meal.totalCarbs}</div>
+        <span>г.</span>
+      </div>
       <div className={styles.root_date}>
         <div className={styles.root_date_calendar}>
           <>

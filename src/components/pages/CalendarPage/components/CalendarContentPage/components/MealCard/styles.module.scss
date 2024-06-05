@@ -8,7 +8,7 @@
     border-radius: 12px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
 
     &_title{
         display: flex;
@@ -42,6 +42,23 @@
             flex-basis: 35%;
         }
     }
+
+    &_bgu {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 3px;
+
+        &_elem {
+
+        }
+        &_vr {
+            min-height: 14px;
+            height: 100%;
+            border-left: 1px solid $light-gray;
+        }
+    }
+
     &_date{
         display: flex;
         gap: 5px;
