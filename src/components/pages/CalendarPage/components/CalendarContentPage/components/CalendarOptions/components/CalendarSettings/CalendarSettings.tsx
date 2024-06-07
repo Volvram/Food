@@ -6,6 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import cn from "classnames";
 import { observer } from "mobx-react-lite";
+import { useRouter } from "next/navigation";
 
 import { UserAccessType, calendarUserAccesses } from "./calendarUserAccesses";
 import styles from "./styles.module.scss";
@@ -14,7 +15,6 @@ import { Input } from "@/components/Input";
 import { CalendarType } from "@/store/CalendarPageStore";
 import CalendarSettingsStore from "@/store/CalendarSettingsStore";
 import { useLocalStore } from "@/utils/useLocalStore";
-import { useRouter } from "next/navigation";
 
 type CalendarSettingProps = {
   currentCalendar: CalendarType;
