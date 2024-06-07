@@ -15,7 +15,18 @@ const JournalPage: React.FC = () => {
       />
       <main>
         <Header />
-        <JournalContent />
+        <div
+          style={{
+            marginTop: "40px",
+            marginLeft: "auto",
+            marginRight: "auto",
+            width: "fit-content",
+            textAlign: "center",
+          }}
+        >
+          Слишком мало данных для отображения статистики
+        </div>
+        {false && <JournalContent />}
       </main>
     </div>
   );
