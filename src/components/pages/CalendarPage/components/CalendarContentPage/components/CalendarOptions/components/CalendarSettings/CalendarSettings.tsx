@@ -14,6 +14,7 @@ import { Input } from "@/components/Input";
 import { CalendarType } from "@/store/CalendarPageStore";
 import CalendarSettingsStore from "@/store/CalendarSettingsStore";
 import { useLocalStore } from "@/utils/useLocalStore";
+import { useRouter } from "next/navigation";
 
 type CalendarSettingProps = {
   currentCalendar: CalendarType;
@@ -22,6 +23,7 @@ type CalendarSettingProps = {
 const CalendarSettings: React.FC<CalendarSettingProps> = ({
   currentCalendar,
 }) => {
+  const router = useRouter();
   const calendarSettingStore = useLocalStore(() => new CalendarSettingsStore());
 
   React.useEffect(() => {
@@ -108,8 +110,7 @@ const CalendarSettings: React.FC<CalendarSettingProps> = ({
       calendarSettingStore.requestDeleteCalendar().then(
         (response) => {
           alert(response);
-          // @TODO заменить на сброс значений полей к неизмененным
-          window.location.reload();
+          router.push("/calendar");
         },
         (error) => {
           alert(`Ошибка: ${error?.response?.data?.reason ?? error.message}`);

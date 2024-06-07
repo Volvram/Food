@@ -1,6 +1,3 @@
-// ### Remote server
-// export const HOST = "http://94.139.255.120/api";
-
 import { google, mailru, yandex } from "./services";
 
 // ### Frontend servers
@@ -9,6 +6,9 @@ export const localhost = "http://localhost:3000";
 
 // ### Local server for web
 export const HOST = "http://localhost:8080/api";
+
+// ### Remote server
+// export const HOST = "http://94.139.255.120/api";
 
 export const KeyCloakHost =
   "http://localhost:8180/realms/diploma/protocol/openid-connect/token";
