@@ -9,8 +9,8 @@ function getWindowDimensions() {
 
 export default function useWindowDimensions() {
   const [windowDimensions, setWindowDimensions] = React.useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: 0,
+    height: 0,
   });
 
   function handleResize() {
