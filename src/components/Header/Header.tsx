@@ -42,7 +42,12 @@ const Header: React.FC = () => {
 
   return (
     <header className={styles.header}>
-      <div className={styles.header_logo}>
+      <div
+        className={styles.header_logo}
+        onClick={() => {
+          router.push("/");
+        }}
+      >
         <div className={styles.logo}>
           <svg
             width="40"
